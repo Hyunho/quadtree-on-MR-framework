@@ -6,13 +6,17 @@
 	<version>0.0.1-SNAPSHOT</version>
 
 	<repositories>
-		<repository>			
+		<repository>
 			<id>cdh4.0.0</id>
 			<name>Cloudera maven repository</name>
 			<url>https://repository.cloudera.com/artifactory/cloudera-repos</url>
 		</repository>
 	</repositories>
-
+	
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.hadoop</groupId>
@@ -21,8 +25,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>	
-			<version>1.8.5</version>		
+			<artifactId>mockito-core</artifactId>
+			<version>1.8.5</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -31,7 +35,7 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	
+
 	<build>
 		<plugins>
 			<plugin>
@@ -46,5 +50,5 @@
 			</plugin>
 		</plugins>
 	</build>
-	
+
 </project>

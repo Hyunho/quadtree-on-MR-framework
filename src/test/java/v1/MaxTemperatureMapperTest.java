@@ -10,7 +10,7 @@ import org.junit.*;
 
 public class MaxTemperatureMapperTest {
 	
-	@test
+	@Test
 	public void processesValidRecord() throws IOException {
 		MaxTemperatureMapper mapper = new MaxTemperatureMapper();
 		Text value = new Text("004301199099999"+"1950"+"051518004+68750+023550FM-12+0382" +

@@ -7,23 +7,16 @@ import org.apache.hadoop.mapred.*;
 public class MaxTemperatureMapper extends MapReduceBase
 	implements Mapper<LongWritable, Text, Text, IntWritable>{
 
+	private NcdcRecordParser parser = new NcdcRecordParser();
+	
 	public void map(LongWritable key, Text value,
 			OutputCollector<Text, IntWritable> output, Reporter reporter)
 			throws IOException {
-
-		String line = value.toString();
-		String year = line.substring(15,19);
-		String temp = line.substring(87,92);
-
-		if(!missing(temp)) {		
-			int airTemperature = Integer.parseInt(temp);
-			output.collect(new Text(year), new IntWritable(airTemperature));
-		}
+		
+		parser.parse(value);
+		
+		if(parser.isValidTemperature()) {
+			output.collect(new Text(parser.getYear()), new IntWritable(parser.getAirTemperature()));
+		}		
 	}
-
-	private boolean missing(String temp)
-	{
-		return temp.equals("+9999");
-	}
-
 }

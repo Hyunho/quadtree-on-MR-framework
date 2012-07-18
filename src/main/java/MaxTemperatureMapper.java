@@ -10,14 +10,20 @@ public class MaxTemperatureMapper extends MapReduceBase
 	public void map(LongWritable key, Text value,
 			OutputCollector<Text, IntWritable> output, Reporter reporter)
 			throws IOException {
-		// TODO Auto-generated method stub
-		
+
 		String line = value.toString();
 		String year = line.substring(15,19);
-		
-		int airTemperature = Integer.parseInt(line.substring(87, 92));
-		output.collect(new Text(year), new IntWritable(airTemperature));
-		
+		String temp = line.substring(87,92);
+
+		if(!missing(temp)) {		
+			int airTemperature = Integer.parseInt(temp);
+			output.collect(new Text(year), new IntWritable(airTemperature));
+		}
+	}
+
+	private boolean missing(String temp)
+	{
+		return temp.equals("+9999");
 	}
 
 }

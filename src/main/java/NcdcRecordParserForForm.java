@@ -31,9 +31,5 @@ public class NcdcRecordParserForForm {
 	
 	public NcdcForm parse(Text record) {
 		return this.parse(record.toString());
-	}
-	
-	public boolean isValidTemperature() {
-		return airTemperature != MISSING_TEMPERATURE &&  quality.matches("[01459]");
-	}	
+	}		
 }

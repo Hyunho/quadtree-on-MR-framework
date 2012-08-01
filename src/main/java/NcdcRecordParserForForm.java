@@ -2,12 +2,6 @@ import org.apache.hadoop.io.Text;
 
 
 public class NcdcRecordParserForForm {
-
-	private static final int MISSING_TEMPERATURE = 9999;
-	
-	private String year;
-	private int airTemperature;
-	private String quality;
 	
 	public NcdcForm parse(String record) {
 		
@@ -25,6 +19,9 @@ public class NcdcRecordParserForForm {
 		
 		ncdcForm.setAirTemperature(Integer.parseInt(airTemperatureString));
 		ncdcForm.setAirTemperatureQuality(record.substring(92,93));
+		
+		ncdcForm.setAtmosphericPressure(Integer.parseInt(record.substring(99,104)));
+		ncdcForm.setAtmosphericPressureQuality(record.substring(104,105));
 		
 		return ncdcForm;
 	}

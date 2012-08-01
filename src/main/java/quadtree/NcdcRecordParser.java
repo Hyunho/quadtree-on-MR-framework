@@ -1,4 +1,4 @@
-package skyline;
+package quadtree;
 import org.apache.hadoop.io.Text;
 
 

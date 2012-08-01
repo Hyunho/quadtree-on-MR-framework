@@ -1,11 +1,14 @@
-package skyline;
+package quadtree;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
 import org.apache.hadoop.io.*;
 import org.junit.*;
 
-public class NcdcRecordParserForFormTest {
+import quadtree.NcdcForm;
+import quadtree.NcdcRecordParser;
+
+public class NcdcRecordParserTest {
 
 	@Test
 	public void processesValidRecord() throws IOException {

@@ -1,7 +1,8 @@
+package skyline;
 import org.apache.hadoop.io.Text;
 
 
-public class NcdcRecordParserForForm {
+public class NcdcRecordParser {
 	
 	public NcdcForm parse(String record) {
 		

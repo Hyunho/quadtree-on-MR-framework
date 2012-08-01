@@ -4,6 +4,8 @@ import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapred.*;
 import org.apache.hadoop.util.*;
 
+import MaxTemperature.*;
+
 public class MaxTemperatureDriver extends Configured implements Tool{
 
 	@Override

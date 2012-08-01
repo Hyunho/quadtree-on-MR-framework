@@ -1,3 +1,4 @@
+package MaxTemperature;
 
 import java.io.IOException;
 import java.util.Iterator;

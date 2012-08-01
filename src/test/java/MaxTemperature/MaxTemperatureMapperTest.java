@@ -1,3 +1,4 @@
+package MaxTemperature;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.*;
 import java.io.IOException;

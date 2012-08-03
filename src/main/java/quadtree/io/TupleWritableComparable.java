@@ -44,9 +44,15 @@ public class TupleWritableComparable implements WritableComparable<TupleWritable
 		
 		if (!(o instanceof TupleWritableComparable)) return false;		
 		TupleWritableComparable other = (TupleWritableComparable) o;
-		return this.compareTo(other) == 0;
-		
-		
+		return this.compareTo(other) == 0;		
+	}
+
+	public int getAirTemperature() {
+		return this.airTemperature;
+	}
+
+	public int getAtmosphericPressure() {
+		return this.atmosphericPressure;
 	}
 
 }

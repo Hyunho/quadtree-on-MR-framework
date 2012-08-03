@@ -1,5 +1,6 @@
 package quadtree;
 
+
 public class NcdcForm {
 
 	private static final int MISSING_TEMPERATURE = 9999;
@@ -9,6 +10,13 @@ public class NcdcForm {
 	
 	private int airTemperature;
 	private String airTemperatureQuality;
+	
+	final static public int MAX_AIR_TEMPERATURE = 618;
+	final static public int MIN_AIR_TEMPERATURE	= -932;			 
+	
+	final static public int MAX_ATMOSPHERIC_PRESSURE = 10900;
+	final static public int MIN_ATMOSPHERIC_pRESSURE = 8600;
+	
 	public final int minAirTemperature = -932;
 	public final int maxAirTemperature = 618;
 

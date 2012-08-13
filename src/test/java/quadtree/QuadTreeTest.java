@@ -1,12 +1,11 @@
 package quadtree;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
+
 import java.io.IOException;
 import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapred.OutputCollector;
-
 import org.junit.*;
-
 import quadtree.io.*;
 
 public class QuadTreeTest {
@@ -46,6 +45,43 @@ public class QuadTreeTest {
 		indexingMapper.map(null, tuple, output, null);
 		verify(output).collect(new Text("11"), new TupleWritableComparable(-11, 10268));
 		verify(output, never()).collect(new Text("11"), new TupleWritableComparable(-10, 10268));
+	}
+	
+	@Test
+	public void returnsMaximumIntegerInValues() throws IOException {
+		
+//	MaxTemperatureReducer reducer = new MaxTemperatureReducer();
+//		
+//		Text key = new Text("1950");		
+//		Iterator<IntWritable> values = Arrays.asList(
+//				new IntWritable(10), new IntWritable(5)).iterator();
+//		
+//		OutputCollector<Text, IntWritable> output = mock(OutputCollector.class);
+//		
+//		reducer.reduce(key, values, output, null);		
+//		verify(output).collect(key, new IntWritable(10));
+//		
+//		QuadTreeReducer reducer = new QuadTreeReducer();
+//		
+//		Text index = new Text("00");		
+//		Iterator<TupleWritableComparable> values = Arrays.asList(
+//				new TupleWritableComparable(10, 10),
+//				new TupleWritableComparable(20, 20),
+//				new TupleWritableComparable(30, 30))
+//				.iterator();
+//		
+//		OutputCollector<Text, TupleArrayWritable> nullOutput = mock(OutputCollector.class);
+//		
+//		reducer.setThreshold(5);
+//		reducer.reduce(index, values, nullOutput, null);		
+//		verify(nullOutput).collect(null, null);
+//		
+//		OutputCollector<Text, TupleArrayWritable> reOutput = mock(OutputCollector.class);
+//		
+//		reducer.setThreshold(2);
+//		reducer.reduce(index, values, reOutput, null);		
+//		verify(reOutput).collect(index, values);
+		
 	}
 
 	

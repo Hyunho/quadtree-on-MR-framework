@@ -7,6 +7,7 @@ import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapred.OutputCollector;
 import org.junit.*;
 import quadtree.io.*;
+import quadtree.*;
 
 public class QuadTreeTest {
 
@@ -92,6 +93,6 @@ public class QuadTreeTest {
 		int min = 0;		
 		int depth = 3;
 
-		assertEquals("001", QuadTreeHelper.getIndex(value, max, min, depth));
+		assertEquals("001", InvertedIndexer.getIndex(value, max, min, depth));
 	}
 }

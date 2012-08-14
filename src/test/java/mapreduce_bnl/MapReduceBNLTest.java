@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
 
+import mapreduce_bnl.io.TupleWritable;
+
 import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapred.OutputCollector;
 
@@ -15,47 +17,51 @@ import org.junit.*;
 
 public class MapReduceBNLTest {
 
-
 	@Test
 	public void divideData() throws IOException {
-		DivisionMapper mapper = nwe DivisionMapper();
+		DivisionMapper mapper = new DivisionMapper();
 		
-		Text record = new Text("0.100441153460505 0.128266280946252");	
-		
-		
-		OutputCollector<Text, IntWritable> output = mock(OutputCollector.class);		
+		Text record = new Text("75 85");	
 		
 		
-		mapper.map(null, value, output, null);
+		OutputCollector<Text, TupleWritable> output = mock(OutputCollector.class);		
+		
+		
+		mapper.map(null, record, output, null);
 		
 		verify(output).collect(
 				new Text("11"),
-				new PointWritable(0.100441153460505, 0.128266280946252));		
+				new TupleWritable(75, 85));		
 	}
 	
 	@Test
 	public void getLocalSkylineAndWriteIt() throws IOException {
 		
-		LocalSkylineReduce reduce = new LocalSkylineReducer()
+		LocalSkylineReducer reducer = new LocalSkylineReducer();
 		
 		
-		Text key = new Text("11");		
-		Iterator<IntWritable> values = Arrays.asList(
-				new PointWritable(10, 10),
-				new PointWritable(20, 20))
+		Text key = new Text("00");		
+		Iterator<TupleWritable> values = Arrays.asList(
+				new TupleWritable(10, 10),
+				new TupleWritable(20, 20))
 				.iterator();
 		
-		OutputCollector<Text, IntWritable> output = mock(OutputCollector.class);
+		OutputCollector<Text, TupleWritable> output = mock(OutputCollector.class);
 		
 		reducer.reduce(key, values, output, null);		
-		verify(output).collect(key, new PointWritable(10, 10));
+		verify(output).collect(key, new TupleWritable(10, 10));
+		verify(output, never()).collect(key, new TupleWritable(20, 20)); 
 	}
+
+
 
 
 	@Test
 	public void getherDataInOneReducer() throws IOException {
 		
-	
+		Text record = new Text("75 85");
+		
+		
 	}
 	
 	@Test

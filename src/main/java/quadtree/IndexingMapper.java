@@ -29,11 +29,11 @@ public class IndexingMapper extends MapReduceBase
 	
 	private Text getIndex(TupleWritableComparable value) {
 		
-		String temperatureIndex = QuadTreeHelper.getIndex(
+		String temperatureIndex = InvertedIndexer.getIndex(
 				value.getAirTemperature(),
 				NcdcForm.MAX_AIR_TEMPERATURE, NcdcForm.MIN_AIR_TEMPERATURE,				 
 				depth);
-		String atmosphericPressureIndex = QuadTreeHelper.getIndex(
+		String atmosphericPressureIndex = InvertedIndexer.getIndex(
 				value.getAtmosphericPressure(),
 				NcdcForm.MAX_ATMOSPHERIC_PRESSURE, NcdcForm.MIN_ATMOSPHERIC_pRESSURE, 
 				depth);

@@ -54,5 +54,4 @@ public class TupleWritableComparable implements WritableComparable<TupleWritable
 	public int getAtmosphericPressure() {
 		return this.atmosphericPressure;
 	}
-
 }

@@ -4,6 +4,7 @@ import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 
@@ -82,26 +83,41 @@ public class MapReduceBNLTest {
 				new FlagWritable(new Text("11"), new TupleWritable(75, 85)));
 	}
 	
-//	@Test
-//	public void getGlobalSkyline() throws IOException {
-//		
-//		
-//		MergingReducer reducer = new MergingReducer();		
-//		
-//				
-//		Iterator<FlagWritable> values = Arrays.asList(
-//				FlagWritable(new Text("00"), new TupleWritable(10, 10)),
-//				FlagWritable(new Text("11"), new TupleWritable(70, 70))
-//				.iterator();
-//		
-//		OutputCollector<TupleWritable, NullWritable> output = mock(OutputCollector.class);
-//		
-//		reducer.reduce(NullWritable.get(), values, output, null);		
-//		verify(output).collect(key, new TupleWritable(10, 10));
-//		verify(output, never()).collect(key, new TupleWritable(20, 20)); 
-//		
-//		
-//	}
+	@Test
+	public void getGlobalSkyline() throws IOException {
+		
+		MergingReducer reducer = new MergingReducer();		
+		
+				
+		Iterator<FlagWritable> values = Arrays.asList(
+				new FlagWritable(new Text("00"), new TupleWritable(10, 10)),
+				new FlagWritable(new Text("11"), new TupleWritable(70, 70)))
+				.iterator();
+		
+		OutputCollector<TupleWritable, NullWritable> output = mock(OutputCollector.class);
+		
+		reducer.reduce(NullWritable.get(), values, output, null);
+		
+		verify(output).collect(new TupleWritable(10, 10), NullWritable.get());
+		verify(output, never()).collect(new TupleWritable(70, 70), NullWritable.get()); 
+		
+		
+	}
+	
+	@Test
+	public void skyline() throws IOException {
+				
+		Iterator<TupleWritable> values = Arrays.asList(
+				new TupleWritable(10, 10),
+				new TupleWritable(20, 20))
+				.iterator();
+		
+		ArrayList<TupleWritable> skyline = Skyline.getSkylineUsingBNL(values);
+		
+		assertTrue(skyline.contains(new TupleWritable(10, 10)));
+		assertFalse(skyline.contains(new TupleWritable(20, 20)));
+	}
+	
 	
 	@Test
 	public void dominationTest() throws IOException {

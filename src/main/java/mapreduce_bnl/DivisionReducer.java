@@ -26,31 +26,13 @@ public class DivisionReducer extends MapReduceBase
 	public void reduce(Text key, Iterator<TupleWritable> values,
 			OutputCollector<Text, TupleWritable> output, Reporter reporter)
 			throws IOException {
-
-		ArrayList<TupleWritable> window = new ArrayList<TupleWritable>(100);
 		
-		while (values.hasNext()){
-			
-			boolean pDominatedByWindow = false;
-			TupleWritable p = values.next();
-			//check tuples in window dominate a point
-			for (TupleWritable q : window) {
-				if(q.dominate(p))
-					pDominatedByWindow = true;
-				
-				if(p.dominate(q))
-					window.remove(q);
-					
-			}
-			
-			if (false == pDominatedByWindow)
-				window.add(p);
-		}
+		ArrayList<TupleWritable> skyline = Skyline.getSkylineUsingBNL(values);
 		
 		//write local skyline in window to HDFS
-		Iterator<TupleWritable> skyline = window.iterator();
-		while(skyline.hasNext()){
-			output.collect(key, skyline.next());
+		Iterator<TupleWritable> skylineIterator = skyline.iterator();
+		while(skylineIterator.hasNext()){
+			output.collect(key, skylineIterator.next());
 		}		
-	}	
+	}
 }

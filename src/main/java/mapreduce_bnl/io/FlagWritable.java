@@ -16,7 +16,11 @@ public class FlagWritable implements Writable {
 
 
 	private Text flag;
-	private TupleWritable tuple;
+	private TupleWritable tuple;	
+	
+	public Text getFlag() {return this.flag;}
+	public TupleWritable getTuple() {	return this.tuple; }
+	
 	
 	public FlagWritable(Text flag, TupleWritable tuple)
 	{

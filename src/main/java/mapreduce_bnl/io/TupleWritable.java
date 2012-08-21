@@ -12,15 +12,33 @@ public class TupleWritable implements Writable  {
 	private IntWritable x;
 	private IntWritable y;
 	
-	public TupleWritable(int x, int y)
-	{
-		this.x = new IntWritable(x);
-		this.y = new IntWritable(y);
+	public TupleWritable()	{
+		set(new IntWritable(), new IntWritable());		
+	}
+	
+	public TupleWritable(int x, int y) {
+		this.set(new IntWritable(x), new IntWritable(y));
+	}
+	
+	public TupleWritable(IntWritable x, IntWritable y) {
+		this.set(x, y);
+	}
+	
+	public void set(IntWritable x, IntWritable y) {
+		this.x = x;
+		this.y = y;
+	}
+	
+	public int getX() {
+		return this.x.get();		
+	}
+	
+	public int getY() {
+		return this.y.get();		
 	}
 		
 	@Override
-	public void write(DataOutput out) throws IOException {
-		
+	public void write(DataOutput out) throws IOException {		
 		x.write(out);
 		y.write(out);
 	}
@@ -31,6 +49,11 @@ public class TupleWritable implements Writable  {
 		y.readFields(in);
 	}
 
+	@Override
+	public int hashCode() {		
+		return x.hashCode() * 163 + y.hashCode();
+	}
+	
 	@Override 
 	public boolean equals(Object o)
 	{
@@ -42,7 +65,7 @@ public class TupleWritable implements Writable  {
 	
 	@Override
 	public String toString() {
-		return "x : " + x.get() + ", y : " + y.get();
+		return x.get() + "\t" + y.get();
 	}
 	
 	

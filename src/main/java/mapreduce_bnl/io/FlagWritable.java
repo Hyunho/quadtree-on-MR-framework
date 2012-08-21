@@ -22,12 +22,20 @@ public class FlagWritable implements Writable {
 	public TupleWritable getTuple() {	return this.tuple; }
 	
 	
-	public FlagWritable(Text flag, TupleWritable tuple)
-	{
+	public FlagWritable(){
+		this.set(new Text(), new TupleWritable());
+	}	
+	
+	public FlagWritable(Text flag, TupleWritable tuple)	{
 		this.flag = flag;
-		this.tuple = tuple;
-		
+		this.tuple = tuple;		
 	}
+	
+	public void set(Text flag, TupleWritable tuple) {
+		this.flag = flag;
+		this.tuple = tuple;		
+	}
+	
 		
 	@Override
 	public void write(DataOutput out) throws IOException {
@@ -54,7 +62,7 @@ public class FlagWritable implements Writable {
 	
 	@Override
 	public String toString() {
-		return "falg : " + flag.toString() + ", tuple = " + tuple.toString();
+		return flag + "\t" + tuple.toString();
 	}
 	
 	

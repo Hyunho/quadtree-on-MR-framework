@@ -26,13 +26,12 @@ public class DivisionMapper  extends MapReduceBase
 		int x = Integer.parseInt(strings[0]);
 		int y = Integer.parseInt(strings[1]);
 		
-		TupleWritable tuple = new TupleWritable(x,y);
-		
 		String index_x =InvertedIndexer.getIndex(x, 0, 100, 1);
 		String index_y = InvertedIndexer.getIndex(y, 0, 100, 1);
-		output.collect(
-				new Text(index_x+index_y),
-				new TupleWritable(x, y)
-				);		
+		
+		Text outputKey = new Text(index_x+index_y);
+		TupleWritable tuple = new TupleWritable(x,y);
+		
+		output.collect(outputKey, tuple);		
 	}
 }

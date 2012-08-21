@@ -39,19 +39,22 @@ public class MapReduceBNLTest {
 	@Test
 	public void getLocalSkylineAndWriteIt() throws IOException {
 		
-		DivisionReducer reducer = new DivisionReducer();		
+		DivisionReducer reducer = new DivisionReducer();	
 		
 		Text key = new Text("00");		
 		Iterator<TupleWritable> values = Arrays.asList(
 				new TupleWritable(10, 10),
-				new TupleWritable(20, 20))
-				.iterator();
+				new TupleWritable(20, 20),
+				new TupleWritable(5, 15),
+				new TupleWritable(10, 30)).iterator();
 		
 		OutputCollector<Text, TupleWritable> output = mock(OutputCollector.class);
 		
 		reducer.reduce(key, values, output, null);		
 		verify(output).collect(key, new TupleWritable(10, 10));
-		verify(output, never()).collect(key, new TupleWritable(20, 20)); 
+		verify(output, never()).collect(key, new TupleWritable(20, 20));
+		verify(output).collect(key, new TupleWritable(5, 15));
+		verify(output, never()).collect(key, new TupleWritable(10, 30));
 	}
 
 
@@ -59,7 +62,7 @@ public class MapReduceBNLTest {
 	public void getherDataInOneReducer() throws IOException {
 		
 		MergingMapper mapper = new MergingMapper();		
-		Text record = new Text("00 75 85");	
+		Text record = new Text("00	6	6");	
 		
 		OutputCollector<NullWritable, FlagWritable> output = mock(OutputCollector.class);
 		
@@ -67,21 +70,11 @@ public class MapReduceBNLTest {
 		
 		//key is used as placeholder.
 		verify(output).collect(				
-				NullWritable.get(), new FlagWritable(new Text("00"), new TupleWritable(75, 85)));		
+				NullWritable.get(), new FlagWritable(new Text("00"), new TupleWritable(6, 6)));		
 				
 	}
 	
 	
-	@Test
-	public void compareWritable() throws IOException {
-		assertEquals(new TupleWritable(75, 85), new TupleWritable(75,85));
-		assertEquals(new Text("11"), new Text("11"));
-		assertEquals(new String("11"), new String("11"));
-		
-		assertEquals(
-				new FlagWritable(new Text("11"), new TupleWritable(75, 85)),
-				new FlagWritable(new Text("11"), new TupleWritable(75, 85)));
-	}
 	
 	@Test
 	public void getGlobalSkyline() throws IOException {
@@ -109,13 +102,17 @@ public class MapReduceBNLTest {
 				
 		Iterator<TupleWritable> values = Arrays.asList(
 				new TupleWritable(10, 10),
-				new TupleWritable(20, 20))
-				.iterator();
+				new TupleWritable(20, 20),
+				new TupleWritable(5, 15),
+				new TupleWritable(10, 30)).iterator();
 		
 		ArrayList<TupleWritable> skyline = Skyline.getSkylineUsingBNL(values);
 		
 		assertTrue(skyline.contains(new TupleWritable(10, 10)));
-		assertFalse(skyline.contains(new TupleWritable(20, 20)));
+		assertTrue(skyline.contains(new TupleWritable(5, 15)));
+		assertTrue(skyline.contains(new TupleWritable(10, 10)));
+		assertFalse(skyline.contains(new TupleWritable(10, 30)));
+		assertEquals(2, skyline.size());
 	}
 	
 	
@@ -126,9 +123,20 @@ public class MapReduceBNLTest {
 		
 		assertTrue(tuple1.dominate(tuple2));
 		assertFalse(tuple2.dominate(tuple1));
-		
-
 	}
+	
+	@Test
+	public void compareWritable() throws IOException {
+		assertEquals(new TupleWritable(75, 85), new TupleWritable(75,85));
+		assertEquals(new Text("11"), new Text("11"));
+		assertEquals(new String("11"), new String("11"));
+		
+		assertEquals(
+				new FlagWritable(new Text("11"), new TupleWritable(75, 85)),
+				new FlagWritable(new Text("11"), new TupleWritable(75, 85)));
+	}
+	
+	
 	
 }
 

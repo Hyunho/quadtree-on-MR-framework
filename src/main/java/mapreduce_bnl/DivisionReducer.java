@@ -12,8 +12,6 @@ import org.apache.hadoop.mapred.OutputCollector;
 import org.apache.hadoop.mapred.Reducer;
 import org.apache.hadoop.mapred.Reporter;
 
-import com.sun.tools.javac.util.List;
-
 public class DivisionReducer extends MapReduceBase
 	implements Reducer<Text, TupleWritable, Text, TupleWritable>{
 
@@ -28,11 +26,9 @@ public class DivisionReducer extends MapReduceBase
 			throws IOException {
 		
 		ArrayList<TupleWritable> skyline = Skyline.getSkylineUsingBNL(values);
-		
-		//write local skyline in window to HDFS
-		Iterator<TupleWritable> skylineIterator = skyline.iterator();
-		while(skylineIterator.hasNext()){
-			output.collect(key, skylineIterator.next());
+				
+		for (TupleWritable tupleWritable : skyline) {
+			output.collect(key, tupleWritable);
 		}		
 	}
 }

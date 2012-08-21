@@ -22,12 +22,12 @@ public class MergingMapper extends MapReduceBase
 			OutputCollector<NullWritable, FlagWritable> output, Reporter reporter)
 			throws IOException {
 		
-		String[] strings = record.toString().split(" ");
+		String[] strings = record.toString().split("\t");
 		
 		Text flag = new Text(strings[0]);
-		TupleWritable tuple = new TupleWritable(
-				Integer.parseInt(strings[1]),		
-				Integer.parseInt(strings[2]));		
+		int x = Integer.parseInt(strings[1]);
+		int y = Integer.parseInt(strings[2]);
+		TupleWritable tuple = new TupleWritable(x, y);		
 				
 		output.collect(
 				NullWritable.get(),

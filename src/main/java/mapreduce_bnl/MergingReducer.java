@@ -22,18 +22,20 @@ public class MergingReducer extends MapReduceBase
 			throws IOException {
 		
 		
+		
+		//get only tuples
 		ArrayList<TupleWritable> tuples = new ArrayList<TupleWritable>();
 		
 		while(flags.hasNext()) {
-			tuples.add(flags.next().getTuple());
+			TupleWritable tuple = flags.next().getTuple();			
+			tuples.add(new TupleWritable(tuple.getX(), tuple.getY()));
 		}
+		
 		
 		ArrayList<TupleWritable> skyline = Skyline.getSkylineUsingBNL(tuples.iterator());
 		
-		Iterator<TupleWritable> skyline_iterator = skyline.iterator();
-		
-		while(skyline_iterator.hasNext()) {
-			output.collect(skyline_iterator.next(), NullWritable.get());			
-		}
+		for (TupleWritable tupleWritable : skyline) {
+			output.collect(tupleWritable, NullWritable.get());
+		}		
 	}
 }

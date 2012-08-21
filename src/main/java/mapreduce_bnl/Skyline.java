@@ -11,28 +11,32 @@ public class Skyline {
 	public static ArrayList<TupleWritable> getSkylineUsingBNL(
 			Iterator<TupleWritable> tuples) {
 
-		ArrayList<TupleWritable> window = new ArrayList<TupleWritable>(100);
+		ArrayList<TupleWritable> window = new ArrayList<TupleWritable>();
 
 		while (tuples.hasNext()){
 			
-			boolean pDominatedByWindow = false;
+			boolean pointDominatedByWindow = false;
 			TupleWritable p = tuples.next();
+			
+			ArrayList<TupleWritable> dominatedTupels = new ArrayList<TupleWritable>();
+			
 			//check tuples in window dominate a point
 			for (TupleWritable q : window) {
 				if(q.dominate(p))
-					pDominatedByWindow = true;
+					pointDominatedByWindow = true;
 
 				if(p.dominate(q))
-					window.remove(q);
-
+					dominatedTupels.add(q);
+			}
+			
+			//remove dominated tuple
+			for (TupleWritable dominatedTuple : dominatedTupels) {
+				window.remove(dominatedTuple);
 			}
 
-			if (false == pDominatedByWindow)
-				window.add(p);
+			if (false == pointDominatedByWindow)
+				window.add(new TupleWritable(p.getX(), p.getY()));
 		}
-
 		return window;
-
 	}
-
 }

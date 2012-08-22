@@ -70,11 +70,9 @@ public class MapReduceBNLTest {
 		
 		//key is used as placeholder.
 		verify(output).collect(				
-				NullWritable.get(), new FlagWritable(new Text("00"), new TupleWritable(6, 6)));		
-				
-	}
-	
-	
+				NullWritable.get(),
+				new FlagWritable(new Text("00"), new TupleWritable(6, 6)));
+	}	
 	
 	@Test
 	public void getGlobalSkyline() throws IOException {
@@ -96,26 +94,7 @@ public class MapReduceBNLTest {
 		
 		
 	}
-	
-	@Test
-	public void skyline() throws IOException {
-				
-		Iterator<TupleWritable> values = Arrays.asList(
-				new TupleWritable(10, 10),
-				new TupleWritable(20, 20),
-				new TupleWritable(5, 15),
-				new TupleWritable(10, 30)).iterator();
-		
-		ArrayList<TupleWritable> skyline = Skyline.getSkylineUsingBNL(values);
-		
-		assertTrue(skyline.contains(new TupleWritable(10, 10)));
-		assertTrue(skyline.contains(new TupleWritable(5, 15)));
-		assertTrue(skyline.contains(new TupleWritable(10, 10)));
-		assertFalse(skyline.contains(new TupleWritable(10, 30)));
-		assertEquals(2, skyline.size());
-	}
-	
-	
+
 	@Test
 	public void dominationTest() throws IOException {
 		TupleWritable tuple1 = new TupleWritable(10, 10);
@@ -135,7 +114,6 @@ public class MapReduceBNLTest {
 				new FlagWritable(new Text("11"), new TupleWritable(75, 85)),
 				new FlagWritable(new Text("11"), new TupleWritable(75, 85)));
 	}
-	
 	
 	
 }

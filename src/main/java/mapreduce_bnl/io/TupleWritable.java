@@ -3,6 +3,7 @@ package mapreduce_bnl.io;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Writable;
@@ -68,12 +69,50 @@ public class TupleWritable implements Writable  {
 		return x.get() + "\t" + y.get();
 	}
 	
-	
+	/**
+	 * check that this tuple dominates other tuple.
+	 * @param other
+	 * @return
+	 */	
 	public boolean dominate(TupleWritable other) {
 		
 		boolean condition1 = (this.x.get() <= other.x.get() && this.y.get() <= other.y.get());
 		boolean condition2 = (this.x.get() < other.x.get() || this.y.get() < other.y.get()); 
 		return (condition1 && condition2);
+	}	
+	
+	/**
+	 * check that this tuple is dominated by all tuples in window.
+	 * @param tuple
+	 * @param window
+	 * @return
+	 */
+	public boolean dominatedByWindow(ArrayList<TupleWritable> window) {
+		
+		boolean dominatedByWindow = false;
+		
+		for(TupleWritable q: window) {
+			if(q.dominate(this))
+				dominatedByWindow = true;
+		}
+		return dominatedByWindow;
+	}
+	
+
+	/**
+	 * return dominated tuples in window by tuple. 
+	 * @param window
+	 * @return dominated tuples
+	 */
+	public ArrayList<TupleWritable> dominatedTuples(ArrayList<TupleWritable> window) {
+
+		ArrayList<TupleWritable> dominatedTupels = new ArrayList<TupleWritable>();			
+		//check tuples in window dominate a point
+		for (TupleWritable q : window) {				
+			if(this.dominate(q))
+				dominatedTupels.add(q);
+		}
+		return dominatedTupels;
 	}
 	
 }

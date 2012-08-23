@@ -4,7 +4,6 @@ import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 
@@ -23,8 +22,7 @@ public class MapReduceBNLTest {
 	public void divideData() throws IOException {
 		DivisionMapper mapper = new DivisionMapper();
 		
-		Text record = new Text("75 85");	
-		
+		Text record = new Text("75 85");
 		
 		OutputCollector<Text, TupleWritable> output = mock(OutputCollector.class);		
 		

@@ -32,7 +32,7 @@ public class MergingReducer extends MapReduceBase
 		}
 		
 		
-		ArrayList<TupleWritable> skyline = new SkylineHelper().getSkylineUsingBNL(tuples.iterator());
+		ArrayList<TupleWritable> skyline = new SkylineHelper(tuples.iterator()).getSkylineUsingBNL();
 		
 		for (TupleWritable tupleWritable : skyline) {
 			output.collect(tupleWritable, NullWritable.get());

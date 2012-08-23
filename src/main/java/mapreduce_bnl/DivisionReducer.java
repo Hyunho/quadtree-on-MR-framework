@@ -26,7 +26,7 @@ public class DivisionReducer extends MapReduceBase
 			throws IOException {
 		
 		
-		ArrayList<TupleWritable> skyline =  new SkylineHelper().getSkylineUsingBNL(values);
+		ArrayList<TupleWritable> skyline =  new SkylineHelper(values).getSkylineUsingBNL();
 				
 		for (TupleWritable tupleWritable : skyline) {
 			output.collect(key, tupleWritable);

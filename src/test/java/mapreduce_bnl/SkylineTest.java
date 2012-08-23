@@ -7,7 +7,8 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
+
+import junit.framework.TestCase;
 
 import mapreduce_bnl.io.TupleWritable;
 
@@ -15,40 +16,57 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.LocalFileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.Text;
 import org.junit.*;
 
 public class SkylineTest {
 
+	private ArrayList<TupleWritable> tuples;
+	
+	@Before
+	public void setUp() throws Exception {
+		
+		this.tuples = new ArrayList<TupleWritable>(
+				Arrays.asList(
+						new TupleWritable(10, 10),
+						new TupleWritable(20, 20),
+						new TupleWritable(5, 15),
+						new TupleWritable(15, 5),
+						new TupleWritable(10, 30)));
+	}
 	
 	@Test
-	public void blockNestedLoop() {	
+	public void oneIterateInblockNestedLoop() throws IOException {	
 		
-		Iterator<TupleWritable> values = Arrays.asList(
-				new TupleWritable(10, 10),
-				new TupleWritable(20, 20),
-				new TupleWritable(5, 15),
-				new TupleWritable(15, 5),
-				new TupleWritable(10, 30)).iterator();
+		SkylineHelper helper = new SkylineHelper(this.tuples.iterator());
+		helper.setMaximumWindowSize(2);
 		
-		SkylineHelper helper = new SkylineHelper();
+		ArrayList<TupleWritable> skyline = helper.iterate();
+		assertEquals(2, skyline.size());
 		
-		//helper.setWindowSize(1);		
-		ArrayList<TupleWritable> skyline = helper.getSkylineUsingBNL(values);
+		skyline = helper.iterate();
+		assertEquals(1, skyline.size());
+	}
+	
+	@Test
+	public void getSkylineUsingBNL() throws IOException {
 		
-		assertTrue(skyline.contains(new TupleWritable(10, 10)));
+		SkylineHelper helper = new SkylineHelper(this.tuples.iterator());
+		
+		helper.setMaximumWindowSize(2);
+		ArrayList<TupleWritable> skyline = helper.getSkylineUsingBNL();
+		
+		assertEquals(3, skyline.size());
+		
+ 		assertTrue(skyline.contains(new TupleWritable(10, 10)));
 		assertTrue(skyline.contains(new TupleWritable(5, 15)));
 		assertTrue(skyline.contains(new TupleWritable(10, 10)));
-		assertFalse(skyline.contains(new TupleWritable(10, 30)));
-		assertEquals(3, skyline.size());
+		assertFalse(skyline.contains(new TupleWritable(10, 30)));		
 	}
 	
 	@Test
 	public void inputAndOuputToLocalFileSystem() throws IOException {
-		 
 		
 		String uri = "temp.txt";
 		Configuration conf = new Configuration();
@@ -56,7 +74,6 @@ public class SkylineTest {
 		Path path = new Path(uri);
 		FSDataOutputStream out = fs.create(path);
 		
-
 		IntWritable origin_value = new IntWritable(10);
 		
 		//write

@@ -1,4 +1,4 @@
-package mapreduce_bnl;
+package mapreduce.bnl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

@@ -1,12 +1,13 @@
 package mapreduce;
 
+import mapreduce.quadtree.*;
+
 import org.apache.hadoop.conf.*;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapred.*;
 import org.apache.hadoop.util.*;
 
-import quadtree.*;
 
 
 public class QuadtreeDriver extends Configured implements Tool{

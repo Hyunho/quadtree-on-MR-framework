@@ -1,4 +1,4 @@
-package quadtree;
+package mapreduce.quadtree;
 import static org.junit.Assert.*;
 
 import java.io.IOException;

@@ -1,6 +1,5 @@
 package mapreduce;
-import mapreduce.maxTemperature.MaxTemperatureMapper;
-import mapreduce.maxTemperature.MaxTemperatureReducer;
+import mapreduce.maxTemperature.*;
 
 import org.apache.hadoop.conf.*;
 import org.apache.hadoop.fs.Path;
@@ -8,7 +7,6 @@ import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapred.*;
 import org.apache.hadoop.util.*;
 
-import MaxTemperature.*;
 
 public class MaxTemperatureDriver extends Configured implements Tool{
 

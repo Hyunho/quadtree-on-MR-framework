@@ -1,13 +1,10 @@
+package quadtree;
 import static org.junit.Assert.*;
-
 import java.util.List;
-
 import org.junit.*;
 
-import quadtree.Boundary;
-import quadtree.Point;
-import quadtree.QuadTree;
-import quadtree.Range;
+
+
 
 
 public class QuadTreeTest {

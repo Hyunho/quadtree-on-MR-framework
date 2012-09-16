@@ -1,35 +1,37 @@
+package mapreduce;
+
 import org.apache.hadoop.conf.*;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapred.*;
 import org.apache.hadoop.util.*;
 
-import MaxTemperature.*;
+import quadtree.*;
 
-public class MaxTemperatureDriver extends Configured implements Tool{
+
+public class QuadtreeDriver extends Configured implements Tool{
 
 	@Override
 	public int run(String[] args) throws Exception {
 		if(args.length != 2) {
-			System.err.printf("Usage: %s [generic option] <input> <output>\n", 
-					getClass().getSimpleName());
+			System.err.printf("Usage: %s [generic option] <input> <output\n", getClass().getSimpleName());
 			ToolRunner.printGenericCommandUsage(System.err);
 			return -1;
 		}
 				
 		JobConf conf = new JobConf(getConf(), getClass());
-		conf.setJobName("Max temperature");
+		conf.setJobName("QuadTree");
 		
 		FileInputFormat.addInputPath(conf, new Path(args[0]));
 		FileOutputFormat.setOutputPath(conf, new Path(args[1]));
 		
 		conf.setOutputKeyClass(Text.class);
 		conf.setOutputValueClass(IntWritable.class);
-		
-		conf.setMapperClass(MaxTemperatureMapper.class);
-		conf.setCombinerClass(MaxTemperatureReducer.class);
-		conf.setReducerClass(MaxTemperatureReducer.class);
-		
+//		
+//		conf.setMapperClass(MaxTemperatureMapper.class);
+//		conf.setCombinerClass(MaxTemperatureReducer.class);
+//		conf.setReducerClass(MaxTemperatureReducer.class);
+//		
 		JobClient.runJob(conf);
 		return 0;
 	}
@@ -38,4 +40,7 @@ public class MaxTemperatureDriver extends Configured implements Tool{
 		int exitCode = ToolRunner.run(new MaxTemperatureDriver(), args);
 		System.exit(exitCode);
 	}
+
 }
+
+

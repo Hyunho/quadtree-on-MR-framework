@@ -3,11 +3,13 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import java.io.IOException;
+
+import mapreduce.quadtree.*;
+import mapreduce.quadtree.io.TupleWritableComparable;
+
 import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapred.OutputCollector;
 import org.junit.*;
-import quadtree.io.*;
-import quadtree.*;
 
 public class QuadTreeTest {
 

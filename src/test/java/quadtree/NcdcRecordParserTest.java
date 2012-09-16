@@ -2,11 +2,13 @@ package quadtree;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+
+import mapreduce.quadtree.NcdcForm;
+import mapreduce.quadtree.NcdcRecordParser;
+
 import org.apache.hadoop.io.*;
 import org.junit.*;
 
-import quadtree.NcdcForm;
-import quadtree.NcdcRecordParser;
 
 public class NcdcRecordParserTest {
 

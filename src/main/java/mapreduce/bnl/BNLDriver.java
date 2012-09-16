@@ -1,4 +1,4 @@
-package mapreduce_bnl;
+package mapreduce.bnl;
 
 
 
@@ -8,10 +8,10 @@ import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapred.*;
 import org.apache.hadoop.util.*;
 
-import tool.JobBuilder;
 
-import mapreduce_bnl.io.FlagWritable;
-import mapreduce_bnl.io.TupleWritable;
+import mapreduce.bnl.io.FlagWritable;
+import mapreduce.bnl.io.TupleWritable;
+import mapreduce.tool.JobBuilder;
 
 public class BNLDriver {
 

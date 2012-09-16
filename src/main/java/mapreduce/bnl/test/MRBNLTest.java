@@ -1,12 +1,13 @@
-package mapreduce_bnl.test;
+package mapreduce.bnl.test;
 
 
 import java.io.IOException;
 
-import mapreduce_bnl.BNLDriver;
-import mapreduce_bnl.DivisionMapper;
-import mapreduce_bnl.DivisionReducer;
-import mapreduce_bnl.io.TupleWritable;
+import mapreduce.bnl.BNLDriver;
+import mapreduce.bnl.DivisionMapper;
+import mapreduce.bnl.DivisionReducer;
+import mapreduce.bnl.io.TupleWritable;
+import mapreduce.tool.JobBuilder;
 
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.FileSystem;
@@ -17,12 +18,9 @@ import org.apache.hadoop.mapred.FileOutputFormat;
 import org.apache.hadoop.mapred.JobClient;
 import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapred.FileInputFormat;
-import org.apache.hadoop.mapred.TextOutputFormat;
-
 import org.apache.hadoop.mapred.TextInputFormat;
 import org.apache.hadoop.util.Tool;
 
-import tool.JobBuilder;
 
 
 

@@ -1,11 +1,11 @@
-package mapreduce_bnl;
+package mapreduce.bnl;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import mapreduce_bnl.io.FlagWritable;
-import mapreduce_bnl.io.TupleWritable;
+import mapreduce.bnl.io.FlagWritable;
+import mapreduce.bnl.io.TupleWritable;
 
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.mapred.MapReduceBase;
@@ -31,11 +31,14 @@ public class MergingReducer extends MapReduceBase
 			tuples.add(new TupleWritable(tuple.getX(), tuple.getY()));
 		}
 		
+		SkylineComputer helper =  new SkylineComputer(tuples.iterator());
 		
-		ArrayList<TupleWritable> skyline = new SkylineHelper(tuples.iterator()).getSkylineUsingBNL();
+		//helper.setMaximumWindowSize(10000);	
 		
-		for (TupleWritable tupleWritable : skyline) {
-			output.collect(tupleWritable, NullWritable.get());
-		}		
+		//ArrayList<TupleWritable> skyline = helper.getSkylineUsingBNL();
+		
+//		for (TupleWritable tupleWritable : skyline) {
+//			output.collect(tupleWritable, NullWritable.get());
+//		}		
 	}
 }

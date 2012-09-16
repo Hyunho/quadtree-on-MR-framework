@@ -1,9 +1,9 @@
-package mapreduce_bnl;
+package mapreduce.bnl;
 
 import java.io.IOException;
 
-import mapreduce_bnl.io.FlagWritable;
-import mapreduce_bnl.io.TupleWritable;
+import mapreduce.bnl.io.FlagWritable;
+import mapreduce.bnl.io.TupleWritable;
 
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.NullWritable;

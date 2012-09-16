@@ -1,4 +1,4 @@
-package quadtree;
+package mapreduce.quadtree;
 
 
 public class NcdcForm {

@@ -1,4 +1,4 @@
-package MaxTemperature;
+package mapreduce.maxTemperature;
 import org.apache.hadoop.io.Text;
 
 public class NcdcRecordParser {

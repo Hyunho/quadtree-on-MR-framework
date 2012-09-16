@@ -1,6 +1,8 @@
-package quadtree;
+package mapreduce.quadtree;
 
 import java.io.IOException;
+
+import mapreduce.quadtree.io.TupleWritableComparable;
 
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
@@ -9,7 +11,6 @@ import org.apache.hadoop.mapred.Mapper;
 import org.apache.hadoop.mapred.OutputCollector;
 import org.apache.hadoop.mapred.Reporter;
 
-import quadtree.io.TupleWritableComparable;
 
 public class ParsingMapper extends MapReduceBase 
 implements Mapper<LongWritable, Text, Text, TupleWritableComparable> {

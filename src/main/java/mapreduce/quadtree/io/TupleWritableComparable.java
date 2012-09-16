@@ -1,4 +1,4 @@
-package quadtree.io;
+package mapreduce.quadtree.io;
 
 import java.io.DataInput;
 import java.io.DataOutput;

@@ -8,9 +8,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import junit.framework.TestCase;
-
-import mapreduce_bnl.io.TupleWritable;
+import mapreduce.bnl.io.TupleFile;
+import mapreduce.bnl.io.TupleIterator;
+import mapreduce.bnl.io.TupleWritable;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataInputStream;
@@ -36,36 +36,24 @@ public class SkylineTest {
 						new TupleWritable(10, 30)));
 	}
 	
-	@Test
-	public void oneIterateInblockNestedLoop() throws IOException {	
-		
-		SkylineHelper helper = new SkylineHelper(this.tuples.iterator());
-		helper.setMaximumWindowSize(2);
-		
-		ArrayList<TupleWritable> skyline = helper.iterate();
-		assertEquals(2, skyline.size());
-		
-		skyline = helper.iterate();
-		assertEquals(1, skyline.size());
-	}
 	
-	@Test
+	//@Test
 	public void getSkylineUsingBNL() throws IOException {
 		
-		SkylineHelper helper = new SkylineHelper(this.tuples.iterator());
-		
-		helper.setMaximumWindowSize(2);
-		ArrayList<TupleWritable> skyline = helper.getSkylineUsingBNL();
-		
-		assertEquals(3, skyline.size());
-		
- 		assertTrue(skyline.contains(new TupleWritable(10, 10)));
-		assertTrue(skyline.contains(new TupleWritable(5, 15)));
-		assertTrue(skyline.contains(new TupleWritable(10, 10)));
-		assertFalse(skyline.contains(new TupleWritable(10, 30)));		
+//		SkylineComputer helper = new SkylineComputer(this.tuples.iterator());
+//		
+//		helper.setMaximumWindowSize(2);
+//		ArrayList<TupleWritable> skyline = helper.getSkylineUsingBNL();
+//		
+//		assertEquals(3, skyline.size());
+//		
+// 		assertTrue(skyline.contains(new TupleWritable(10, 10)));
+//		assertTrue(skyline.contains(new TupleWritable(5, 15)));
+//		assertTrue(skyline.contains(new TupleWritable(10, 10)));
+//		assertFalse(skyline.contains(new TupleWritable(10, 30)));		
 	}
 	
-	@Test
+	//@Test
 	public void inputAndOuputToLocalFileSystem() throws IOException {
 		
 		String uri = "temp.txt";
@@ -90,6 +78,41 @@ public class SkylineTest {
 		assertTrue(fs.exists(path));
 		assertEquals(origin_value, read_value);		
 	}
+	
+	@Test
+	public void dominationTest() throws IOException {
+		TupleWritable tuple1 = new TupleWritable(10, 10);
+		TupleWritable tuple2 = new TupleWritable(20, 20);
+		
+		assertTrue(tuple1.dominate(tuple2));
+		assertFalse(tuple2.dominate(tuple1));
+	}
+	
+	@Test	
+	public void createTupleFile() throws IOException {
+
+//		String fileName = new String("filename");
+//		
+//		TupleFile file = new TupleFile(fileName);
+//		
+//		TupleWritable tuple = new TupleWritable(50, 50);
+//		file.insertTuple(tuple);
+//		file.insertTuple(tuple);
+//		file.insertTuple(tuple);
+//		
+//		file.close();
+//		
+//		TupleIterator iterator =  TupleFile.tupleIterator(fileName);
+//		
+//		assertEquals(tuple , iterator.next());
+//		assertEquals(tuple , iterator.next());
+//		assertEquals(tuple , iterator.next());
+//		
+//		assertFalse(iterator.hasNext());
+//		
+//		TupleFile.delete(fileName);
+	}
+	
 }
 
 

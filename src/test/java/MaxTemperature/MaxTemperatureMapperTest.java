@@ -2,6 +2,9 @@ package MaxTemperature;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.*;
 import java.io.IOException;
+
+import mapreduce.maxTemperature.MaxTemperatureMapper;
+
 import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapred.OutputCollector;
 

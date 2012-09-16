@@ -1,4 +1,4 @@
-package mapreduce_bnl.io;
+package mapreduce.bnl.io;
 
 import java.io.DataInput;
 import java.io.DataOutput;

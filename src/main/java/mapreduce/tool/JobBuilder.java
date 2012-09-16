@@ -1,4 +1,4 @@
-package tool;
+package mapreduce.tool;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;

@@ -1,4 +1,4 @@
-package MaxTemperature;
+package mapreduce.maxTemperature;
 
 import java.io.IOException;
 import java.util.Iterator;

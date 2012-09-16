@@ -1,8 +1,9 @@
-package mapreduce_bnl;
+package mapreduce.bnl;
 
 import java.io.IOException;
 
-import mapreduce_bnl.io.TupleWritable;
+import mapreduce.bnl.io.TupleWritable;
+import mapreduce.quadtree.InvertedIndexer;
 
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
@@ -11,7 +12,6 @@ import org.apache.hadoop.mapred.Mapper;
 import org.apache.hadoop.mapred.OutputCollector;
 import org.apache.hadoop.mapred.Reporter;
 
-import quadtree.InvertedIndexer;
 
 public class DivisionMapper  extends MapReduceBase
 	implements Mapper<LongWritable, Text, Text, TupleWritable>{

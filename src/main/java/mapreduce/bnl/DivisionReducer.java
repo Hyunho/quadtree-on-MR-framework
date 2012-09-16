@@ -1,11 +1,11 @@
-package mapreduce_bnl;
+package mapreduce.bnl;
 
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
 
-import mapreduce_bnl.io.TupleWritable;
+import mapreduce.bnl.io.TupleWritable;
+
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapred.MapReduceBase;
 import org.apache.hadoop.mapred.OutputCollector;
@@ -26,10 +26,10 @@ public class DivisionReducer extends MapReduceBase
 			throws IOException {
 		
 		
-		ArrayList<TupleWritable> skyline =  new SkylineHelper(values).getSkylineUsingBNL();
-				
-		for (TupleWritable tupleWritable : skyline) {
-			output.collect(key, tupleWritable);
-		}		
+		SkylineComputer computer =  new SkylineComputer(values);
+		
+		computer.setMaximumWindowSize(10000);
+		
+	
 	}
 }

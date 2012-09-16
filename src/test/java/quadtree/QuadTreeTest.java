@@ -1,5 +1,12 @@
 package quadtree;
 import static org.junit.Assert.*;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import org.junit.*;
 
@@ -13,8 +20,8 @@ public class QuadTreeTest {
 	@Test 
 	public void boundary()	{		
 		Boundary boundary = new Boundary(new Range(0, 100), new Range(0, 100));
-		assertTrue(boundary.containsPoint(new Point(10,10)));
-		assertFalse(boundary.containsPoint(new Point(100,100)));
+		assertTrue(boundary.containsPoint(new Point(34.9198960931972, 9.390168171376)));
+		assertFalse(boundary.containsPoint(new Point(100, 100)));
 	}
 	
 	@Test 
@@ -33,6 +40,9 @@ public class QuadTreeTest {
 				subBoundary.get(2));
 		assertEquals(new Boundary(new Range(50, 100), new Range(50, 100)), 
 				subBoundary.get(3));
+		
+		boundary = new Boundary(new Range(50, 100), new Range(50, 100));
+		subBoundary = boundary.split();
 		
 		
 	}
@@ -72,34 +82,90 @@ public class QuadTreeTest {
 		
 		assertFalse(quadTree.hasChildren());
 		
-		quadTree.insert(new Point(10, 10));
-		quadTree.insert(new Point(10, 10));
-		quadTree.split();
+		quadTree.insert(new Point(1, 2));
+		quadTree.insert(new Point(10, 10));		
+	
+		quadTree.insert(new Point(15, 15));
+		quadTree.insert(new Point(24, 24));
 		
-		assertTrue(quadTree.hasChildren());
-		assertEquals(4, quadTree.children.size());
+		assertEquals(10, quadTree.leaves().size());
 		
-		quadTree.insertIntoChildren(new Point(90, 90));
-		
-		assertEquals(3, quadTree.size());		
-		assertEquals(2, quadTree.children.get(0).size());
+		assertEquals(4, quadTree.size());		
+		assertEquals(4, quadTree.children.get(0).size());
 	}
 	
 
 	@Test
 	public void bulidQuadTree() {		
 		Boundary boundary = new Boundary(new Range(0, 100), new Range(0, 100));		
-		QuadTree quadTree =  new QuadTree(2, boundary);		
+		QuadTree quadTree =  new QuadTree(3, boundary);		
 		
-		quadTree.insert(new Point(10,10));
-		assertEquals(1, quadTree.size());
+		List<String> str = Arrays.asList(
+				"34.9198960931972 9.3901681713760", 
+				"35.271448479034 66.4713265141472",
+				"87.9154678201303 28.4757010638714",
+				"26.5008917078376 58.3467065123841",
+				"43.6861026799306 82.5742253800854",
+				"71.0774731822312 28.0028196051717",
+				"21.2149743456393 99.315042141825",
+				"94.2635245388374 95.3292045276612",
+				"85.5743957217783 60.1300568319857");
 		
-		quadTree.insert(new Point(10,10));
-		assertEquals(2, quadTree.size());
+		Iterator<String> is = str.iterator();
+		int count = 0; 
+		while(is.hasNext()) {
+			String line = is.next();
+			
+			String[] strings = line.split(" ");
+			
+			double x = Double.parseDouble(strings[0]);
+			double y = Double.parseDouble(strings[1]);
+			
+			Point point = new Point(x, y);
+			quadTree.insert(point);
+			
+			count++;
+			assertEquals(count, quadTree.size());
+			
+		}
+	}
+	
+	@Test
+	public void buildQuadTreeWithFile() {
 		
-		quadTree.insert(new Point(90,90));
-		assertTrue(quadTree.hasChildren());
-		assertEquals(3, quadTree.size());
+		String fileName = "src/test/resources/data-quad.txt";
+		QuadTree quadTree = new QuadTree(10, new Boundary(new Range(0, 100), new Range(0, 100)));
 		
+		int count = 0;
+		try {
+			
+			BufferedReader in = new BufferedReader(new FileReader(fileName));
+			
+			String line;
+			try {
+				while((line = in.readLine()) != null) {
+					String[] strings = line.split(" ");
+					
+					double x = Double.parseDouble(strings[0]);
+					double y = Double.parseDouble(strings[1]);
+
+					Point point = new Point(x, y);
+					
+					quadTree.insert(point);					
+					count++;					
+					assertEquals(count, quadTree.size());					
+				}
+				
+				assertEquals(count,quadTree.size());
+				
+			} catch (IOException e) {				
+				e.printStackTrace();
+			}
+			
+		} catch (FileNotFoundException e) {
+			System.err.println(fileName + "is not existed in " +
+					System.getProperty("user.dir"));
+			e.printStackTrace();
+		} 
 	}
 }

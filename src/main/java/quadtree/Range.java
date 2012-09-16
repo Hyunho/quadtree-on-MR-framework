@@ -24,7 +24,7 @@ public class Range {
 	@Override
 	public String toString() {
 		String str = new String();
-		str += " min : "+ this.max + ", max : "+ this.min;
+		str += "(min : "+ this.min + ", max : "+ this.max + ")";
 		return str;
 	}
 	

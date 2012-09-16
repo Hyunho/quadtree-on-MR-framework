@@ -48,7 +48,7 @@ public class Boundary{
 		
 		List<List<Range>> list = new ArrayList<List<Range>>();		
 		for(int i=0; i < dimension() ; i++) {
-			double median = (this.ranges[i].max - this.ranges[i].min) / 2;
+			double median = (this.ranges[i].max + this.ranges[i].min) / 2;
 			List<Range> part = new ArrayList<Range>();
 			part.add(new Range(this.ranges[i].min, median));
 			part.add(new Range(median, this.ranges[i].max));			
@@ -85,9 +85,7 @@ public class Boundary{
 	
 	@Override
 	public String toString() {
-		String str = new String();
-		str += " size : "+ ranges.length + "\n";
-		str += "ranges : ";
+		String str = new String();	
 		for(int i=0; i< this.dimension(); i++) {
 			 str += this.ranges[i].toString();
 		}

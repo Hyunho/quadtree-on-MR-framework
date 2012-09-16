@@ -1,7 +1,10 @@
 package quadtree;
+import java.io.NotActiveException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import com.sun.tools.internal.ws.wsdl.document.jaxws.Exception;
 
 
 /**
@@ -17,7 +20,9 @@ public class QuadTree{
 	
 	private int capacity;
 	
-	private Boundary boundary;	
+	private Boundary boundary;
+	public Boundary boundary() { return this.boundary; }
+	
 	private int dimension = 2;
 	
 	public ArrayList<QuadTree> children;
@@ -35,16 +40,15 @@ public class QuadTree{
 		
 		List<Boundary> lb = this.boundary.split();
 		
-		Iterator<Boundary> ib = lb.iterator();
-		
+		Iterator<Boundary> ib = lb.iterator();		
 		while(ib.hasNext()) {
 			Boundary subBoundary = ib.next();			
 			this.children.add(new QuadTree(this.capacity, subBoundary));
-		}	
+		}
 		
 		Iterator<Point>  iterator  = this.points.iterator();
-		
-		while(iterator.hasNext())	{
+
+		while(iterator.hasNext()) {
 			Point point = iterator.next();
 			insertIntoChildren(point);
 			iterator.remove();
@@ -59,52 +63,48 @@ public class QuadTree{
 	public boolean insert(Point point) {		
 		
 		//ignore objects which do not belong in this quad tree
-		if(!boundary.containsPoint(point))
-			return false;	
-		
+		if(!boundary.containsPoint(point)) {
+			return false;
+		}
+
 		// if there is space in this quad tree, add the object here
-		if(size() < this.capacity) {			
-			this.points.add(point);			
+		if(size() < this.capacity) {
+			this.points.add(point);
 			return true;
 		}
-		
+
 		// Otherwise, we need to subdivide than add the point to whichever node will accept it
-		if (!this.hasChildren()) {						
+		if (!this.hasChildren()) {
 			this.split();
-		}		
-		
+		}
+
 		this.insertIntoChildren(point);
 		
 		//otherwise. the point can not be inserted for some unknown reason(which should never happen)
-		return false;
+		return false;		
 	}
 
 	//insert point into sub-quadtree
-	public void insertIntoChildren(Point point) {		
+	public boolean insertIntoChildren(Point point) {		
 		
 		Iterator<QuadTree> iterator = this.children.iterator();
 		while(iterator.hasNext()) {
 			QuadTree quadTree = iterator.next();
 			if(quadTree.insert(point))
-				break;
+				return true;
 		}
+		
+		return false;
 	}
 	
 	public int size() {
+		List<QuadTree> leaves = this.leaves();
+		int size = 0;
 		
-		if (!this.hasChildren()) {
-			return points.size();
-		} else {
-			int size = 0;		
-			Iterator<QuadTree> iterator = this.children.iterator();
-
-			while(iterator.hasNext()) {
-				QuadTree quadTree = iterator.next();
-				size += quadTree.size();
-			}	
-			
-			return size; 
-		}
+		Iterator<QuadTree> iq = leaves.iterator();
+		while(iq.hasNext())
+			size += iq.next().points.size();
+		return size;			
 	}
 
 	public boolean hasChildren() {		
@@ -113,5 +113,35 @@ public class QuadTree{
 
 	public int dimension() {
 		return this.dimension;
+	}
+	
+	public List<QuadTree> leaves() {
+		List<QuadTree> sub = new ArrayList<QuadTree>();
+	
+		if (!this.hasChildren()) {
+			sub.add(this);
+			
+		} else {
+					
+			Iterator<QuadTree> iterator = this.children.iterator();
+			
+			while(iterator.hasNext()) {
+				QuadTree quadTree = iterator.next();
+				sub.addAll(quadTree.leaves());
+			}
+		}
+		
+		return sub;
+	}
+	
+	@Override
+	public String toString() {
+		String str = new String();		
+		str += "number of data point : " + size() + "\n";
+		str += "number of leaves of qaudtree : " + leaves().size() + "\n";
+		str += "boundary : " + boundary();
+		str += "Is children null? : " + (this.children == null) + "\n";; 
+		
+		return str;		
 	}
 }

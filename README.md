@@ -1,12 +1,12 @@
 
-
 #development 
 
+<pre class="code>
   $ sudo apt-get install maven2
   $ sudo apt-get insatll eclipse
     # all test must bepassed
   $ mvn test
-
+</pre>
 
 
 the data is downloaded from ncdc.

@@ -1,11 +1,25 @@
-#development 
 
+
+#developement
+
+## Java
 <pre class="code">
   $ sudo apt-get install maven2
   $ sudo apt-get insatll eclipse
-    # all test must bepassed
+  
+  # all test must be passed
   $ mvn test
 </pre>
+
+## R
+
+Type following code, 
+
+<pre class="code">
+  # sudo apt-get install r-base
+</pre>
+
+
 
 
 the data is downloaded from ncdc.

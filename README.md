@@ -1,5 +1,14 @@
 
 
+#development 
+
+  $ sudo apt-get install maven2
+  $ sudo apt-get insatll eclipse
+    # all test must bepassed
+  $ mvn test
+
+
+
 the data is downloaded from ncdc.
 we use two attributes to get skyline tuples.
 

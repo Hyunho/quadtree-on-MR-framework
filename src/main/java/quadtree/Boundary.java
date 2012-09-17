@@ -1,8 +1,9 @@
 package quadtree;
+import java.io.Serializable;
 import java.security.InvalidParameterException;
 import java.util.*;
 
-public class Boundary{	
+public class Boundary implements Serializable{	
 
 	private Range[] ranges;
 

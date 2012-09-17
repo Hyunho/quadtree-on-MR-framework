@@ -5,8 +5,6 @@ import java.io.ObjectInputStream;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import com.sun.xml.internal.ws.server.UnsupportedMediaException;
-
 public class TupleIterator implements Iterator<TupleWritable> {
 	
 	private ObjectInputStream is;

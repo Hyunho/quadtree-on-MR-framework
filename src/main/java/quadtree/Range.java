@@ -1,6 +1,8 @@
 package quadtree;
 
-public class Range {
+import java.io.Serializable;
+
+public class Range  implements Serializable{
 
 	public double min;
 	public double max;

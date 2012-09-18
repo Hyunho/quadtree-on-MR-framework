@@ -131,4 +131,35 @@ public class QuadTreeMemoryTest {
 			e.printStackTrace();
 		} 
 	}
+	
+	@Test
+	public void index() {
+		Point point = new Point(20, 20);
+		Boundary boundary = 
+			new Boundary(new Range(0, 100), new Range(0, 100));
+		
+		QuadTreeMemory quadTree = new QuadTreeMemory(10, boundary);
+		assertEquals("", quadTree.getindex(point));
+		
+		quadTree = QuadTreeMemory.getQuadtree(2, boundary, 1);
+				
+		assertEquals("1", quadTree.getindex(point));
+		
+	}
+	
+	@Test
+	public void quadtreeWithDepth() {
+				
+		Boundary boundary = 
+			new Boundary(new Range(0, 100), new Range(0, 100));
+		
+		QuadTreeMemory quadTree = new QuadTreeMemory(2, boundary);		
+		assertEquals(1, quadTree.leaves().size());
+		
+		quadTree = QuadTreeMemory.getQuadtree(2, boundary, 1);
+		assertEquals(4, quadTree.leaves().size());
+		
+		quadTree = QuadTreeMemory.getQuadtree(2, boundary, 2);
+		assertEquals(16, quadTree.leaves().size());
+	}
 }

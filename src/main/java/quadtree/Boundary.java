@@ -29,8 +29,8 @@ public class Boundary implements Serializable{
 					"dimension of boundrary and that of point must be same");
 		
 		for(int i=0; i< ranges.length; i++) {
-			if ((ranges[i].min > point.values[i]) ||
-					ranges[i].max <= point.values[i]) {
+			if ((ranges[i].min > point.values()[i]) ||
+					ranges[i].max <= point.values()[i]) {
 				return false;
 			}
 		}	

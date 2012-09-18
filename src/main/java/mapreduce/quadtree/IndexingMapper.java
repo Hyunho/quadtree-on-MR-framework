@@ -2,7 +2,7 @@ package mapreduce.quadtree;
 
 import java.io.IOException;
 
-import mapreduce.quadtree.io.TupleWritableComparable;
+import mapreduce.quadtree.io.PointWritable;
 
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
@@ -11,41 +11,42 @@ import org.apache.hadoop.mapred.Mapper;
 import org.apache.hadoop.mapred.OutputCollector;
 import org.apache.hadoop.mapred.Reporter;
 
+import quadtree.Boundary;
+import quadtree.QuadTreeMemory;
+import quadtree.Range;
 
+
+
+/**
+ * get index of tuple using virtual quad-tree
+ * @author hyunho
+ *
+ */
 public class IndexingMapper extends MapReduceBase 
-	implements Mapper<LongWritable, TupleWritableComparable, Text, TupleWritableComparable> {
+	implements Mapper<LongWritable, PointWritable, Text, PointWritable> {
 		
 	private int depth = 0;
+	private QuadTreeMemory quadTree;
+	
+	
+	/**
+	 * generate a quadtree to index a tuple
+	 * @param depth
+	 */
+	public void setQuadtreeDepth(int depth) {		
+		Boundary boundary = new Boundary(new Range(0, 100), new Range(0, 100));		
+		this.quadTree =QuadTreeMemory.getQuadtree(3, boundary, depth);
+		}
+	
 	
 	@Override
-	public void map(LongWritable key, TupleWritableComparable value,
-			OutputCollector<Text, TupleWritableComparable> output, Reporter reporter)
+	public void map(LongWritable key, PointWritable value,
+			OutputCollector<Text, PointWritable> output, Reporter reporter)
 	throws IOException {
-				
+
 		output.collect(
-				this.getIndex(value),
-				new TupleWritableComparable(value.getAirTemperature(), value.getAtmosphericPressure())
-		);
-	}	
-	
-	private Text getIndex(TupleWritableComparable value) {
-		
-		String temperatureIndex = InvertedIndexer.getIndex(
-				value.getAirTemperature(),
-				NcdcForm.MAX_AIR_TEMPERATURE, NcdcForm.MIN_AIR_TEMPERATURE,				 
-				depth);
-		String atmosphericPressureIndex = InvertedIndexer.getIndex(
-				value.getAtmosphericPressure(),
-				NcdcForm.MAX_ATMOSPHERIC_PRESSURE, NcdcForm.MIN_ATMOSPHERIC_pRESSURE, 
-				depth);
-		
-		String allIndex = temperatureIndex + atmosphericPressureIndex;		
-		return new Text(allIndex);
+				new Text(this.quadTree.getindex(value.point())),
+				value
+				);
 	}
-
-
-	public void setQuadtreeDepth(int depth) {
-		this.depth = depth;
-	}
-	
 }

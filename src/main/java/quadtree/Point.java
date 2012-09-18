@@ -3,13 +3,15 @@ package quadtree;
 import java.io.Serializable;
 
 public class Point implements Serializable {
-	
-	
-	public double[] values;
-
+		
+	private double[] values;
+	public double[] values() {
+		return this.values;
+	}
 	public Point(double... values) {
 		this.values = values;
 	}	
+	
 	
 	public Point(String... strings) {		
 		this.values = new double[strings.length];

@@ -1,7 +1,5 @@
 package quadtree;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -18,15 +16,9 @@ public class QuadTreeMemory implements QuadTree {
 	private int capacity;
 	
 	private Boundary boundary;
-	/* (non-Javadoc)
-	 * @see quadtree.Quad#boundary()
-	 */
 	public Boundary boundary() { return this.boundary; }
 	
 	private int dimension;
-	/* (non-Javadoc)
-	 * @see quadtree.Quad#dimension()
-	 */
 	public int dimension() { return this.dimension; }
 	
 	public ArrayList<QuadTreeMemory> children;
@@ -174,6 +166,56 @@ public class QuadTreeMemory implements QuadTree {
 	}
 
 
-
-
+	/**
+	 * get index of tuple, if a given point is inserted into quadtree.
+	 * but a point is not inserted actually
+	 * @param point
+	 * @return
+	 */
+	public String getindex(Point point) { 
+		
+		if (!this.hasChildren()) {
+			return "";
+		}
+		
+		
+		int count = 0;
+		String subString = new String();
+		
+		for(QuadTreeMemory quadTree: this.children) {
+			if (quadTree.canHas(point)) {
+				count++;
+				subString = quadTree.getindex(point);
+				break;
+			}
+		}
+		
+		return count + subString;
+	}
+	
+	private boolean canHas(Point point) {
+		return this.boundary.containsPoint(point);
+	}
+	
+	/**
+	 * generate quadtree with given depth
+	 * @param capacity
+	 * @param boundary
+	 * @param depth
+	 * @return
+	 */
+	public static QuadTreeMemory getQuadtree(
+			int capacity, Boundary boundary, int depth){
+		
+		QuadTreeMemory quadTree = new QuadTreeMemory(capacity, boundary);
+		
+		for(int i=0; i < depth; i++ ) {
+			List<QuadTree> leaves = quadTree.leaves();
+			for(QuadTree q : leaves) 
+				q.split();
+		}
+				
+		return quadTree;
+	}
 }
+	

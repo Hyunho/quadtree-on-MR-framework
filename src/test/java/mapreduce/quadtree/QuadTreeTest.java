@@ -34,18 +34,5 @@ public class QuadTreeTest {
 		indexingMapper.map(null, new PointWritable(point), output, null);
 		verify(output).collect(new Text("11"), new PointWritable(point));
 	}
-		
-
-	
-	@Test	
-	public void testIndexing() throws IOException {
-		int value = 20;		
-		int max = 100;
-		int min = 0;		
-		int depth = 3;
-
-		assertEquals("001", InvertedIndexer.getIndex(value, max, min, depth));
-	}
-	
 	
 }

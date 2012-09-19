@@ -75,29 +75,6 @@ public class QuadTreeTest {
 		verify(output).collect(key, new Text("114 60.0 60.0"));	
 	}
 	
-	@Test
-	public void sampling() throws IOException, InterruptedException {
-
-		Job job = new Job();
-		
-		job.setInputFormatClass(KeyValueTextInputFormat.class);
-			
-		String input = "src/test/resources/sample2D-quad.txt";
-		
-		
-		KeyValueTextInputFormat inputFormat = 
-			new KeyValueTextInputFormat();
-
-		KeyValueTextInputFormat.setInputPaths(
-				job, new Path(input));
-	
-		
-		InputSampler.IntervalSampler<Text, Text> sampler =
-			new IntervalSampler<Text, Text>(3,1);
-		
-		Text[] keys = sampler.getSample(inputFormat, job);
-			
-	}
 
 	@Test	
 	public void testIndexing() throws IOException {

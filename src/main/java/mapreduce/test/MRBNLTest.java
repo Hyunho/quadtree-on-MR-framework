@@ -1,4 +1,4 @@
-package mapreduce.bnl.test;
+package mapreduce.test;
 
 
 import java.io.IOException;

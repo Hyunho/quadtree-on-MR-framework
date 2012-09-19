@@ -8,7 +8,13 @@ echo "this script is suitable for this project"
 mvn clean package 1> /dev/null
 
 #run hadoop algorithm test
-hadoop --config /etc/hadoop/conf.empty/ jar target/skyline-practice-0.0.1-SNAPSHOT.jar mapreduce_bnl.test.MRBNLTest
+hadoop --config /etc/hadoop/conf.empty/ jar target/skyline-practice-0.0.1-SNAPSHOT.jar mapreduce.test.MRBNLTest
+
+
+hadoop --config /etc/hadoop/conf.empty/ jar target/skyline-practice-0.0.1-SNAPSHOT.jar mapreduce.test.Sampling
+
+
+
 
 
 

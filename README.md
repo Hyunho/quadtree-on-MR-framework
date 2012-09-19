@@ -29,8 +29,8 @@ Now run the following commands:
 
 You can now import the projects into your eclipse workspace via:
 
-    File -> Import -> Existing Projects into Workspace -> Choose your workspace as
-        the root directory and import a project.
+    File -> Import -> Existing Projects into Workspace -> 
+            Choose your workspace as the root directory and import a project.
 
 ## install R language
 

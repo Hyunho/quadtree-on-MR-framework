@@ -1,4 +1,4 @@
-package mapreduce.bnl;
+package mapreduce.example.bnl;
 
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;

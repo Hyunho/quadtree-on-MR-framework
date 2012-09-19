@@ -1,4 +1,4 @@
-package mapreduce.maxTemperature;
+package mapreduce.example.maxTemperature;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.*;
 

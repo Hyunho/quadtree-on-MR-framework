@@ -1,4 +1,4 @@
-package mapreduce.quadtree;
+package mapreduce.example.quadtree;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -8,6 +8,9 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 import mapreduce.io.PointWritable;
+import mapreduce.quadtree.IndexingMapper;
+import mapreduce.quadtree.InvertedIndexer;
+import mapreduce.quadtree.QuadTreeReducer;
 
 
 import org.apache.hadoop.fs.Path;

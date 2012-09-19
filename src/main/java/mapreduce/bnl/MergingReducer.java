@@ -31,7 +31,7 @@ public class MergingReducer extends MapReduceBase
 			tuples.add(new TupleWritable(tuple.getX(), tuple.getY()));
 		}
 		
-		SkylineComputer helper =  new SkylineComputer(tuples.iterator());
+//		SkylineComputer helper =  new SkylineComputer(tuples.iterator());
 		
 		//helper.setMaximumWindowSize(10000);	
 		

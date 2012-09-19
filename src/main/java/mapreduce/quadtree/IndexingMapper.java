@@ -12,6 +12,7 @@ import org.apache.hadoop.mapred.OutputCollector;
 import org.apache.hadoop.mapred.Reporter;
 
 import quadtree.Boundary;
+import quadtree.Point;
 import quadtree.QuadTreeMemory;
 import quadtree.Range;
 
@@ -23,9 +24,8 @@ import quadtree.Range;
  *
  */
 public class IndexingMapper extends MapReduceBase 
-	implements Mapper<LongWritable, PointWritable, Text, PointWritable> {
+	implements Mapper<LongWritable, Text, Text, PointWritable> {
 		
-	private int depth = 0;
 	private QuadTreeMemory quadTree;
 	
 	
@@ -40,13 +40,17 @@ public class IndexingMapper extends MapReduceBase
 	
 	
 	@Override
-	public void map(LongWritable key, PointWritable value,
+	public void map(LongWritable key, Text iValue,
 			OutputCollector<Text, PointWritable> output, Reporter reporter)
-	throws IOException {
+			throws IOException {
+		
+
+		Point point = new Point(iValue.toString().split(" "));
+		
 
 		output.collect(
-				new Text(this.quadTree.getindex(value.point())),
-				value
+				new Text(this.quadTree.getindex(point)),
+				new PointWritable(point)
 				);
 	}
 }

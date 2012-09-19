@@ -5,6 +5,10 @@ import java.util.*;
 
 public class Boundary implements Serializable{	
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8410984052838112510L;
 	private Range[] ranges;
 
 	/**

@@ -16,11 +16,15 @@ import java.util.List;
 
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 
-
 public class QuadTreeFile implements QuadTree, Serializable {
 
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 10661782942512120L;
 	private String name;
+	public String name() { return this.name; }
 	
 	
 	private int capacity;
@@ -125,7 +129,7 @@ public class QuadTreeFile implements QuadTree, Serializable {
 
 		// if there is space in this quad tree, add the object here
 		if(size() < this.capacity) {
-			this.points.add(point);
+			this.checkAndSavePoint(point);
 			this.save();
 			return true;
 		}
@@ -140,6 +144,18 @@ public class QuadTreeFile implements QuadTree, Serializable {
 		//otherwise. the point can not be inserted for some unknown reason
 		//(which should never happen)
 		return false;		
+	}
+	
+	/**
+	 * check whether a point is already inside quadtree or not.
+	 * if not, save a point into quadtree.
+	 * @param point
+	 */
+	private void checkAndSavePoint(Point point) {
+		
+		if(!this.points.contains(point)) {
+			this.points.add(point);
+		}
 	}
 
 	//insert point into sub-quadtree
@@ -204,6 +220,28 @@ public class QuadTreeFile implements QuadTree, Serializable {
 		return sub;		
 	}
 	
+	/**
+	 * return all descendant including self
+	 * @return
+	 */
+	public List<QuadTreeFile> descendant() {
+		
+		List<QuadTreeFile> descendant = new ArrayList<QuadTreeFile>();
+		
+		if (this.hasChildren()) {
+					
+			Iterator<QuadTreeFile> iterator = this.children().iterator();
+			
+			while(iterator.hasNext()) {
+				QuadTreeFile quadTree = iterator.next();
+				descendant.addAll(quadTree.descendant());
+			}
+		}		
+		
+		descendant.add(this);
+		return descendant;
+	}
+	
 	public List<QuadTreeFile> children() {
 		
 		List<QuadTreeFile> children = new ArrayList<QuadTreeFile>();
@@ -228,6 +266,34 @@ public class QuadTreeFile implements QuadTree, Serializable {
 		str += "boundary : " + boundary();
 		
 		return str;		
+	}
+
+	/**
+	 * delete a quadtree which has given name including descendant"
+	 * @param name
+	 */
+	public static void delete(String name) {
+		File dir = new File(".");
+		FileFilter fileFilter = new WildcardFileFilter(name +"*");
+		File[] files = dir.listFiles(fileFilter);	
+		
+		for(int i = 0; i < files.length ; i ++ )  {
+			files[i].delete(); 
+		}
+	}
+
+	/**
+	 * return true, if this quadtree has no children. 
+	 * @return
+	 */
+	public boolean isLeaf() {
+		return !this.hasChildren();
+	}
+
+	public ArrayList<Point> values() {
+		if(isLeaf())
+			return this.points;
+		return null;
 	}
 }
 	

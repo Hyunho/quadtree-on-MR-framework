@@ -4,7 +4,7 @@
 # dont need to type all script, just type this command script
 echo "this script is suitable for this project"
 
-#run manven scritp
+#run manven script
 mvn clean package 1> /dev/null
 
 #run hadoop algorithm test

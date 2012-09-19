@@ -4,6 +4,10 @@ import java.io.Serializable;
 
 public class Range  implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 9156625161361529947L;
 	public double min;
 	public double max;
 

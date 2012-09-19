@@ -4,6 +4,10 @@ import java.io.Serializable;
 
 public class Point implements Serializable {
 		
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3656012765730552099L;
 	private double[] values;
 	public double[] values() {
 		return this.values;
@@ -39,5 +43,22 @@ public class Point implements Serializable {
 		
 		return str;
 	}
+	
+	@Override 
+	public boolean equals(Object o)
+	{
+		if (this == o) return true;	
+		if (!(o instanceof Point)) return false;		                 
+		Point other = (Point) o;
+		
+		if (!(this.dimension() == other.dimension())) return false;
+		
+		for(int i=0; i< this.dimension(); i++) {
+			if (!(this.values[i] == other.values[i])) return false;
+		}
+		
+		return true;	      
+	}
+	
 	
 }

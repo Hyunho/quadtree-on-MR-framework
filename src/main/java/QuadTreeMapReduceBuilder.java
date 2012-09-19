@@ -1,14 +1,19 @@
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import quadtree.*;
+import quadtree.Boundary;
+import quadtree.Point;
+import quadtree.QuadTree;
+import quadtree.QuadTreeFile;
+import quadtree.Range;
 
 
-public class QuadtreeBuilder {
+public class QuadTreeMapReduceBuilder {
 
+	
+	
 	/**
 	 * @param args
 	 */
@@ -50,5 +55,8 @@ public class QuadtreeBuilder {
 					System.getProperty("user.dir"));
 			e.printStackTrace();
 		}
+		
+		//FileOutputFormat
 	}
+	
 }

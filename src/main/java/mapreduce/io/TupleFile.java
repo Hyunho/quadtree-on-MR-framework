@@ -1,4 +1,4 @@
-package mapreduce.bnl.io;
+package mapreduce.io;
 
 import java.io.File;
 import java.io.FileInputStream;

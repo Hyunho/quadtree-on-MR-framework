@@ -1,11 +1,12 @@
-package mapreduce.bnl;
+package mapreduce.example.bnl;
 
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
-import mapreduce.bnl.io.TupleFile;
-import mapreduce.bnl.io.TupleWritable;
+
+import mapreduce.io.TupleFile;
+import mapreduce.io.TupleWritable;
 
 /***
  * To get skyline, this class help it,

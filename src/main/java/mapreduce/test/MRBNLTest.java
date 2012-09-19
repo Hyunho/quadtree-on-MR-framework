@@ -3,10 +3,10 @@ package mapreduce.test;
 
 import java.io.IOException;
 
-import mapreduce.bnl.BNLDriver;
-import mapreduce.bnl.DivisionMapper;
-import mapreduce.bnl.DivisionReducer;
-import mapreduce.bnl.io.TupleWritable;
+import mapreduce.example.bnl.BNLDriver;
+import mapreduce.example.bnl.DivisionMapper;
+import mapreduce.example.bnl.DivisionReducer;
+import mapreduce.io.TupleWritable;
 import mapreduce.tool.JobBuilder;
 
 import org.apache.hadoop.conf.Configured;
@@ -59,7 +59,8 @@ public class MRBNLTest extends Configured implements Tool {
 		
 		System.out.println("===================                        =====================");
 		System.out.println("===================                        =====================");
-		mergingJob();		
+		mergingJob();	
+		
 	}
 
 	private static Path divisionJob() throws IOException, Exception {

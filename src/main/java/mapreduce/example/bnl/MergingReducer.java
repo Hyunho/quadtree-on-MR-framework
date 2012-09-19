@@ -1,11 +1,11 @@
-package mapreduce.bnl;
+package mapreduce.example.bnl;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import mapreduce.bnl.io.FlagWritable;
-import mapreduce.bnl.io.TupleWritable;
+import mapreduce.io.FlagWritable;
+import mapreduce.io.TupleWritable;
 
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.mapred.MapReduceBase;

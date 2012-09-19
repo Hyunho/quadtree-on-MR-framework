@@ -7,12 +7,12 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
 
-import mapreduce.bnl.DivisionMapper;
-import mapreduce.bnl.DivisionReducer;
-import mapreduce.bnl.MergingMapper;
-import mapreduce.bnl.MergingReducer;
-import mapreduce.bnl.io.FlagWritable;
-import mapreduce.bnl.io.TupleWritable;
+import mapreduce.example.bnl.DivisionMapper;
+import mapreduce.example.bnl.DivisionReducer;
+import mapreduce.example.bnl.MergingMapper;
+import mapreduce.example.bnl.MergingReducer;
+import mapreduce.io.FlagWritable;
+import mapreduce.io.TupleWritable;
 
 import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapred.OutputCollector;

@@ -6,7 +6,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
 
-import mapreduce.maxTemperature.MaxTemperatureMapper;
+import mapreduce.example.MaxTemperature.MaxTemperatureMapper;
+import mapreduce.example.MaxTemperature.MaxTemperatureReducer;
 
 import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapred.OutputCollector;

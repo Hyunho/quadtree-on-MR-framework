@@ -2,7 +2,7 @@ package mapreduce.quadtree;
 
 import java.io.IOException;
 
-import mapreduce.quadtree.io.PointWritable;
+import mapreduce.io.PointWritable;
 
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;

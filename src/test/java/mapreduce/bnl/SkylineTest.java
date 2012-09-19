@@ -8,9 +8,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import mapreduce.bnl.io.TupleFile;
-import mapreduce.bnl.io.TupleIterator;
-import mapreduce.bnl.io.TupleWritable;
+import mapreduce.io.TupleFile;
+import mapreduce.io.TupleIterator;
+import mapreduce.io.TupleWritable;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataInputStream;

@@ -1,4 +1,4 @@
-package mapreduce.maxTemperature;
+package mapreduce.example.MaxTemperature;
 import java.io.IOException;
 
 import org.apache.hadoop.io.*;

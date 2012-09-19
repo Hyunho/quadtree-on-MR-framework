@@ -1,8 +1,8 @@
-package mapreduce.bnl;
+package mapreduce.example.bnl;
 
 import java.io.IOException;
 
-import mapreduce.bnl.io.TupleWritable;
+import mapreduce.io.TupleWritable;
 import mapreduce.quadtree.InvertedIndexer;
 
 import org.apache.hadoop.io.LongWritable;

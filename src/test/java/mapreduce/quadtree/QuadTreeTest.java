@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
 
-import mapreduce.quadtree.io.PointWritable;
+import mapreduce.io.PointWritable;
 
 
 import org.apache.hadoop.fs.Path;
@@ -74,8 +74,7 @@ public class QuadTreeTest {
 		verify(output).collect(key, new Text("111 10.0 10.0"));
 		verify(output).collect(key, new Text("114 60.0 60.0"));	
 	}
-	
-
+		
 	@Test	
 	public void testIndexing() throws IOException {
 		int value = 20;		

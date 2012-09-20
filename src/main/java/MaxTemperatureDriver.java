@@ -1,7 +1,6 @@
 
 import mapreduce.example.MaxTemperature.MaxTemperatureMapper;
 import mapreduce.example.MaxTemperature.MaxTemperatureReducer;
-import mapreduce.example.maxTemperature.*;
 
 import org.apache.hadoop.conf.*;
 import org.apache.hadoop.fs.Path;

@@ -30,7 +30,9 @@ public class Boundary implements Serializable{
 		
 		if (this.dimension() !=  point.dimension())
 			throw new InvalidParameterException(
-					"dimension of boundrary and that of point must be same");
+					"dimension of boundrary and that of point must be same. " +
+					"number of dimension of boundary is " +  this.dimension() +
+					" and number of dimension of point is " + point.dimension());
 		
 		for(int i=0; i< ranges.length; i++) {
 			if ((ranges[i].min > point.values()[i]) ||

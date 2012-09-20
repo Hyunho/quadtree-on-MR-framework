@@ -4,7 +4,6 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import org.apache.hadoop.io.ArrayWritable;
 import org.apache.hadoop.io.*;
 
 
@@ -22,37 +21,52 @@ public class PointWritable implements Writable {
 		}
 	}
 	
-	public PointWritable(Point point) {	
-		this.point = point;
+	public PointWritable() {
+		this.set(new Point());
 	}
+	public PointWritable(Point point) {
+		this.set(point);
+	}
+	
+	public void set(Point point) {
+		this.point = point;		
+	}
+	
+	
 
 	@Override
 	public void write(DataOutput out) throws IOException {
+
 		LongArrayWritable law = new LongArrayWritable();		
 		
 		double[] values = point.values();
-		
+					
 		LongWritable[] lw  = new LongWritable[values.length];
 		
 		for(int i=0; i< values.length ; i++) {
-			lw[i].set((long) values[i]);
+			lw[i] = (new LongWritable((long) values[i]));
 		}
 		
-		law.set(lw);
+		law.set(lw);		
+		law.write(out);
 	}
 
 	@Override	
 	public void readFields(DataInput in) throws IOException {
+		
 		LongArrayWritable law = new LongArrayWritable();
+		
 		law.readFields(in);
 		
-		LongWritable[] la = (LongWritable[]) law.get();
+		Writable[] w = law.get();
 		
-		double[] values = new double[la.length];
+		double[] values = new double[w.length];
 		
-		for(int i=0; i< la.length ; i++) {
-			values[i] = la[i].get();
+		for(int i=0; i< w.length ; i++) {
+			values[i] = ((LongWritable)w[i]).get();
 		}
+		
+		this.set(new Point(values));
 	}
 	
 	@Override
@@ -63,5 +77,10 @@ public class PointWritable implements Writable {
 		if (!(o instanceof PointWritable)) return false;		
 		PointWritable other = (PointWritable) o;
 		return this.point.equals(other.point);		
+	}
+	
+	@Override
+	public String toString() {
+		return this.point.toString();
 	}
 }

@@ -12,6 +12,10 @@ public class Point implements Serializable {
 	public double[] values() {
 		return this.values;
 	}
+	
+	public Point() {
+		this.values = new double[0];
+	}
 	public Point(double... values) {
 		this.values = values;
 	}	

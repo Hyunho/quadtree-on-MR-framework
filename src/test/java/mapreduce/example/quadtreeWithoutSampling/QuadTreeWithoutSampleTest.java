@@ -53,28 +53,41 @@ public class QuadTreeWithoutSampleTest {
 	@Test
 	public void quadtreeReduce() throws IOException  {		
 
-
-
 		QuadTreeReducer reducer= new QuadTreeReducer();
 		
+		JobConf conf = new JobConf();
 
-		Text key = new Text("11");
+		conf.setInt("capacity", 4);
+		conf.setStrings("boundary",
+				"0-100",
+				"0-100"				
+		);
+		
+		reducer.configure(conf);
+		
+		Text key = new Text("1");
+		
 		Iterator<PointWritable> values = Arrays.asList(
 				new PointWritable(new Point(10, 10)),
 				new PointWritable(new Point(1, 1)),
-				new PointWritable(new Point(60, 60)),
+				new PointWritable(new Point(30, 30)),
 				new PointWritable(new Point(20, 20)),
-				new PointWritable(new Point(70, 25))).iterator();
+				new PointWritable(new Point(30, 15))).iterator();
 
 		OutputCollector<Text, Text> output =
 			mock(OutputCollector.class);
 
 		reducer.reduce(key, values, output, null);		
 
-		verify(output).collect(key, new Text("11"));
-		verify(output).collect(key, new Text("111 10.0 10.0"));
-		verify(output).collect(key, new Text("111 10.0 10.0"));
-		verify(output).collect(key, new Text("114 60.0 60.0"));	
+//		verify(output).collect(
+//				new Text("Q1"), null);
+		verify(output).collect(
+				new Text("Q14"), new Text("30.0 30.0"));
+		verify(output).collect(
+				new Text("Q11"), new Text("10.0 10.0"));
+		verify(output).collect(
+				new Text("Q11"), new Text("20.0 20.0"));
+			
 	}
 		
 	@Test	

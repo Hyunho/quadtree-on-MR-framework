@@ -1,6 +1,7 @@
 package quadtree;
 
 import java.io.Serializable;
+import java.security.InvalidParameterException;
 
 public class Range  implements Serializable{
 
@@ -32,6 +33,25 @@ public class Range  implements Serializable{
 		String str = new String();
 		str += "(min : "+ this.min + ", max : "+ this.max + ")";
 		return str;
+	}
+	
+	/**
+	 * create Range instance using string split by 
+	 * given regular expression. 
+	 * @param str
+	 * @param regex
+	 * @return
+	 */
+	public static Range createRange(String str, String regex) {
+		String[] strs =  str.split(regex);
+		
+		if(strs.length != 2)
+			throw new InvalidParameterException(
+					"given string have to be split by regex"
+					);
+		
+		return new Range(Double.parseDouble(strs[0]),				
+				Double.parseDouble(strs[1]));
 	}
 	
 }

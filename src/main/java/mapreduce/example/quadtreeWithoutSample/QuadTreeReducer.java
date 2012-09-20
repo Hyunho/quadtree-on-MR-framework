@@ -7,6 +7,7 @@ import java.util.List;
 import mapreduce.io.PointWritable;
 
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapred.MapReduceBase;
 import org.apache.hadoop.mapred.OutputCollector;
 import org.apache.hadoop.mapred.Reducer;
@@ -20,31 +21,38 @@ import quadtree.Range;
 public class QuadTreeReducer extends MapReduceBase
 	implements Reducer<Text, PointWritable, Text, Text> {
 	
-	private int capacity = 10000;
+	private int capacity;	
 	
-	public void setCapacity(int capacity)  {
-		this.capacity = capacity;
-	}
 	
 	private Boundary boundary;
-	public void setBoundary(Boundary boundary) {
-		this.boundary = boundary;	}
-
 	
-	public QuadTreeReducer() {
-		Boundary boundary = new Boundary(
-				new Range(0, 100), new Range(0, 100));
-		this.setCapacity(10000);
-		this.setBoundary(boundary);
+	
+	
+	@Override   
+	public void configure(JobConf conf) {		
+		//set capacity
+		this.capacity = (conf.getInt("capacity", 10));
 
+		// set boundary		
+		String[] boundary = conf.getStrings(
+				"boundary",				
+				new String("0 100"),
+				new String("0 100"));		
+
+		Range[] ranges = new Range[boundary.length];		
+		for(int i=0; i <boundary.length; i++ ) {
+			ranges[i] = Range.createRange(boundary[i], "-");
+		}		
+		this.boundary = new Boundary(ranges);
 	}
+	
 	@Override
 	public void reduce(Text key, Iterator<PointWritable> values,
 			OutputCollector<Text, Text> output, Reporter reporter)
 			throws IOException {
 		
 		QuadTreeFile quadTree = new QuadTreeFile(
-				this.capacity, this.boundary, key.toString());
+				this.capacity, this.boundary, "Q");
 		
 		while(values.hasNext()) {
 			PointWritable point = values.next();
@@ -54,16 +62,15 @@ public class QuadTreeReducer extends MapReduceBase
 		List<QuadTreeFile> descendant = quadTree.descendant();		
 		
 		for(QuadTreeFile qtf : descendant) {			
-			String str = new String();
-			str += qtf.name();
+			Text oKey = new Text(qtf.name());
 			
 			if (qtf.isLeaf()) {
 				for(Point point : qtf.values()) {
-					output.collect(key,
-							new Text(str + " " + point.toString()));
+					output.collect(
+							oKey, new Text(point.toString()));
 				}
 			}else {
-				output.collect(key, new Text(str));
+				output.collect(oKey, new Text(key));
 			}
 		}
 		QuadTreeFile.delete(quadTree.name());

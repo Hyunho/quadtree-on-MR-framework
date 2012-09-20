@@ -29,7 +29,7 @@ import quadtree.Boundary;
 import quadtree.Point;
 import quadtree.Range;
 
-public class QuadTreeTest {
+public class QuadTreeWithoutSampleTest {
 
 
 
@@ -53,11 +53,10 @@ public class QuadTreeTest {
 	@Test
 	public void quadtreeReduce() throws IOException  {		
 
-		Boundary boundary = new Boundary(new Range(0, 100), new Range(0, 100));
+
 
 		QuadTreeReducer reducer= new QuadTreeReducer();
-		reducer.setCapacity(3);
-		reducer.setBoundary(boundary);
+		
 
 		Text key = new Text("11");
 		Iterator<PointWritable> values = Arrays.asList(

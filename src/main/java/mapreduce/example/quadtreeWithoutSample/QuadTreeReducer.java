@@ -34,7 +34,7 @@ public class QuadTreeReducer extends MapReduceBase
 	public QuadTreeReducer() {
 		Boundary boundary = new Boundary(
 				new Range(0, 100), new Range(0, 100));
-		this.setCapacity(3);
+		this.setCapacity(10000);
 		this.setBoundary(boundary);
 
 	}

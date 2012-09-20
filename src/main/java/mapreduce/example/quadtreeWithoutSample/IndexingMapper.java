@@ -1,4 +1,4 @@
-package mapreduce.quadtree;
+package mapreduce.example.quadtreeWithoutSample;
 
 import java.io.IOException;
 
@@ -27,6 +27,10 @@ public class IndexingMapper extends MapReduceBase
 	implements Mapper<LongWritable, Text, Text, PointWritable> {
 		
 	private QuadTreeMemory quadTree;
+	
+	public IndexingMapper() {
+		this.setQuadtreeDepth(2);
+	}
 	
 	
 	/**

@@ -1,10 +1,10 @@
-package mapreduce.example.quadtree;
+package mapreduce.example.quadtreeWithoutSampling;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
 
-import mapreduce.quadtree.NcdcForm;
-import mapreduce.quadtree.NcdcRecordParser;
+import mapreduce.example.quadtreeWithoutSample.NcdcForm;
+import mapreduce.example.quadtreeWithoutSample.NcdcRecordParser;
 
 import org.apache.hadoop.io.*;
 import org.junit.*;

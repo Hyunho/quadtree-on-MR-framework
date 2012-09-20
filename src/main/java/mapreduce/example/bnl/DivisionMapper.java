@@ -2,8 +2,8 @@ package mapreduce.example.bnl;
 
 import java.io.IOException;
 
+import mapreduce.example.quadtreeWithoutSample.InvertedIndexer;
 import mapreduce.io.TupleWritable;
-import mapreduce.quadtree.InvertedIndexer;
 
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;

@@ -1,4 +1,4 @@
-package mapreduce.quadtree;
+package mapreduce.example.quadtreeWithoutSample;
 
 
 public class NcdcForm {

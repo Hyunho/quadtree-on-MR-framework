@@ -1,4 +1,4 @@
-package mapreduce.example.quadtree;
+package mapreduce.example.quadtreeWithoutSampling;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -7,10 +7,10 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
 
+import mapreduce.example.quadtreeWithoutSample.IndexingMapper;
+import mapreduce.example.quadtreeWithoutSample.InvertedIndexer;
+import mapreduce.example.quadtreeWithoutSample.QuadTreeReducer;
 import mapreduce.io.PointWritable;
-import mapreduce.quadtree.IndexingMapper;
-import mapreduce.quadtree.InvertedIndexer;
-import mapreduce.quadtree.QuadTreeReducer;
 
 
 import org.apache.hadoop.fs.Path;

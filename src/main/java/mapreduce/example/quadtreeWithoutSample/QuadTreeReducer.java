@@ -1,4 +1,4 @@
-package mapreduce.quadtree;
+package mapreduce.example.quadtreeWithoutSample;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -15,6 +15,7 @@ import org.apache.hadoop.mapred.Reporter;
 import quadtree.Boundary;
 import quadtree.Point;
 import quadtree.QuadTreeFile;
+import quadtree.Range;
 
 public class QuadTreeReducer extends MapReduceBase
 	implements Reducer<Text, PointWritable, Text, Text> {
@@ -29,6 +30,14 @@ public class QuadTreeReducer extends MapReduceBase
 	public void setBoundary(Boundary boundary) {
 		this.boundary = boundary;	}
 
+	
+	public QuadTreeReducer() {
+		Boundary boundary = new Boundary(
+				new Range(0, 100), new Range(0, 100));
+		this.setCapacity(3);
+		this.setBoundary(boundary);
+
+	}
 	@Override
 	public void reduce(Text key, Iterator<PointWritable> values,
 			OutputCollector<Text, Text> output, Reporter reporter)
@@ -42,9 +51,7 @@ public class QuadTreeReducer extends MapReduceBase
 			quadTree.insert(point.point());
 		}
 		
-		List<QuadTreeFile> descendant = quadTree.descendant();
-		
-		
+		List<QuadTreeFile> descendant = quadTree.descendant();		
 		
 		for(QuadTreeFile qtf : descendant) {			
 			String str = new String();

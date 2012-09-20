@@ -1,5 +1,8 @@
 
 
+import mapreduce.example.quadtreeWithoutSample.IndexingMapper;
+import mapreduce.example.quadtreeWithoutSample.QuadTreeReducer;
+
 import org.apache.hadoop.conf.*;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.*;
@@ -8,7 +11,7 @@ import org.apache.hadoop.util.*;
 
 
 
-public class QuadtreeDriver extends Configured implements Tool{
+public class QuadtreeDriverWithoutSample extends Configured implements Tool{
 
 	@Override
 	public int run(String[] args) throws Exception {
@@ -19,18 +22,18 @@ public class QuadtreeDriver extends Configured implements Tool{
 		}
 				
 		JobConf conf = new JobConf(getConf(), getClass());
-		conf.setJobName("QuadTree");
+		conf.setJobName("QuadTreeWithoutSample");
 		
 		FileInputFormat.addInputPath(conf, new Path(args[0]));
 		FileOutputFormat.setOutputPath(conf, new Path(args[1]));
 		
 		conf.setOutputKeyClass(Text.class);
 		conf.setOutputValueClass(IntWritable.class);
-//		
-//		conf.setMapperClass(MaxTemperatureMapper.class);
-//		conf.setCombinerClass(MaxTemperatureReducer.class);
-//		conf.setReducerClass(MaxTemperatureReducer.class);
-//		
+		
+		conf.setMapperClass(IndexingMapper.class);
+//		/conf.setCombinerClass(QuadTreeReducer.class);
+		conf.setReducerClass(QuadTreeReducer.class);
+		
 		JobClient.runJob(conf);
 		return 0;
 	}
@@ -39,5 +42,4 @@ public class QuadtreeDriver extends Configured implements Tool{
 		int exitCode = ToolRunner.run(new MaxTemperatureDriver(), args);
 		System.exit(exitCode);
 	}
-
 }

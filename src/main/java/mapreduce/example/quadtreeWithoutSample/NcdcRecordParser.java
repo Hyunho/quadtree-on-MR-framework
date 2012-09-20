@@ -1,4 +1,4 @@
-package mapreduce.quadtree;
+package mapreduce.example.quadtreeWithoutSample;
 import org.apache.hadoop.io.Text;
 
 

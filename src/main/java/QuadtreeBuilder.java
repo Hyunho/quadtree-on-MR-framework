@@ -14,6 +14,12 @@ public class QuadtreeBuilder {
 	 */
 	public static void main(String[] args) {
 
+		if (args.length != 1) {
+			System.err.println("there is no input arg[0]");
+			System.exit(-1);
+		}
+			
+			
 		String fileName = args[0];
 		QuadTree quadTree = new QuadTreeFile(4,
 				new Boundary(new Range(0, 100), new Range(0, 100)), "Q");

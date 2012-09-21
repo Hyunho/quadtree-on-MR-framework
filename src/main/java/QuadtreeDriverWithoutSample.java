@@ -43,10 +43,12 @@ public class QuadtreeDriverWithoutSample extends Configured implements Tool{
 		conf.setMapperClass(QuadTreeMapper.class);
 		
 	
-//		/conf.setCombinerClass(QuadTreeReducer.class);
+		conf.setOutputValueClass(Text.class);		
+		
+		
 //		conf.setNumReduceTasks(0);
 		
-//		conf.setReducerClass(QuadTreeReducer.class);
+		conf.setReducerClass(QuadTreeReducer.class);
 		
 		
 		JobClient.runJob(conf);

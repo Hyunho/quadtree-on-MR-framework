@@ -1,4 +1,4 @@
-package mapreduce.example.quadtreeWithSampling;
+package mapreduce.example.quadtree;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -26,7 +26,7 @@ import quadtree.Boundary;
 import quadtree.Point;
 import quadtree.Range;
 
-public class QuadTreeWithSampleTest {
+public class SamplingTest {
 	
 	//@Test
 	public void sampling() throws IOException {

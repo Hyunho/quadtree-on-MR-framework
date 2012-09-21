@@ -1,4 +1,4 @@
-package mapreduce.example.quadtreeWithoutSampling;
+package mapreduce.example.quadtree;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -29,7 +29,7 @@ import quadtree.Boundary;
 import quadtree.Point;
 import quadtree.Range;
 
-public class QuadTreeWithoutSampleTest {
+public class QuadTreeTest {
 
 	
 	private JobConf conf;

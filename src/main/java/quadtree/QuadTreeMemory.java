@@ -23,12 +23,15 @@ public class QuadTreeMemory implements QuadTree {
 	
 	public ArrayList<QuadTreeMemory> children;
 	private ArrayList<Point> points = new ArrayList<Point>();
+
+	private String name;
 	
 	
-	public QuadTreeMemory(int capacity, Boundary boundary) {
+	public QuadTreeMemory(int capacity, Boundary boundary, String name) {
 		this.capacity = capacity;
 		this.boundary = boundary;
 		this.dimension = boundary.dimension();
+		this.name = name;
 	}
 	
 
@@ -41,10 +44,15 @@ public class QuadTreeMemory implements QuadTree {
 		
 		List<Boundary> lb = this.boundary.split();
 		
-		Iterator<Boundary> ib = lb.iterator();		
+		Iterator<Boundary> ib = lb.iterator();	
+		
+		int count = 0;
 		while(ib.hasNext()) {
 			Boundary subBoundary = ib.next();			
-			this.children.add(new QuadTreeMemory(this.capacity, subBoundary));
+			this.children.add(new QuadTreeMemory(
+							this.capacity,
+							subBoundary,
+							this.name() + (++count)));
 		}
 		
 		Iterator<Point>  iterator  = this.points.iterator();
@@ -179,14 +187,15 @@ public class QuadTreeMemory implements QuadTree {
 		}
 		
 		
-		int count = 0;
+		int count = 1;
 		String subString = new String();
 		
 		for(QuadTreeMemory quadTree: this.children) {
-			if (quadTree.canHas(point)) {
-				count++;
+			if (quadTree.canHas(point)) {				
 				subString = quadTree.getindex(point);
 				break;
+			}else	{
+				count++;
 			}
 		}
 		
@@ -207,7 +216,8 @@ public class QuadTreeMemory implements QuadTree {
 	public static QuadTreeMemory getQuadtree(
 			int capacity, Boundary boundary, int depth){
 		
-		QuadTreeMemory quadTree = new QuadTreeMemory(capacity, boundary);
+		QuadTreeMemory quadTree = 
+			new QuadTreeMemory(capacity, boundary, "Q");
 		
 		for(int i=0; i < depth; i++ ) {
 			List<QuadTree> leaves = quadTree.leaves();
@@ -216,6 +226,24 @@ public class QuadTreeMemory implements QuadTree {
 		}
 				
 		return quadTree;
+	}
+
+
+	@Override
+	public String name() {
+		return this.name;
+	}
+
+
+	@Override
+	public boolean isLeaf() {
+		return this.points.size() == 0 ;
+	}
+
+
+	@Override
+	public List<Point> values() {
+		return this.points;
 	}
 }
 	

@@ -28,4 +28,11 @@ public interface QuadTree {
 
 	public abstract String toString();
 	
+	public abstract String name();
+
+	public abstract boolean isLeaf();
+
+	public abstract List<Point> values();
+	
+	
 }

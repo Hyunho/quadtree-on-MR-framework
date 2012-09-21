@@ -14,8 +14,8 @@ public class QuadtreeBuilder {
 	 */
 	public static void main(String[] args) {
 
-		String fileName = "src/test/resources/data2D-quad.txt";
-		QuadTree quadTree = new QuadTreeFile(10000,
+		String fileName = args[0];
+		QuadTree quadTree = new QuadTreeFile(4,
 				new Boundary(new Range(0, 100), new Range(0, 100)), "Q");
 				
 		try {

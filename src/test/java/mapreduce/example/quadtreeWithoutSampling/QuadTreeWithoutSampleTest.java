@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
 
-import mapreduce.example.quadtreeWithoutSample.IndexingMapper;
+import mapreduce.example.quadtreeWithoutSample.QuadTreeMapper;
 import mapreduce.example.quadtreeWithoutSample.InvertedIndexer;
 import mapreduce.example.quadtreeWithoutSample.QuadTreeReducer;
 import mapreduce.io.PointWritable;
@@ -31,23 +31,43 @@ import quadtree.Range;
 
 public class QuadTreeWithoutSampleTest {
 
+	
+	private JobConf conf;
+
+	@Before
+	public void before () {
+		
+		this.conf = new JobConf();
+		conf.setInt("capacity", 4);
+		conf.setStrings("boundary",
+				"0-100",
+				"0-100"				
+		);
+		
+		this.conf.setInt("depth", 2);
+	}
 
 
 	@Test 
-	public void IndexingMap() throws IOException {		
+	public void IndexingMap() throws IOException {
 		
-		IndexingMapper indexingMapper = new IndexingMapper();
-		indexingMapper.setQuadtreeDepth(2);
+		QuadTreeMapper indexingMapper = new QuadTreeMapper();
+		indexingMapper.configure(conf);
 		
 		Text ivalue = new Text("10 10");
-
-		Point point = new Point(10, 10);
+		
 		
 		OutputCollector<Text, PointWritable> output =
 			mock(OutputCollector.class);
 		
 		indexingMapper.map(null, ivalue, output, null);
-		verify(output).collect(new Text("11"), new PointWritable(point));
+		verify(output).collect(new Text("Q11"),
+				new PointWritable(new Point(10, 10)));
+		
+		ivalue = new Text("60 60");
+		indexingMapper.map(null, ivalue, output, null);
+		verify(output).collect(new Text("Q41"),
+				new PointWritable(new Point(60, 60)));
 	}
 	
 	@Test
@@ -55,13 +75,6 @@ public class QuadTreeWithoutSampleTest {
 
 		QuadTreeReducer reducer= new QuadTreeReducer();
 		
-		JobConf conf = new JobConf();
-
-		conf.setInt("capacity", 4);
-		conf.setStrings("boundary",
-				"0-100",
-				"0-100"				
-		);
 		
 		reducer.configure(conf);
 		
@@ -79,8 +92,6 @@ public class QuadTreeWithoutSampleTest {
 
 		reducer.reduce(key, values, output, null);		
 
-//		verify(output).collect(
-//				new Text("Q1"), null);
 		verify(output).collect(
 				new Text("Q14"), new Text("30.0 30.0"));
 		verify(output).collect(

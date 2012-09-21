@@ -15,6 +15,7 @@ import org.apache.hadoop.mapred.Reporter;
 
 import quadtree.Boundary;
 import quadtree.Point;
+import quadtree.QuadTree;
 import quadtree.QuadTreeFile;
 import quadtree.Range;
 
@@ -36,8 +37,8 @@ public class QuadTreeReducer extends MapReduceBase
 		// set boundary		
 		String[] boundary = conf.getStrings(
 				"boundary",				
-				new String("0 100"),
-				new String("0 100"));		
+				new String("0-100"),
+				new String("0-100"));		
 
 		Range[] ranges = new Range[boundary.length];		
 		for(int i=0; i <boundary.length; i++ ) {
@@ -59,18 +60,28 @@ public class QuadTreeReducer extends MapReduceBase
 			quadTree.insert(point.point());
 		}
 		
-		List<QuadTreeFile> descendant = quadTree.descendant();		
+		List<QuadTree> leaves = quadTree.leaves();		
 		
-		for(QuadTreeFile qtf : descendant) {			
+		
+		System.out.println("start saving");
+		int count = 0;
+		for(QuadTree qtf : leaves) {			
 			Text oKey = new Text(qtf.name());
 			
 			if (qtf.isLeaf()) {
 				for(Point point : qtf.values()) {
+					
+					if(( count++ %100) == 0) 
+						System.out.println("Reducer has saved " + count +" recodes");
+					
 					output.collect(
 							oKey, new Text(point.toString()));
-				}
+					}
+				
 			}else {
-				output.collect(oKey, new Text(key));
+				System.out.println("Reducer has saved " + count +" recodes");
+				output.collect(oKey, null);
+				
 			}
 		}
 		QuadTreeFile.delete(quadTree.name());

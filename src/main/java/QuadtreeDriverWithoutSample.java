@@ -1,6 +1,6 @@
 
 
-import mapreduce.example.quadtreeWithoutSample.IndexingMapper;
+import mapreduce.example.quadtreeWithoutSample.QuadTreeMapper;
 import mapreduce.example.quadtreeWithoutSample.QuadTreeReducer;
 import mapreduce.io.PointWritable;
 
@@ -26,6 +26,13 @@ public class QuadtreeDriverWithoutSample extends Configured implements Tool{
 		JobConf conf = new JobConf(getConf(), getClass());
 		conf.setJobName("QuadTreeWithoutSample");
 		
+		conf.setInt("capacity", 4);
+		conf.setStrings("boundary",
+				"0-100",
+				"0-100"				
+		);
+		
+		
 		FileInputFormat.addInputPath(conf, new Path(args[0]));
 		FileOutputFormat.setOutputPath(conf, new Path(args[1]));
 		
@@ -33,13 +40,13 @@ public class QuadtreeDriverWithoutSample extends Configured implements Tool{
 //		conf.setInputFormat(theClass);
 		conf.setMapOutputKeyClass(Text.class);
 		conf.setMapOutputValueClass(PointWritable.class);		
-		conf.setMapperClass(IndexingMapper.class);
+		conf.setMapperClass(QuadTreeMapper.class);
 		
 	
 //		/conf.setCombinerClass(QuadTreeReducer.class);
 //		conf.setNumReduceTasks(0);
 		
-		conf.setReducerClass(QuadTreeReducer.class);
+//		conf.setReducerClass(QuadTreeReducer.class);
 		
 		
 		JobClient.runJob(conf);

@@ -28,7 +28,7 @@ import quadtree.Range;
 
 public class QuadTreeWithSampleTest {
 	
-	@Test
+	//@Test
 	public void sampling() throws IOException {
 		
 		SampleMapper mapper = new SampleMapper();

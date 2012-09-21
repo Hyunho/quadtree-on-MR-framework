@@ -10,6 +10,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -31,6 +32,10 @@ public class QuadTreeFile implements QuadTree, Serializable {
 	private Boundary boundary;
 
 	public QuadTreeFile(int capacity, Boundary boundary, String name) {
+		
+		if (name == "")
+			throw new InvalidParameterException(
+					"QuadtreeFile instance must has a name for saving");
 		
 		this.capacity = capacity;
 		this.boundary = boundary;

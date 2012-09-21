@@ -60,29 +60,19 @@ public class QuadTreeReducer extends MapReduceBase
 			quadTree.insert(point.point());
 		}
 		
-		List<QuadTree> leaves = quadTree.leaves();		
 		
+		System.out.println("start to ouput");
+		List<QuadTree> leaves = quadTree.leaves();	
 		
-		System.out.println("start saving");
-		int count = 0;
 		for(QuadTree qtf : leaves) {			
 			Text oKey = new Text(qtf.name());
-			
-			if (qtf.isLeaf()) {
-				for(Point point : qtf.values()) {
-					
-					if(( count++ %100) == 0) 
-						System.out.println("Reducer has saved " + count +" recodes");
-					
-					output.collect(
-							oKey, new Text(point.toString()));
-					}
-				
-			}else {
-				System.out.println("Reducer has saved " + count +" recodes");
-				output.collect(oKey, null);
-				
+
+			for(Point point : qtf.values()) {
+				output.collect(
+						oKey, new Text(point.toString()));
 			}
+
+
 		}
 		QuadTreeFile.delete(quadTree.name());
 

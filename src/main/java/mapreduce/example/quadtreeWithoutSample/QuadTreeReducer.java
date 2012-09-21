@@ -16,8 +16,7 @@ import org.apache.hadoop.mapred.Reporter;
 import quadtree.Boundary;
 import quadtree.Point;
 import quadtree.QuadTree;
-import quadtree.QuadTreeFile;
-import quadtree.QuadTreeMemory;
+import quadtree.QuadTreeFileNode;
 import quadtree.Range;
 
 public class QuadTreeReducer extends MapReduceBase
@@ -53,7 +52,7 @@ implements Reducer<Text, PointWritable, Text, Text> {
 			OutputCollector<Text, Text> output, Reporter reporter)
 	throws IOException {
 
-		QuadTree quadTree = new QuadTreeFile(
+		QuadTree quadTree = new QuadTreeFileNode(
 				this.capacity, this.boundary, "Q");
 
 		while(values.hasNext()) {

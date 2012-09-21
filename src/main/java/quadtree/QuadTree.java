@@ -22,8 +22,6 @@ public interface QuadTree {
 
 	public abstract int size();
 
-	public abstract boolean hasChildren();
-
 	public abstract List<QuadTree> leaves();
 
 	public abstract String toString();

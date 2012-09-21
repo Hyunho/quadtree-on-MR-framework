@@ -14,10 +14,11 @@ import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 
-public class QuadTreeFile implements QuadTree, Serializable {
+public class QuadTreeFileNode implements QuadTree, Serializable {
 
 
 	/**
@@ -31,7 +32,7 @@ public class QuadTreeFile implements QuadTree, Serializable {
 	private int capacity;
 	private Boundary boundary;
 
-	public QuadTreeFile(int capacity, Boundary boundary, String name) {
+	public QuadTreeFileNode(int capacity, Boundary boundary, String name) {
 		
 		if (name == "")
 			throw new InvalidParameterException(
@@ -41,15 +42,7 @@ public class QuadTreeFile implements QuadTree, Serializable {
 		this.boundary = boundary;
 		this.name = name;
 		
-		try {
-			FileOutputStream fs = new FileOutputStream(name);
-			ObjectOutputStream os = new ObjectOutputStream(fs);
-			
-			os.writeObject(this);
-		    os.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		this.save();
 	}
 	
 	public void save() {
@@ -64,12 +57,12 @@ public class QuadTreeFile implements QuadTree, Serializable {
 		}		
 	}
 	
-	public static QuadTreeFile load(File file) {
+	public static QuadTreeFileNode load(File file) {
 		try {
 			FileInputStream fileStream = new FileInputStream(file);
 			ObjectInputStream os = new ObjectInputStream(fileStream);
 			
-			return (QuadTreeFile)os.readObject();
+			return (QuadTreeFileNode)os.readObject();
 			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -91,22 +84,29 @@ public class QuadTreeFile implements QuadTree, Serializable {
 
 	private ArrayList<Point> points = new ArrayList<Point>();
 	
+	private String[] childenNames; 
+	
 	public void split() {
 		
 		
 		List<Boundary> boundaries = this.boundary.split();	
-		Iterator<Boundary> ib = boundaries.iterator();		
 		
 		int count = 0;
-		while(ib.hasNext()) {
-			Boundary subBoundary = ib.next();	
-			
-			new QuadTreeFile(this.capacity, 
-					subBoundary,
-					name + (++count));
-			
-		}
 		
+		this.childenNames = new String[boundaries.size()];
+		
+		for(int i=0; i< boundaries.size(); i++ ) {
+
+			Boundary subBoundary = boundaries.get(i);
+			childenNames[i] = name + (++count); 
+
+			new QuadTreeFileNode(this.capacity, 
+					subBoundary,
+					childenNames[i]
+					);
+
+		}
+
 		//
 		Iterator<Point>  iterator  = this.points.iterator();
 
@@ -119,6 +119,8 @@ public class QuadTreeFile implements QuadTree, Serializable {
 		this.save();
 		
 	}
+	
+	private int size = 0;
 
 	/**
 	 * insert a point into the QuadTree
@@ -131,47 +133,44 @@ public class QuadTreeFile implements QuadTree, Serializable {
 		if(!boundary.containsPoint(point)) {
 			return false;
 		}
+		
 
 		// if there is space in this quad tree, add the object here
 		if(size() < this.capacity) {
-			this.checkAndSavePoint(point);
-			this.save();
-			return true;
+			
+			if(!this.points.contains(point)) {
+				this.points.add(point);
+				size++;
+				this.save();
+				return true;
+			}			
+			
+			return false;
 		}
 		
 		// Otherwise, we need to subdivide than add the point to whichever node will accept it
-		if (!this.hasChildren()) {
+		if (this.isLeaf()) {
 			this.split();
 		}
 
-		this.insertIntoChildren(point);
+		if (this.insertIntoChildren(point)) {
+			size++;
+			return true;
+		}
 
 		//otherwise. the point can not be inserted for some unknown reason
 		//(which should never happen)
 		return false;		
 	}
 	
-	/**
-	 * check whether a point is already inside quadtree or not.
-	 * if not, save a point into quadtree.
-	 * @param point
-	 */
-	private void checkAndSavePoint(Point point) {
-		
-		if(!this.points.contains(point)) {
-			this.points.add(point);
-		}
-	}
-
 	//insert point into sub-quadtree
 	public boolean insertIntoChildren(Point point) {		
 
-		File dir = new File(".");
-		FileFilter fileFilter = new WildcardFileFilter( this.name + "?");
-		File[] files = dir.listFiles(fileFilter);		
+		
+		File[] files = childrenFiles();		
 		
 		for(int i=0; i< files.length; i++ ) {
-			QuadTreeFile qtf = QuadTreeFile.load(files[i]);
+			QuadTreeFileNode qtf = QuadTreeFileNode.load(files[i]);
 			if(qtf.insert(point)) 
 				return true;
 			
@@ -179,29 +178,8 @@ public class QuadTreeFile implements QuadTree, Serializable {
 		return false;
 	}
 
-	public int size() {
-		
-		if(!this.hasChildren())
-			return this.points.size();
-		
-		List<QuadTree> leaves = this.leaves();	
-		
-		int size = 0;
-
-		Iterator<QuadTree> iFile = leaves.iterator();
-		while(iFile.hasNext()) {
-			QuadTree quad = iFile.next();			
-			size += quad.size();
-		}
-		
-		return size;			
-	}
-
-	public boolean hasChildren() {
-		File dir = new File(".");		
-		FileFilter fileFilter = new WildcardFileFilter( this.name + "?");
-		File[] files = dir.listFiles(fileFilter);
-		return (files.length != 0);
+	public int size() {		
+		return size;
 	}
 
 
@@ -210,12 +188,12 @@ public class QuadTreeFile implements QuadTree, Serializable {
 		
 		List<QuadTree> sub = new ArrayList<QuadTree>();
 		
-		if (!this.hasChildren()) {
+		if (this.isLeaf()) {
 			sub.add(this);
 			
 		} else {
 					
-			Iterator<QuadTreeFile> iterator = this.children().iterator();
+			Iterator<QuadTreeFileNode> iterator = this.children();
 			
 			while(iterator.hasNext()) {
 				QuadTree quadTree = iterator.next();
@@ -229,16 +207,16 @@ public class QuadTreeFile implements QuadTree, Serializable {
 	 * return all descendant including self
 	 * @return
 	 */
-	public List<QuadTreeFile> descendant() {
+	public List<QuadTreeFileNode> descendant() {
 		
-		List<QuadTreeFile> descendant = new ArrayList<QuadTreeFile>();
+		List<QuadTreeFileNode> descendant = new ArrayList<QuadTreeFileNode>();
 		
-		if (this.hasChildren()) {
+		if (!this.isLeaf()) {
 					
-			Iterator<QuadTreeFile> iterator = this.children().iterator();
+			Iterator<QuadTreeFileNode> iterator = this.children();
 			
 			while(iterator.hasNext()) {
-				QuadTreeFile quadTree = iterator.next();
+				QuadTreeFileNode quadTree = iterator.next();
 				descendant.addAll(quadTree.descendant());
 			}
 		}		
@@ -247,20 +225,56 @@ public class QuadTreeFile implements QuadTree, Serializable {
 		return descendant;
 	}
 	
-	public List<QuadTreeFile> children() {
+
+	
+	public File[] childrenFiles() {
 		
-		List<QuadTreeFile> children = new ArrayList<QuadTreeFile>();
+		File[] childrenFiles = new File[this.childenNames.length];
 		
-		File dir = new File(".");
-		FileFilter fileFilter = new WildcardFileFilter( this.name + "?");
-		File[] files = dir.listFiles(fileFilter);		
-		
-		for(int i=0; i< files.length; i++ ) {
-			QuadTreeFile qtf = QuadTreeFile.load(files[i]);
-			children.add(qtf);	
+		for(int i=0; i< childrenFiles.length; i++ ) {
+			childrenFiles[i] = new File(this.childenNames[i]);
 		}
 		
-		return children;
+		return childrenFiles;
+		
+	}
+	
+	public Iterator<QuadTreeFileNode> children() {					
+		
+		return new QuadIterator(childrenFiles());
+	}
+	
+	class QuadIterator implements Iterator<QuadTreeFileNode> {
+
+		private File[] files;		
+		int i=0;
+
+		QuadIterator(File[] files) {
+			this.files = files;
+		}
+		@Override
+		public boolean hasNext() {
+
+			return i < files.length;
+		}
+
+		@Override
+		public QuadTreeFileNode next() {
+
+			if(this.hasNext()) {
+				QuadTreeFileNode qtf = QuadTreeFileNode.load(files[i]);
+				i++;
+				return qtf;	
+			}
+			throw new NoSuchElementException();
+		}
+
+		@Override
+		public void remove() {
+			// TODO Auto-generated method stub
+			
+		}
+		
 	}
 
 	@Override
@@ -277,13 +291,20 @@ public class QuadTreeFile implements QuadTree, Serializable {
 	 * delete a quadtree which has given name including descendant"
 	 * @param name
 	 */
-	public static void delete(String name) {
-		File dir = new File(".");
-		FileFilter fileFilter = new WildcardFileFilter(name +"*");
-		File[] files = dir.listFiles(fileFilter);	
+	public static void delete(String name) {		
 		
-		for(int i = 0; i < files.length ; i ++ )  {
-			files[i].delete(); 
+		File dir = new File(name);
+		
+		QuadTreeFileNode root = QuadTreeFileNode.load(dir);
+		
+		List<QuadTreeFileNode> descendant = root.descendant();
+		 
+		Iterator<QuadTreeFileNode> iq = descendant.iterator();
+		
+		while(iq.hasNext()) {
+			QuadTreeFileNode node = iq.next();
+			File deleteFile = new File(node.name());
+			deleteFile.delete();
 		}
 	}
 
@@ -292,13 +313,13 @@ public class QuadTreeFile implements QuadTree, Serializable {
 	 * @return
 	 */
 	public boolean isLeaf() {
-		return !this.hasChildren();
+		return this.childenNames == null;
+		
 	}
 
 	public ArrayList<Point> values() {
 		if(isLeaf())
 			return this.points;
-		return null;
+		return new ArrayList<Point>();
 	}
 }
-	

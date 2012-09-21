@@ -1,5 +1,6 @@
 package quadtree;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
 import java.io.BufferedReader;
@@ -22,19 +23,19 @@ public class QuadTreeFileTest {
 	@Test 
 	public void construct() {
 		Boundary boundary = new Boundary(new Range(0, 100), new Range(0, 100));
-		new QuadTreeFile(3, boundary, "Q");
+		new QuadTreeFileNode(3, boundary, "Q");
 	}
 
 	@Test 
 	public void inputSamePoint() {
 		Boundary boundary = new Boundary(new Range(0, 100), new Range(0, 100));
-		QuadTreeFile quadTree =  new QuadTreeFile(3, boundary, "Q");
+		QuadTreeFileNode quadTree =  new QuadTreeFileNode(3, boundary, "Q");
 		
-		quadTree.insert(new Point(10, 10));
-		quadTree.insert(new Point(10, 10));
-		quadTree.insert(new Point(10, 10));
-		quadTree.insert(new Point(10, 10));
-		quadTree.insert(new Point(10, 10));
+		assertTrue(quadTree.insert(new Point(10, 10)));
+		assertFalse(quadTree.insert(new Point(10, 10)));
+		assertFalse(quadTree.insert(new Point(10, 10)));
+		assertFalse(quadTree.insert(new Point(10, 10)));
+		assertFalse(quadTree.insert(new Point(10, 10)));
 		
 		assertEquals(1, quadTree.descendant().size());
 		
@@ -44,7 +45,7 @@ public class QuadTreeFileTest {
 		
 		Boundary boundary = new Boundary(new Range(0, 100), new Range(0, 100));	
 		
-		QuadTree quadTree =  new QuadTreeFile(3, boundary, "Q");		
+		QuadTree quadTree =  new QuadTreeFileNode(3, boundary, "Q");		
 
 		List<String> str = Arrays.asList(
 				"34.9198960931972 9.3901681713760", 
@@ -76,7 +77,7 @@ public class QuadTreeFileTest {
 	public void buildQuadTreeWithFile() {
 		
 		String fileName = "src/test/resources/sample2D-quad.txt";
-		QuadTree quadTree = new QuadTreeFile(10, 
+		QuadTree quadTree = new QuadTreeFileNode(10, 
 				new Boundary(new Range(0, 100), new Range(0, 100)),
 				"Q"
 				);
@@ -117,9 +118,9 @@ public class QuadTreeFileTest {
 	@Test 
 	public void deleteQuadtreeFile() {
 		Boundary boundary = new Boundary(new Range(0, 100), new Range(0, 100));
-		QuadTreeFile quadTree =  new QuadTreeFile(3, boundary, "Q");
+		QuadTreeFileNode quadTree =  new QuadTreeFileNode(3, boundary, "Q");
 		
-		QuadTreeFile.delete(quadTree.name());
+		QuadTreeFileNode.delete(quadTree.name());
 		
 		File dir = new File(".");
 		FileFilter fileFilter = new WildcardFileFilter("Q*");

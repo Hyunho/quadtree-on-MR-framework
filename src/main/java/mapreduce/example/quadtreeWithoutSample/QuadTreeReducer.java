@@ -52,7 +52,7 @@ public class QuadTreeReducer extends MapReduceBase
 			OutputCollector<Text, Text> output, Reporter reporter)
 			throws IOException {
 		
-		QuadTreeFile quadTree = new QuadTreeFile(
+		QuadTree quadTree = new QuadTreeFile(
 				this.capacity, this.boundary, "Q");
 		
 		while(values.hasNext()) {
@@ -60,19 +60,21 @@ public class QuadTreeReducer extends MapReduceBase
 			quadTree.insert(point.point());
 		}
 		
-		
-		System.out.println("start to ouput");
-		List<QuadTree> leaves = quadTree.leaves();	
+		List<QuadTree> leaves = quadTree.leaves();		
 		
 		for(QuadTree qtf : leaves) {			
 			Text oKey = new Text(qtf.name());
 
-			for(Point point : qtf.values()) {
-				output.collect(
-						oKey, new Text(point.toString()));
+			if (qtf.isLeaf()) {
+				for(Point point : qtf.values()) {
+					output.collect(
+							oKey, new Text(point.toString()));
+				}
+
+			}else {
+				output.collect(oKey, null);
+
 			}
-
-
 		}
 		QuadTreeFile.delete(quadTree.name());
 

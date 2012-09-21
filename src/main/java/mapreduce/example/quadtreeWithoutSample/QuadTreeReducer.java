@@ -17,18 +17,19 @@ import quadtree.Boundary;
 import quadtree.Point;
 import quadtree.QuadTree;
 import quadtree.QuadTreeFile;
+import quadtree.QuadTreeMemory;
 import quadtree.Range;
 
 public class QuadTreeReducer extends MapReduceBase
-	implements Reducer<Text, PointWritable, Text, Text> {
-	
+implements Reducer<Text, PointWritable, Text, Text> {
+
 	private int capacity;	
-	
-	
+
+
 	private Boundary boundary;
-	
-	
-	
+
+
+
 	@Override   
 	public void configure(JobConf conf) {		
 		//set capacity
@@ -46,37 +47,29 @@ public class QuadTreeReducer extends MapReduceBase
 		}		
 		this.boundary = new Boundary(ranges);
 	}
-	
+
 	@Override
 	public void reduce(Text key, Iterator<PointWritable> values,
 			OutputCollector<Text, Text> output, Reporter reporter)
-			throws IOException {
-		
+	throws IOException {
+
 		QuadTree quadTree = new QuadTreeFile(
 				this.capacity, this.boundary, "Q");
-		
+
 		while(values.hasNext()) {
 			PointWritable point = values.next();
 			quadTree.insert(point.point());
 		}
-		
+
 		List<QuadTree> leaves = quadTree.leaves();		
-		
+
 		for(QuadTree qtf : leaves) {			
 			Text oKey = new Text(qtf.name());
 
-			if (qtf.isLeaf()) {
-				for(Point point : qtf.values()) {
-					output.collect(
-							oKey, new Text(point.toString()));
-				}
-
-			}else {
-				output.collect(oKey, null);
-
+			for(Point point : qtf.values()) {
+				output.collect(
+						oKey, new Text(point.toString()));
 			}
 		}
-		QuadTreeFile.delete(quadTree.name());
-
 	}
 }

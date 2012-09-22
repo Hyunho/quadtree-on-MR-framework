@@ -15,9 +15,9 @@ public class PointWritable implements Writable {
 	public Point point() { return this.point; }
 	
 	
-	class LongArrayWritable extends ArrayWritable{
-		public LongArrayWritable() {
-			super(LongWritable.class);
+	class DoubleArrayWritable extends ArrayWritable{
+		public DoubleArrayWritable() {
+			super(DoubleWritable.class);
 		}
 	}
 	
@@ -37,14 +37,14 @@ public class PointWritable implements Writable {
 	@Override
 	public void write(DataOutput out) throws IOException {
 
-		LongArrayWritable law = new LongArrayWritable();		
+		DoubleArrayWritable law = new DoubleArrayWritable();		
 		
 		double[] values = point.values();
 					
-		LongWritable[] lw  = new LongWritable[values.length];
+		DoubleWritable[] lw  = new DoubleWritable[values.length];
 		
 		for(int i=0; i< values.length ; i++) {
-			lw[i] = (new LongWritable((long) values[i]));
+			lw[i] = (new DoubleWritable(values[i]));
 		}
 		
 		law.set(lw);		
@@ -54,7 +54,7 @@ public class PointWritable implements Writable {
 	@Override	
 	public void readFields(DataInput in) throws IOException {
 		
-		LongArrayWritable law = new LongArrayWritable();
+		DoubleArrayWritable law = new DoubleArrayWritable();
 		
 		law.readFields(in);
 		
@@ -63,7 +63,7 @@ public class PointWritable implements Writable {
 		double[] values = new double[w.length];
 		
 		for(int i=0; i< w.length ; i++) {
-			values[i] = ((LongWritable)w[i]).get();
+			values[i] = ((DoubleWritable)w[i]).get();
 		}
 		
 		this.set(new Point(values));

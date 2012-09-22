@@ -26,7 +26,7 @@ public class QuadtreeDriverWithoutSample extends Configured implements Tool{
 		JobConf conf = new JobConf(getConf(), getClass());
 		conf.setJobName("QuadTreeWithoutSample");
 		
-		conf.setInt("capacity", 4);
+		conf.setInt("capacity", 1000);
 		conf.setStrings("boundary",
 				"0-100",
 				"0-100"				

@@ -18,6 +18,8 @@ import org.apache.hadoop.io.*;
 
 import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapred.OutputCollector;
+import org.apache.hadoop.mapred.Reporter;
+import org.apache.hadoop.mapred.Task;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.KeyValueTextInputFormat;
 import org.apache.hadoop.mapreduce.lib.partition.InputSampler;
@@ -90,6 +92,7 @@ public class QuadTreeTest {
 		OutputCollector<Text, Text> output =
 			mock(OutputCollector.class);
 
+		
 		reducer.reduce(key, values, output, null);		
 
 		verify(output).collect(
@@ -97,8 +100,7 @@ public class QuadTreeTest {
 		verify(output).collect(
 				new Text("Q11"), new Text("10.0 10.0"));
 		verify(output).collect(
-				new Text("Q11"), new Text("20.0 20.0"));
-			
+				new Text("Q11"), new Text("20.0 20.0"));		
 	}
 		
 	@Test	

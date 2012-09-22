@@ -9,9 +9,8 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Test;
-
-import quadtree.file.Node;
 
 public class QuadTreeFileTest {
 
@@ -20,7 +19,7 @@ public class QuadTreeFileTest {
 		
 		String fileName = "src/test/reso" +
 				"urces/sample2D-quad.txt";
-		QuadTree quadTree = new Node(10, 
+		QuadTree quadTree = new QuadTreeFileNode(10, 
 				new Boundary(new Range(0, 100), new Range(0, 100)),
 				"Q"
 				);
@@ -76,21 +75,26 @@ public class QuadTreeFileTest {
 		
 		assertEquals(count, pointSizes);
 		
-		Node.delete("Q");
+		QuadTreeFileNode.delete("Q");
 	}
 	
 	@Test 
 	public void deleteQuadtreeFile() {
 		Boundary boundary = new Boundary(new Range(0, 100), new Range(0, 100));
-		Node quadTree =  new Node(3, boundary, "Q");
+		QuadTreeFileNode quadTree =  new QuadTreeFileNode(3, boundary, "Q");
 		
 		quadTree.insert(new Point(10, 10));
 		
-		Node.delete(quadTree.name());
+		QuadTreeFileNode.delete(quadTree.name());
 		
 //		File dir = new File(".");
 //		FileFilter fileFilter = new WildcardFileFilter("Q*");
 //		File[] files = dir.listFiles(fileFilter);	
 //		assertEquals(0, files.length);
+	}
+	
+	@After
+	public void deleteFiles() {
+		QuadTreeFileNode.delete("Q");
 	}
 }

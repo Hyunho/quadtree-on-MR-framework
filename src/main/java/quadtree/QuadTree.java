@@ -1,5 +1,6 @@
 package quadtree;
 
+import java.util.Iterator;
 import java.util.List;
 
 public interface QuadTree {
@@ -30,7 +31,7 @@ public interface QuadTree {
 
 	public abstract boolean isLeaf();
 
-	public abstract List<Point> values();
+	public abstract Iterator<Point> values();
 	
 	
 }

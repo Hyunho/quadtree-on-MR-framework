@@ -29,6 +29,7 @@ import org.junit.*;
 
 import quadtree.Boundary;
 import quadtree.Point;
+import quadtree.QuadTreeFileNode;
 import quadtree.Range;
 
 public class QuadTreeTest {
@@ -80,8 +81,7 @@ public class QuadTreeTest {
 		
 		reducer.configure(conf);
 		
-		Text key = new Text("1");
-		
+				
 		Iterator<PointWritable> values = Arrays.asList(
 				new PointWritable(new Point(10, 10)),
 				new PointWritable(new Point(1, 1)),
@@ -93,14 +93,14 @@ public class QuadTreeTest {
 			mock(OutputCollector.class);
 
 		
-		reducer.reduce(key, values, output, null);		
+		reducer.reduce(new Text("1"), values, output, null);		
 
 		verify(output).collect(
-				new Text("Q14"), new Text("30.0 30.0"));
+				new Text("111"), new Text("10.0 10.0"));
 		verify(output).collect(
-				new Text("Q11"), new Text("10.0 10.0"));
+				new Text("114"), new Text("30.0 30.0"));		
 		verify(output).collect(
-				new Text("Q11"), new Text("20.0 20.0"));		
+				new Text("111"), new Text("20.0 20.0"));		
 	}
 		
 	@Test	
@@ -112,4 +112,12 @@ public class QuadTreeTest {
 
 		assertEquals("001", InvertedIndexer.getIndex(value, max, min, depth));
 	}
+	
+	@After
+	public void deleteFiles() {
+		QuadTreeFileNode.delete("1");
+		QuadTreeFileNode.delete("Q");
+
+	}
+	
 }

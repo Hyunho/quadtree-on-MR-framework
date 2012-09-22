@@ -53,7 +53,7 @@ implements Reducer<Text, PointWritable, Text, Text> {
 	throws IOException {
 
 		QuadTree quadTree = new QuadTreeFileNode(
-				this.capacity, this.boundary, "Q");
+				this.capacity, this.boundary, key.toString());
 
 		while(values.hasNext()) {
 			PointWritable point = values.next();
@@ -65,9 +65,13 @@ implements Reducer<Text, PointWritable, Text, Text> {
 		for(QuadTree qtf : leaves) {			
 			Text oKey = new Text(qtf.name());
 
-			for(Point point : qtf.values()) {
+			Iterator<Point> points = qtf.values();
+			
+			while(points.hasNext()) {
+				Point point = points.next();
 				output.collect(
 						oKey, new Text(point.toString()));
+				
 			}
 		}
 	}

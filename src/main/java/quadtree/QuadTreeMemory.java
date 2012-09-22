@@ -242,8 +242,8 @@ public class QuadTreeMemory implements QuadTree {
 
 
 	@Override
-	public List<Point> values() {
-		return this.points;
+	public Iterator<Point> values() {
+		return this.points.iterator();
 	}
 }
 	

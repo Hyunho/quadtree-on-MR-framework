@@ -4,19 +4,20 @@ package quadtree;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
+import static org.mockito.Mockito.mock;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapred.OutputCollector;
 import org.junit.Test;
-
-import quadtree.file.Node;
-import quadtree.memory.QuadTreeMemory;
 
 public class QuadTreeTest {
 	
@@ -27,13 +28,14 @@ public class QuadTreeTest {
 	@Test 
 	public void construct() {
 		Boundary boundary = new Boundary(new Range(0, 100), new Range(0, 100));
-		new Node(3, boundary, "Q");
+		new QuadTreeFileNode(3, boundary, "Q");
+		
 	}
 
 	@Test 
 	public void inputSamePoint() {
 		Boundary boundary = new Boundary(new Range(0, 100), new Range(0, 100));
-		Node quadTree =  new Node(3, boundary, "Q");
+		QuadTreeFileNode quadTree =  new QuadTreeFileNode(3, boundary, "Q");
 		
 		assertTrue(quadTree.insert(new Point(10, 10)));
 		assertFalse(quadTree.insert(new Point(10, 10)));
@@ -42,7 +44,6 @@ public class QuadTreeTest {
 		assertFalse(quadTree.insert(new Point(10, 10)));
 		
 		assertEquals(1, quadTree.descendant().size());
-		
 	}
 
 	
@@ -72,15 +73,66 @@ public class QuadTreeTest {
 	public void build() {
 		Boundary boundary = new Boundary(new Range(0, 100), new Range(0, 100));	
 		
-		QuadTree quadTreeFile =  new Node(3, boundary, "Q");
-		bulidQuadTree(quadTreeFile);
+		QuadTree quadTreeFile =  new QuadTreeFileNode(3, boundary, "Q");
+		bulidQuadTreeTest(quadTreeFile);
 		
 		QuadTree quadTreeMemory =  new QuadTreeMemory(3, boundary, "Q");		
-		bulidQuadTree(quadTreeMemory);
+		bulidQuadTreeTest(quadTreeMemory);
 	}
 	
 	
-	private void bulidQuadTree(QuadTree quadTree ) {
+	@Test 
+	public void bulidandVerify() throws FileNotFoundException {
+
+		Boundary boundary = new Boundary(new Range(0, 50), new Range(0, 50));
+		QuadTree quadTree =  new QuadTreeFileNode(4, boundary, "Q");
+
+		
+				
+		Iterator<Point> points = Arrays.asList(
+				new Point(10, 10),
+				new Point(1, 1),
+				new Point(30, 30),
+				new Point(20, 20),
+				new Point(30, 15)).iterator();
+
+		OutputCollector<Text, Text> output =
+			mock(OutputCollector.class);
+		
+		//build a quadTree
+		while(points.hasNext()) {
+			Point point = points.next();
+			quadTree.insert(point);
+		}
+		
+		
+		
+		assertEquals(4, quadTree.leaves().size());
+		
+		//reload quadtree
+		QuadTree quad1 = QuadTreeFileNode.load(new File("Q1"));
+		
+		//convert Iterator of values to ArrayList
+		Iterator<Point> iQuad1Points = quad1.values();
+		List<Point> lQuadPoints = new ArrayList<Point>();
+		while(iQuad1Points.hasNext()) {			
+			lQuadPoints.add(iQuad1Points.next());			
+		}
+		
+//		//Verify
+		assertEquals("Q1", quad1.name());
+		assertTrue(lQuadPoints.contains(new Point(10, 10)));
+		assertTrue(lQuadPoints.contains(new Point(1, 1)));
+		assertFalse(lQuadPoints.contains(new Point(30, 30)));
+
+		assertEquals(4, quadTree.leaves().size());
+		
+	}
+	
+	
+	
+	
+	private void bulidQuadTreeTest(QuadTree quadTree ) {
 		
 		List<String> str = Arrays.asList(
 				"34.9198960931972 9.3901681713760", 
@@ -186,5 +238,12 @@ public class QuadTreeTest {
 		quadTree = QuadTreeMemory.getQuadtree(2, boundary, 2);
 		assertEquals(16, quadTree.leaves().size());
 	}
+	
+	@Test
+	public void deleteFiles() {
+		QuadTreeFileNode.delete("Q");
+
+	}
+	
 	
 }

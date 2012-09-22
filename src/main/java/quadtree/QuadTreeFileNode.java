@@ -1,7 +1,6 @@
 package quadtree;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -16,7 +15,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import org.apache.commons.io.filefilter.WildcardFileFilter;
 
 public class QuadTreeFileNode implements QuadTree, Serializable {
 
@@ -57,7 +55,7 @@ public class QuadTreeFileNode implements QuadTree, Serializable {
 		}		
 	}
 	
-	public static QuadTreeFileNode load(File file) {
+	public static QuadTreeFileNode load(File file) throws FileNotFoundException  {
 		try {
 			FileInputStream fileStream = new FileInputStream(file);
 			ObjectInputStream os = new ObjectInputStream(fileStream);
@@ -65,7 +63,7 @@ public class QuadTreeFileNode implements QuadTree, Serializable {
 			return (QuadTreeFileNode)os.readObject();
 			
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			throw new FileNotFoundException();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
@@ -170,9 +168,15 @@ public class QuadTreeFileNode implements QuadTree, Serializable {
 		File[] files = childrenFiles();		
 		
 		for(int i=0; i< files.length; i++ ) {
-			QuadTreeFileNode qtf = QuadTreeFileNode.load(files[i]);
-			if(qtf.insert(point)) 
-				return true;
+			QuadTreeFileNode qtf;
+			try {
+				qtf = QuadTreeFileNode.load(files[i]);
+				if(qtf.insert(point)) 
+					return true;
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+			
 			
 		}		
 		return false;
@@ -262,7 +266,14 @@ public class QuadTreeFileNode implements QuadTree, Serializable {
 		public QuadTreeFileNode next() {
 
 			if(this.hasNext()) {
-				QuadTreeFileNode qtf = QuadTreeFileNode.load(files[i]);
+				QuadTreeFileNode qtf = null;
+				
+				try {
+					qtf = QuadTreeFileNode.load(files[i]);
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+				
 				i++;
 				return qtf;	
 			}
@@ -291,20 +302,23 @@ public class QuadTreeFileNode implements QuadTree, Serializable {
 	 * delete a quadtree which has given name including descendant"
 	 * @param name
 	 */
-	public static void delete(String name) {		
+	public static void delete(String name) {
 		
-		File dir = new File(name);
-		
-		QuadTreeFileNode root = QuadTreeFileNode.load(dir);
-		
-		List<QuadTreeFileNode> descendant = root.descendant();
-		 
-		Iterator<QuadTreeFileNode> iq = descendant.iterator();
-		
-		while(iq.hasNext()) {
-			QuadTreeFileNode node = iq.next();
-			File deleteFile = new File(node.name());
-			deleteFile.delete();
+		QuadTreeFileNode root;
+		try {
+			root = QuadTreeFileNode.load(new File(name));
+			List<QuadTreeFileNode> descendant = root.descendant();
+			 
+			Iterator<QuadTreeFileNode> iq = descendant.iterator();
+			
+			while(iq.hasNext()) {
+				QuadTreeFileNode node = iq.next();
+				File deleteFile = new File(node.name());
+				deleteFile.delete();
+			}
+			
+		} catch (FileNotFoundException e) {		
+			
 		}
 	}
 
@@ -317,9 +331,9 @@ public class QuadTreeFileNode implements QuadTree, Serializable {
 		
 	}
 
-	public ArrayList<Point> values() {
+	public Iterator<Point> values() {
 		if(isLeaf())
-			return this.points;
-		return new ArrayList<Point>();
+			return this.points.iterator();
+		return new ArrayList<Point>().iterator();
 	}
 }

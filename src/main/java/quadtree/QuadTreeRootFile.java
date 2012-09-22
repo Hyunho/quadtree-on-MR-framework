@@ -1,6 +1,7 @@
 package quadtree;
 
 
+import java.util.Iterator;
 import java.util.List;
 
 public class QuadTreeRootFile implements QuadTree{
@@ -58,7 +59,7 @@ public class QuadTreeRootFile implements QuadTree{
 	}
 
 	@Override
-	public List<Point> values() {
+	public Iterator<Point> values() {
 		return node.values();
 	}
 

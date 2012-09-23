@@ -10,8 +10,8 @@ import java.util.Iterator;
 import java.util.List;
 
 
-import mapreduce.example.quadtreeWithSampling.SampleMapper;
-import mapreduce.example.quadtreeWithoutSample.QuadTreeReducer;
+import mapreduce.example.quadtree.QuadTreeReducer;
+import mapreduce.example.quadtree.SampleMapper;
 import mapreduce.io.PointWritable;
 import mapreduce.io.TupleWritable;
 

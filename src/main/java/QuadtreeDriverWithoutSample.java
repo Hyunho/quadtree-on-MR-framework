@@ -1,7 +1,7 @@
 
 
-import mapreduce.example.quadtreeWithoutSample.QuadTreeMapper;
-import mapreduce.example.quadtreeWithoutSample.QuadTreeReducer;
+import mapreduce.example.quadtree.QuadTreeMapper;
+import mapreduce.example.quadtree.QuadTreeReducer;
 import mapreduce.io.PointWritable;
 
 import org.apache.hadoop.conf.*;

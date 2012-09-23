@@ -37,8 +37,8 @@ public class QuadTreeTest {
 		Boundary boundary = new Boundary(new Range(0, 100), new Range(0, 100));
 		QuadTreeFileNode quadTree =  new QuadTreeFileNode(3, boundary, "Q");
 		
+		assertTrue(quadTree.insert(new Point(10.5454, 10.5254)));
 		assertTrue(quadTree.insert(new Point(10, 10)));
-		assertFalse(quadTree.insert(new Point(10, 10)));
 		assertFalse(quadTree.insert(new Point(10, 10)));
 		assertFalse(quadTree.insert(new Point(10, 10)));
 		assertFalse(quadTree.insert(new Point(10, 10)));

@@ -1,4 +1,4 @@
-package mapreduce.example.quadtreeWithoutSample;
+package mapreduce.example.quadtree;
 
 
 public class InvertedIndexer 

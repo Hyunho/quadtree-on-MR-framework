@@ -3,8 +3,8 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 
-import mapreduce.example.quadtreeWithoutSample.NcdcForm;
-import mapreduce.example.quadtreeWithoutSample.NcdcRecordParser;
+import mapreduce.example.quadtree.NcdcForm;
+import mapreduce.example.quadtree.NcdcRecordParser;
 
 import org.apache.hadoop.io.*;
 import org.junit.*;

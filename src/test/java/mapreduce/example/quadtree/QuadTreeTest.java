@@ -7,9 +7,9 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
 
-import mapreduce.example.quadtreeWithoutSample.QuadTreeMapper;
-import mapreduce.example.quadtreeWithoutSample.InvertedIndexer;
-import mapreduce.example.quadtreeWithoutSample.QuadTreeReducer;
+import mapreduce.example.quadtree.InvertedIndexer;
+import mapreduce.example.quadtree.QuadTreeMapper;
+import mapreduce.example.quadtree.QuadTreeReducer;
 import mapreduce.io.PointWritable;
 
 

@@ -1,4 +1,4 @@
-package mapreduce.example.quadtreeWithSampling;
+package mapreduce.example.quadtree;
 
 import java.io.IOException;
 

@@ -12,25 +12,18 @@ import mapreduce.example.quadtree.QuadTreeMapper;
 import mapreduce.example.quadtree.QuadTreeReducer;
 import mapreduce.io.PointWritable;
 
-
-import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.*;
 
 import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapred.OutputCollector;
-import org.apache.hadoop.mapred.Reporter;
-import org.apache.hadoop.mapred.Task;
-import org.apache.hadoop.mapreduce.Job;
-import org.apache.hadoop.mapreduce.lib.input.KeyValueTextInputFormat;
-import org.apache.hadoop.mapreduce.lib.partition.InputSampler;
-import org.apache.hadoop.mapreduce.lib.partition.InputSampler.IntervalSampler;
+
 
 import org.junit.*;
 
-import quadtree.Boundary;
+
 import quadtree.Point;
-import quadtree.QuadTreeFileNode;
-import quadtree.Range;
+import quadtree.QuadTreeFile;
+
 
 public class QuadTreeTest {
 
@@ -115,8 +108,8 @@ public class QuadTreeTest {
 	
 	@After
 	public void deleteFiles() {
-		QuadTreeFileNode.delete("1");
-		QuadTreeFileNode.delete("Q");
+		QuadTreeFile.delete("1");
+		QuadTreeFile.delete("Q");
 
 	}
 	

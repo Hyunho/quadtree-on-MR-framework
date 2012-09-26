@@ -16,7 +16,7 @@ import org.apache.hadoop.mapred.Reporter;
 import quadtree.Boundary;
 import quadtree.Point;
 import quadtree.QuadTree;
-import quadtree.QuadTreeFileNode;
+import quadtree.QuadTreeFile;
 import quadtree.Range;
 
 public class QuadTreeReducer extends MapReduceBase
@@ -52,20 +52,20 @@ implements Reducer<Text, PointWritable, Text, Text> {
 			OutputCollector<Text, Text> output, Reporter reporter)
 	throws IOException {
 
-		QuadTree quadTree = new QuadTreeFileNode(
+		QuadTree quadTree = new QuadTreeFile(
 				this.capacity, this.boundary, key.toString());
 
 		while(values.hasNext()) {
 			PointWritable point = values.next();
 			quadTree.insert(point.point());
-		}
-
+		}		
+		
 		List<QuadTree> leaves = quadTree.leaves();		
 
 		for(QuadTree qtf : leaves) {			
 			Text oKey = new Text(qtf.name());
 
-			Iterator<Point> points = qtf.values();
+			Iterator<Point> points = qtf.points();
 			
 			while(points.hasNext()) {
 				Point point = points.next();

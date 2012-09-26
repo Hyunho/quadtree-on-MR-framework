@@ -6,25 +6,13 @@ import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
-
-import mapreduce.example.quadtree.QuadTreeReducer;
 import mapreduce.example.quadtree.SampleMapper;
-import mapreduce.io.PointWritable;
-import mapreduce.io.TupleWritable;
-
-import org.apache.hadoop.mapreduce.Mapper.Context;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapred.JobConf;
-import org.apache.hadoop.mapred.OutputCollector;
-import org.junit.Test;
 
-import quadtree.Boundary;
-import quadtree.Point;
-import quadtree.Range;
+import org.apache.hadoop.mapred.OutputCollector;
 
 public class SamplingTest {
 	

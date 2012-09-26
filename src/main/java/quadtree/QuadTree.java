@@ -31,7 +31,7 @@ public interface QuadTree {
 
 	public abstract boolean isLeaf();
 
-	public abstract Iterator<Point> values();
+	public abstract Iterator<Point> points();
 	
 	
 }

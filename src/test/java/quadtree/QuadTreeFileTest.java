@@ -1,28 +1,32 @@
 package quadtree;
 
 import static org.junit.Assert.*;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
 import org.junit.After;
 import org.junit.Test;
 
+
 public class QuadTreeFileTest {
 
 	@Test
 	public void buildQuadTreeWithFile() {
 		
+		// line of sample file is 100. And 2-Dimension,;
 		String fileName = "src/test/reso" +
 				"urces/sample2D-quad.txt";
-		QuadTree quadTree = new QuadTreeFileNode(10, 
+		QuadTreeFile quadTree = new QuadTreeFile(50, 
 				new Boundary(new Range(0, 100), new Range(0, 100)),
 				"Q"
 				);
+		
 		
 		int count = 0;
 		try {
@@ -44,7 +48,6 @@ public class QuadTreeFileTest {
 					assertEquals(count, quadTree.size());					
 				}
 				
-				assertEquals(count,quadTree.size());
 				
 			} catch (IOException e) {				
 				e.printStackTrace();
@@ -56,6 +59,11 @@ public class QuadTreeFileTest {
 			e.printStackTrace();
 		}
 		
+		quadTree.save();
+
+		
+		quadTree = QuadTreeFile.load("Q");
+		
 		int pointSizes = 0;
 		
 		
@@ -64,37 +72,71 @@ public class QuadTreeFileTest {
 		
 		for(QuadTree leaf : leaves) {
 			
-			Iterator<Point> points = leaf.values();
+			Iterator<Point> points = leaf.points();
 			
 			while (points.hasNext()) {
 				points.next();
 				
 				pointSizes++;
-			}			
+			}				
 		}
-		
-		assertEquals(count, pointSizes);
-		
-		QuadTreeFileNode.delete("Q");
+		assertEquals(100, pointSizes);		
 	}
+	
+	
+
 	
 	@Test 
-	public void deleteQuadtreeFile() {
-		Boundary boundary = new Boundary(new Range(0, 100), new Range(0, 100));
-		QuadTreeFileNode quadTree =  new QuadTreeFileNode(3, boundary, "Q");
+	public void bulidandVerify() throws FileNotFoundException {
+
+		Boundary boundary = new Boundary(new Range(0, 50), new Range(0, 50));
+		QuadTreeFile quadtree =  new QuadTreeFile(4, boundary, "Q");
+
 		
-		quadTree.insert(new Point(10, 10));
+				
+		Iterator<Point> points = Arrays.asList(
+				new Point(10, 10),
+				new Point(1, 1),
+				new Point(30, 30),
+				new Point(20, 20),
+				new Point(30, 15)).iterator();
+
+
+		//build a quadTree
+		while(points.hasNext()) {
+			Point point = points.next();
+			quadtree.insert(point);
+		}		
 		
-		QuadTreeFileNode.delete(quadTree.name());
+		assertEquals(4, quadtree.leaves().size());
 		
-//		File dir = new File(".");
-//		FileFilter fileFilter = new WildcardFileFilter("Q*");
-//		File[] files = dir.listFiles(fileFilter);	
-//		assertEquals(0, files.length);
+		quadtree.save();
+		
+		
+		//reload a quadtree
+		quadtree = QuadTreeFile.load("Q");
+		
+		//convert Iterator of values to ArrayList
+		Iterator<Point> iPoints = quadtree.points();
+		List<Point> lQuadPoints = new ArrayList<Point>();
+		while(iPoints.hasNext()) {			
+			lQuadPoints.add(iPoints.next());			
+		}
+		
+		//Verify
+		assertEquals("Q", quadtree.name());
+		assertTrue(lQuadPoints.contains(new Point(10, 10)));
+		assertTrue(lQuadPoints.contains(new Point(1, 1)));
+		assertTrue(lQuadPoints.contains(new Point(30, 30)));
+
+		assertEquals(4, quadtree.leaves().size());
+		
 	}
 	
+	
 	@After
-	public void deleteFiles() {
-		QuadTreeFileNode.delete("Q");
+	public void delete() {
+		QuadTreeFile.delete("Q");
 	}
 }
+	

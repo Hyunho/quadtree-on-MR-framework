@@ -21,7 +21,7 @@ public class QuadtreeBuilder {
 			
 			
 		String fileName = args[0];
-		QuadTree quadTree = new QuadTreeFileNode(1000,
+		QuadTree quadTree = new QuadTreeFile(1000,
 				new Boundary(new Range(0, 100), new Range(0, 100)), "Q");
 				
 		try {

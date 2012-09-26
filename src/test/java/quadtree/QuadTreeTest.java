@@ -4,19 +4,15 @@ package quadtree;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapred.OutputCollector;
+
 import org.junit.Test;
 
 public class QuadTreeTest {
@@ -24,18 +20,13 @@ public class QuadTreeTest {
 	
 
 	
-	
-	@Test 
-	public void construct() {
-		Boundary boundary = new Boundary(new Range(0, 100), new Range(0, 100));
-		new QuadTreeFileNode(3, boundary, "Q");
-		
-	}
-
-	@Test 
+	/**
+	 * we assume there are no same points.
+	 */
+//	@Test 
 	public void inputSamePoint() {
 		Boundary boundary = new Boundary(new Range(0, 100), new Range(0, 100));
-		QuadTreeFileNode quadTree =  new QuadTreeFileNode(3, boundary, "Q");
+		QuadTreeFile quadTree =  new QuadTreeFile(3, boundary, "Q");
 		
 		assertTrue(quadTree.insert(new Point(10.5454, 10.5254)));
 		assertTrue(quadTree.insert(new Point(10, 10)));
@@ -73,60 +64,8 @@ public class QuadTreeTest {
 	public void build() {
 		Boundary boundary = new Boundary(new Range(0, 100), new Range(0, 100));	
 		
-		QuadTree quadTreeFile =  new QuadTreeFileNode(3, boundary, "Q");
-		bulidQuadTreeTest(quadTreeFile);
-		
 		QuadTree quadTreeMemory =  new QuadTreeMemory(3, boundary, "Q");		
 		bulidQuadTreeTest(quadTreeMemory);
-	}
-	
-	
-	@Test 
-	public void bulidandVerify() throws FileNotFoundException {
-
-		Boundary boundary = new Boundary(new Range(0, 50), new Range(0, 50));
-		QuadTree quadTree =  new QuadTreeFileNode(4, boundary, "Q");
-
-		
-				
-		Iterator<Point> points = Arrays.asList(
-				new Point(10, 10),
-				new Point(1, 1),
-				new Point(30, 30),
-				new Point(20, 20),
-				new Point(30, 15)).iterator();
-
-		OutputCollector<Text, Text> output =
-			mock(OutputCollector.class);
-		
-		//build a quadTree
-		while(points.hasNext()) {
-			Point point = points.next();
-			quadTree.insert(point);
-		}
-		
-		
-		
-		assertEquals(4, quadTree.leaves().size());
-		
-		//reload quadtree
-		QuadTree quad1 = QuadTreeFileNode.load(new File("Q1"));
-		
-		//convert Iterator of values to ArrayList
-		Iterator<Point> iQuad1Points = quad1.values();
-		List<Point> lQuadPoints = new ArrayList<Point>();
-		while(iQuad1Points.hasNext()) {			
-			lQuadPoints.add(iQuad1Points.next());			
-		}
-		
-//		//Verify
-		assertEquals("Q1", quad1.name());
-		assertTrue(lQuadPoints.contains(new Point(10, 10)));
-		assertTrue(lQuadPoints.contains(new Point(1, 1)));
-		assertFalse(lQuadPoints.contains(new Point(30, 30)));
-
-		assertEquals(4, quadTree.leaves().size());
-		
 	}
 	
 	
@@ -163,7 +102,7 @@ public class QuadTreeTest {
 
 	
 	@Test
-	public void buildQuadTreeWithFile() {
+	public void buildQuadTreeFromFile() {
 		
 		String fileName = "src/test/resources/sample2D-quad.txt";
 		QuadTree quadTree = 
@@ -241,7 +180,7 @@ public class QuadTreeTest {
 	
 	@Test
 	public void deleteFiles() {
-		QuadTreeFileNode.delete("Q");
+		QuadTreeFile.delete("Q");
 
 	}
 	

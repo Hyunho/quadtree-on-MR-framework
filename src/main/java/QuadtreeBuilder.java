@@ -21,7 +21,7 @@ public class QuadtreeBuilder {
 			
 			
 		String fileName = args[0];
-		QuadTree quadTree = new QuadTreeFile(1000,
+		QuadTree quadTree = new QuadTreeFile(100000,
 				new Boundary(new Range(0, 100), new Range(0, 100)), "Q");
 				
 		try {
@@ -33,10 +33,11 @@ public class QuadtreeBuilder {
 				while((line = in.readLine()) != null) {
 					
 					
-					if((count++ % 1000) == 0) {
+					if((count++ % 1000000) == 0) {
 						System.out.print(".");
 					}
 						
+					
 					
 					String[] strings = line.split(" ");
 					

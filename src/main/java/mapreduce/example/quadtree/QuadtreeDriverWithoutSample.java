@@ -1,7 +1,7 @@
+package mapreduce.example.quadtree;
 
 
-import mapreduce.example.quadtree.QuadTreeMapper;
-import mapreduce.example.quadtree.QuadTreeReducer;
+
 import mapreduce.io.PointWritable;
 
 import org.apache.hadoop.conf.*;
@@ -36,18 +36,13 @@ public class QuadtreeDriverWithoutSample extends Configured implements Tool{
 		FileInputFormat.addInputPath(conf, new Path(args[0]));
 		FileOutputFormat.setOutputPath(conf, new Path(args[1]));
 		
-		
-//		conf.setInputFormat(theClass);
 		conf.setMapOutputKeyClass(Text.class);
 		conf.setMapOutputValueClass(PointWritable.class);		
 		conf.setMapperClass(QuadTreeMapper.class);
-		
 	
-		conf.setOutputValueClass(Text.class);		
-		
-		
-//		conf.setNumReduceTasks(0);
-		
+		conf.setOutputValueClass(Text.class);
+		conf.setNumReduceTasks(18);
+
 		conf.setReducerClass(QuadTreeReducer.class);
 		
 		

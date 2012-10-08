@@ -314,10 +314,6 @@ public class QuadTreeFile implements QuadTree, Serializable {
 		return descendant;
 	}
 
-
-
-
-
 	public Iterator<QuadTreeFile> children() {					
 		return this.children.iterator();
 	}
@@ -387,6 +383,23 @@ public class QuadTreeFile implements QuadTree, Serializable {
 		   files[i].delete();
 		}
 	}
+
+	public String getindex(Point point) { 
+		
+		List<QuadTree> quadtrees = this.leaves();
+		Iterator<QuadTree> iq = quadtrees.iterator();
+		
+		while(iq.hasNext()){
+			QuadTree quad = iq.next();
+			if(quad.boundary().containsPoint(point))
+				return quad.name();
+		}
+		
+		System.err.print("check this point " + point);
+		return null;
+	}
+
+
 
 	
 }

@@ -1,5 +1,7 @@
 package mapreduce.io;
 
+import index.quadtree.Point;
+
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -7,7 +9,6 @@ import java.io.IOException;
 import org.apache.hadoop.io.*;
 
 
-import quadtree.Point;
 
 public class PointWritable implements Writable {
 	

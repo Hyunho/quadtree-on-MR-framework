@@ -1,4 +1,4 @@
-package quadtree;
+package index.quadtree;
 
 import java.util.ArrayList;
 import java.util.Iterator;

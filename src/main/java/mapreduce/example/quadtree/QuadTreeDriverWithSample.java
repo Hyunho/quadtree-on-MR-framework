@@ -1,5 +1,11 @@
 package mapreduce.example.quadtree;
 
+import index.quadtree.Boundary;
+import index.quadtree.Point;
+import index.quadtree.QuadTree;
+import index.quadtree.QuadTreeFile;
+import index.quadtree.Range;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -30,11 +36,6 @@ import org.apache.hadoop.mapred.*;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
-import quadtree.Boundary;
-import quadtree.Point;
-import quadtree.QuadTree;
-import quadtree.QuadTreeFile;
-import quadtree.Range;
 
 /**
  *first job to pre-processing for building a quadtree Q` on sample

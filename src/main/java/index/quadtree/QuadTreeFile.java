@@ -1,4 +1,4 @@
-package quadtree;
+package index.quadtree;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

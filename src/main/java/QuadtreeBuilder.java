@@ -1,10 +1,11 @@
 
+import index.quadtree.*;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import quadtree.*;
 
 
 public class QuadtreeBuilder {

@@ -3,6 +3,9 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 
+import index.quadtree.Point;
+import index.quadtree.QuadTreeFile;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -21,8 +24,6 @@ import org.apache.hadoop.mapred.OutputCollector;
 import org.junit.*;
 
 
-import quadtree.Point;
-import quadtree.QuadTreeFile;
 
 
 public class QuadTreeTest {

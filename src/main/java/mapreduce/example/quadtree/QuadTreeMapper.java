@@ -1,5 +1,10 @@
 package mapreduce.example.quadtree;
 
+import index.quadtree.Boundary;
+import index.quadtree.Point;
+import index.quadtree.QuadTreeMemory;
+import index.quadtree.Range;
+
 import java.io.IOException;
 
 import mapreduce.io.PointWritable;
@@ -12,10 +17,6 @@ import org.apache.hadoop.mapred.Mapper;
 import org.apache.hadoop.mapred.OutputCollector;
 import org.apache.hadoop.mapred.Reporter;
 
-import quadtree.Boundary;
-import quadtree.Point;
-import quadtree.QuadTreeMemory;
-import quadtree.Range;
 
 
 

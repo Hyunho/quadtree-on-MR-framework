@@ -1,4 +1,4 @@
-package quadtree;
+package index.quadtree;
 import java.util.*;
 
 public class CartesianIterator<T> implements Iterator<List<T>> {

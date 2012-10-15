@@ -1,5 +1,11 @@
 package mapreduce.example.quadtree;
 
+import index.quadtree.Boundary;
+import index.quadtree.Point;
+import index.quadtree.QuadTree;
+import index.quadtree.QuadTreeFile;
+import index.quadtree.Range;
+
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
@@ -13,11 +19,6 @@ import org.apache.hadoop.mapred.OutputCollector;
 import org.apache.hadoop.mapred.Reducer;
 import org.apache.hadoop.mapred.Reporter;
 
-import quadtree.Boundary;
-import quadtree.Point;
-import quadtree.QuadTree;
-import quadtree.QuadTreeFile;
-import quadtree.Range;
 
 public class QuadTreeReducer extends MapReduceBase
 implements Reducer<Text, PointWritable, Text, Text> {

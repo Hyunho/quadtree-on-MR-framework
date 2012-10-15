@@ -1,6 +1,12 @@
-package quadtree;
+package index.quadtree;
 
 import static org.junit.Assert.*;
+import index.quadtree.Boundary;
+import index.quadtree.Point;
+import index.quadtree.QuadTree;
+import index.quadtree.QuadTreeFile;
+import index.quadtree.Range;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -12,6 +18,7 @@ import java.util.List;
 
 import org.junit.After;
 import org.junit.Test;
+
 
 
 public class QuadTreeFileTest {

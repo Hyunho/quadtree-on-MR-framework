@@ -23,7 +23,7 @@ import java.util.List;
 import org.junit.Test;
 
 
-public class QuadTreeTest {
+public class MemoryQuadtreeTest {
 	
 	
 
@@ -108,50 +108,6 @@ public class QuadTreeTest {
 	
 	
 
-	
-	@Test
-	public void buildQuadTreeFromFile() {
-		
-		String fileName = "src/test/resources/sample2D-quad.txt";
-		QuadTree quadTree = 
-			new QuadTreeMemory(
-					10, 
-					new Boundary(new Range(0, 100), new Range(0, 100)),
-					"Q");
-		
-		int count = 0;
-		try {
-			
-			BufferedReader in = new BufferedReader(new FileReader(fileName));
-			
-			String line;
-			try {
-				while((line = in.readLine()) != null) {
-					String[] strings = line.split(" ");
-					
-					double x = Double.parseDouble(strings[0]);
-					double y = Double.parseDouble(strings[1]);
-
-					Point point = new Point(x, y);
-					
-					quadTree.insert(point);					
-					count++;					
-					assertEquals(count, quadTree.size());					
-				}
-				
-				assertEquals(count,quadTree.size());
-				
-			} catch (IOException e) {				
-				e.printStackTrace();
-			}
-			
-		} catch (FileNotFoundException e) {
-			System.err.println(fileName + "is not existed in " +
-					System.getProperty("user.dir"));
-			e.printStackTrace();
-		} 
-	}
-	
 
 	@Test
 	public void index() {

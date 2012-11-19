@@ -1,3 +1,4 @@
+package index.quadtree;
 
 import index.quadtree.*;
 
@@ -19,9 +20,16 @@ public class QuadtreeBuilder {
 			System.err.println("there is no input arg[0]");
 			System.exit(-1);
 		}
-			
-			
+		
+		
 		String fileName = args[0];
+		buildingWithSingleMachine(fileName);
+			
+	
+	}
+	
+	private static void buildingWithSingleMachine(String fileName) {
+		
 		QuadTree quadTree = new QuadTreeFile(100000,
 				new Boundary(new Range(0, 100), new Range(0, 100)), "Q");
 				
@@ -33,19 +41,8 @@ public class QuadtreeBuilder {
 			try {
 				while((line = in.readLine()) != null) {
 					
-					
-					if((count++ % 1000000) == 0) {
-						System.out.print(".");
-					}
-						
-					
-					
-					String[] strings = line.split(" ");
-					
-					double x = Double.parseDouble(strings[0]);
-					double y = Double.parseDouble(strings[1]);
-
-					Point point = new Point(x, y);					
+					Point point = Point.stringToPoint(line);
+							
 					quadTree.insert(point);
 				}	
 				
@@ -59,4 +56,5 @@ public class QuadtreeBuilder {
 			e.printStackTrace();
 		}
 	}
+	
 }

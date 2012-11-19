@@ -21,78 +21,8 @@ import org.junit.Test;
 
 
 
-public class QuadTreeFileTest {
+public class DiskQuadtreeTest {
 
-	@Test
-	public void buildQuadTreeWithFile() {
-		
-		// line of sample file is 100. And 2-Dimension,;
-		String fileName = "src/test/reso" +
-				"urces/sample2D-quad.txt";
-		QuadTreeFile quadTree = new QuadTreeFile(50, 
-				new Boundary(new Range(0, 100), new Range(0, 100)),
-				"Q"
-				);
-		
-		
-		int count = 0;
-		try {
-			
-			BufferedReader in = new BufferedReader(new FileReader(fileName));
-			
-			String line;
-			try {
-				while((line = in.readLine()) != null) {
-					String[] strings = line.split(" ");
-					
-					double x = Double.parseDouble(strings[0]);
-					double y = Double.parseDouble(strings[1]);
-
-					Point point = new Point(x, y);
-					
-					quadTree.insert(point);					
-					count++;					
-					assertEquals(count, quadTree.size());					
-				}
-				
-				
-			} catch (IOException e) {				
-				e.printStackTrace();
-			}
-			
-		} catch (FileNotFoundException e) {
-			System.err.println(fileName + "is not existed in " +
-					System.getProperty("user.dir"));
-			e.printStackTrace();
-		}
-		
-		quadTree.save();
-
-		
-		quadTree = QuadTreeFile.load("Q");
-		
-		int pointSizes = 0;
-		int numLeaf = 0;
-		
-		
-		List<QuadTree> leaves = quadTree.leaves();
-		
-		
-		for(QuadTree leaf : leaves) {
-			
-			numLeaf++;
-			Iterator<Point> points = leaf.points();
-			
-			while (points.hasNext()) {
-				points.next();
-				
-				pointSizes++;
-			}				
-		}
-		
-		assertEquals(100, pointSizes);		
-		assertEquals(4, numLeaf);
-	}
 	
 	
 

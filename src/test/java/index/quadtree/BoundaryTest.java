@@ -23,7 +23,7 @@ public class BoundaryTest {
 	}
 	
 	@Test 
-	public void splitBoundary() {
+	public void splitBoundary1() {
 		Boundary boundary = new Boundary(new Range(0, 100), new Range(0, 100));
 		
 		List<Boundary> subBoundary = boundary.split();
@@ -40,8 +40,25 @@ public class BoundaryTest {
 				subBoundary.get(3));
 		
 		boundary = new Boundary(new Range(50, 100), new Range(50, 100));
-		subBoundary = boundary.split();
+		subBoundary = boundary.split();		
 		
+	}
+	
+	@Test
+	public void splitBoundary2() {
+		
+		Range[] ranges = new Range[8];
+		
+		for(int i=0; i<8 ; i++) {
+			ranges[i] = new Range(0, 100);
+		}
+		
+		Boundary boundary = new Boundary(ranges);
+		
+		List<Boundary> boundaries = boundary.split();
+		
+		assertEquals(256, boundaries.size());
+		assertEquals(8, boundaries.get(0).dimension());
 		
 	}
 	

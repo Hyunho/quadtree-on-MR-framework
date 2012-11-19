@@ -63,6 +63,22 @@ public class Point implements Serializable {
 		
 		return true;	      
 	}
+
+	
+	public static Point stringToPoint(String line) {
+		String[] strings = line.split(" ");
+		
+		double[] douArray =  new double[strings.length];
+
+		for(int i=0; i< strings.length; i++)
+		for(String str : strings) {
+			douArray[i] = Double.parseDouble(strings[i]);
+			
+		}		
+
+		Point point = new Point(douArray);
+		return point;
+	}
 	
 	
 }

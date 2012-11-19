@@ -31,7 +31,7 @@ public class Boundary implements Serializable{
 		if (this.dimension() !=  point.dimension())
 			throw new InvalidParameterException(
 					"dimension of boundrary and that of point must be same. " +
-					"number of dimension of boundary is " +  this.dimension() +
+					"But number of dimension of boundary is " +  this.dimension() +
 					" and number of dimension of point is " + point.dimension());
 		
 		for(int i=0; i< ranges.length; i++) {
@@ -68,7 +68,12 @@ public class Boundary implements Serializable{
 		List<Boundary> subBoundaries= new ArrayList<Boundary>();		
 		while(ci.hasNext()) {
 			List<Range> lr = ci.next();
-			subBoundaries.add(new Boundary(lr.get(0), lr.get(1)));
+			
+			Range[] ranges = new Range[lr.size()];
+			for(int i=0; i< ranges.length; i++)
+				ranges[i]= lr.get(i);
+			
+			subBoundaries.add(new Boundary(ranges));
 		}
 		
 		return subBoundaries;

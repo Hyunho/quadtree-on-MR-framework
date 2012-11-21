@@ -30,8 +30,8 @@ public class QuadtreeBuilder {
 	
 	private static void buildingWithSingleMachine(String fileName) {
 		
-		QuadTree quadTree = new QuadTreeFile(100000,
-				new Boundary(new Range(0, 100), new Range(0, 100)), "Q");
+		QuadTree quadTree = new QuadTreeFile(10000,
+				new Boundary(new Range(0, 1000), new Range(0, 1000)), "Q");
 				
 		try {
 			

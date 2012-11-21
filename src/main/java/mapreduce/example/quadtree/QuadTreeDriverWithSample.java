@@ -147,12 +147,9 @@ public class QuadTreeDriverWithSample {
 					OutputCollector<NullWritable, Text> output, Reporter arg3)
 					throws IOException {
 				
-				// TODO should remove follow line
-				System.out.println("capacity: "+ this.capacity);
-				
 				QuadTree quadTree = new QuadTreeFile(
 						this.capacity, 
-						new Boundary(new Range(0, 100), new Range(0, 100)),
+						new Boundary(new Range(0, 1000), new Range(0, 1000)),
 						"Q");				
 				
 				// build a quadtree
@@ -179,11 +176,13 @@ public class QuadTreeDriverWithSample {
 		public int run(String[] args) throws Exception {
 			Configuration conf = new Configuration();
 
-			conf.setInt("capacity", 100000);
+			
 			//build quadtree
 			JobConf job = new JobConf(conf, Preprocessing.class);
 			
 			int capacity = (int) (numSample / job.getNumReduceTasks());
+			conf.setInt("capacity", capacity);
+
 			
 			job.setJobName("build quadtree on sample");
 			job.setOutputKeyClass(NullWritable.class);
@@ -246,10 +245,10 @@ public class QuadTreeDriverWithSample {
 			JobConf conf = new JobConf(getConf(), getClass());
 			conf.setJobName("Build local quadtrees");
 			
-			conf.setInt("capacity", 100000);
+			conf.setInt("capacity", 10000);
 			conf.setStrings("boundary",
-					"0-100",
-					"0-100"				
+					"0-1000",
+					"0-1000"				
 			);
 			
 			DistributedCache.addCacheFile(

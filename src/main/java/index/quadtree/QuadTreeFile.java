@@ -203,6 +203,11 @@ public class QuadTreeFile implements QuadTree, Serializable {
 				if(this.line == null) {
 					try {
 						line =  super.readLine();
+						if(line == null) {
+							super.close();
+							
+						}
+						
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -210,6 +215,8 @@ public class QuadTreeFile implements QuadTree, Serializable {
 				
 				String result = this.line;
 				this.line = null;
+
+				
 				
 				return result;
 			}

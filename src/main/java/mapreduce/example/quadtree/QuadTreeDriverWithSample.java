@@ -162,13 +162,9 @@ public class QuadTreeDriverWithSample {
 				FSDataOutputStream os = this.fileSystem.create(new Path(dst), true);				
 				ObjectOutputStream oos = new ObjectOutputStream(os);
 				oos.writeObject(quadTree);
-				
-				Iterator<QuadTree> qTrees = quadTree.leaves().iterator();
-				while(qTrees.hasNext()) {
-					output.collect(NullWritable.get(), 
-							new Text(qTrees.next().name()));
-				}
-					
+
+				oos.close();
+				// no needs to emit point data.		
 			}
 		}
 
@@ -180,7 +176,9 @@ public class QuadTreeDriverWithSample {
 			//build quadtree
 			JobConf job = new JobConf(conf, Preprocessing.class);
 			
-			int capacity = (int) (numSample / job.getNumReduceTasks());
+			int capacity = (int) (numSample / numReduceTasks);
+			
+			System.out.println("capacity of base quadtree is " + capacity);
 			conf.setInt("capacity", capacity);
 
 			

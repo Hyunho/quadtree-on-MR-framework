@@ -14,6 +14,8 @@ import org.apache.hadoop.util.*;
 
 public class QuadtreeDriverWithoutSample extends Configured implements Tool{
 
+	
+	private static int mumReduceTask = 2 * 9;
 	@Override
 	public int run(String[] args) throws Exception {
 		if(args.length != 2) {
@@ -41,7 +43,7 @@ public class QuadtreeDriverWithoutSample extends Configured implements Tool{
 		conf.setMapperClass(QuadTreeMapper.class);
 	
 		conf.setOutputValueClass(Text.class);
-		conf.setNumReduceTasks(18);
+		conf.setNumReduceTasks(mumReduceTask);
 
 		conf.setReducerClass(QuadTreeReducer.class);
 		

@@ -25,27 +25,10 @@ implements Reducer<Text, PointWritable, Text, Text> {
 
 	private int capacity;	
 
-
-	private Boundary boundary;
-
-
-
 	@Override   
 	public void configure(JobConf conf) {		
 		//set capacity
 		this.capacity = (conf.getInt("capacity", 10));
-
-		// set boundary		
-		String[] boundary = conf.getStrings(
-				"boundary",				
-				new String("0-100"),
-				new String("0-100"));		
-
-		Range[] ranges = new Range[boundary.length];		
-		for(int i=0; i <boundary.length; i++ ) {
-			ranges[i] = Range.createRange(boundary[i], "-");
-		}		
-		this.boundary = new Boundary(ranges);
 	}
 
 	@Override
@@ -53,16 +36,31 @@ implements Reducer<Text, PointWritable, Text, Text> {
 			OutputCollector<Text, Text> output, Reporter reporter)
 	throws IOException {
 
-		QuadTree quadTree = new QuadTreeFile(
-				this.capacity, this.boundary, key.toString());
-
+		
+		//build a local quadtree
+		QuadTree quadTree = null;
 		while(values.hasNext()) {
+			
 			PointWritable point = values.next();
+			
+			if (quadTree == null) {
+				int dimension = point.point().dimension();
+				
+				Range[] ranges = new Range[dimension];
+				for(int i=0; i< dimension ; i++ ) {
+					ranges[i] = new Range(0, 1000);
+				}
+				
+				Boundary boundary = new Boundary(ranges);
+				
+				quadTree = new QuadTreeFile(
+						this.capacity, boundary, key.toString());
+			}
 			quadTree.insert(point.point());
 		}		
 		
+		//emit points in quadtree
 		List<QuadTree> leaves = quadTree.leaves();		
-
 		for(QuadTree qtf : leaves) {			
 			Text oKey = new Text(qtf.name());
 
@@ -72,8 +70,8 @@ implements Reducer<Text, PointWritable, Text, Text> {
 				Point point = points.next();
 				output.collect(
 						oKey, new Text(point.toString()));
-				
 			}
 		}
+		
 	}
 }

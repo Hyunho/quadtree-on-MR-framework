@@ -36,11 +36,7 @@ public class QuadTreeTest {
 		
 		this.conf = new JobConf();
 		conf.setInt("capacity", 4);
-		conf.setStrings("boundary",
-				"0-100",
-				"0-100"				
-		);
-		
+	
 		this.conf.setInt("depth", 2);
 	}
 
@@ -77,11 +73,11 @@ public class QuadTreeTest {
 		
 				
 		Iterator<PointWritable> values = Arrays.asList(
-				new PointWritable(new Point(10, 10)),
+				new PointWritable(new Point(100, 100)),
 				new PointWritable(new Point(1, 1)),
-				new PointWritable(new Point(30, 30)),
-				new PointWritable(new Point(20, 20)),
-				new PointWritable(new Point(30, 15))).iterator();
+				new PointWritable(new Point(300, 300)),
+				new PointWritable(new Point(200, 200)),
+				new PointWritable(new Point(300, 150))).iterator();
 
 		OutputCollector<Text, Text> output =
 			mock(OutputCollector.class);
@@ -90,11 +86,11 @@ public class QuadTreeTest {
 		reducer.reduce(new Text("1"), values, output, null);		
 
 		verify(output).collect(
-				new Text("111"), new Text("10.0 10.0"));
+				new Text("111"), new Text("100.0 100.0"));
 		verify(output).collect(
-				new Text("114"), new Text("30.0 30.0"));		
+				new Text("114"), new Text("300.0 300.0"));		
 		verify(output).collect(
-				new Text("111"), new Text("20.0 20.0"));		
+				new Text("111"), new Text("200.0 200.0"));		
 	}
 		
 	@Test	

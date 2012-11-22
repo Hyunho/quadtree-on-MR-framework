@@ -31,7 +31,7 @@ public class QuadtreeDriverWithoutSample extends Configured implements Tool{
 		conf.setInt("capacity", 10000);
 		conf.setStrings("boundary",
 				"0-1000",
-				"0-1000"				
+				"0-1000"			
 		);
 		
 		

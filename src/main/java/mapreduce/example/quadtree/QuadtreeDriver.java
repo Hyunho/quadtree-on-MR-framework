@@ -47,10 +47,17 @@ public class QuadtreeDriver {
 
 		Point[] points = Sampler.reservoirSampling(args[0], numSample);
 
+		int dimension = points[0].dimension();
+		
+		Range[] ranges = new Range[dimension];
+		for(int i=0; i< dimension ; i++ ) {
+			ranges[i] = new Range(0, 1000);
+		}
+		
 		// initialize a base quadtree
 		QuadTree quadTree = new QuadTreeFile(
 				capacityOfBaseQuadtree, 
-				new Boundary(new Range(0, 1000), new Range(0, 1000)),
+				new Boundary(ranges),
 				"Q");				
 		
 		// build a quadtree

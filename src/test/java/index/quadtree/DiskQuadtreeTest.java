@@ -17,47 +17,50 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 
 
 public class DiskQuadtreeTest {
-
 	
 	
-
+	private QuadTreeFile quadtree = null	;
+	private String filename = "Q";
 	
-	@Test 
-	public void bulidandVerify() throws FileNotFoundException {
-
-		Boundary boundary = new Boundary(new Range(0, 50), new Range(0, 50));
-		QuadTreeFile quadtree =  new QuadTreeFile(4, boundary, "Q");
-
+	List<Point> points = Arrays.asList(
+			new Point(10, 10),
+			new Point(1, 1),
+			new Point(30, 30),
+			new Point(20, 20),
+			new Point(30, 15));
+	
+	@Before
+	public void build() {
 		
+		Boundary boundary = new Boundary(new Range(0, 50), new Range(0, 50));
+		quadtree =  new QuadTreeFile(4, boundary, filename);
 				
-		Iterator<Point> points = Arrays.asList(
-				new Point(10, 10),
-				new Point(1, 1),
-				new Point(30, 30),
-				new Point(20, 20),
-				new Point(30, 15)).iterator();
-
+		Iterator<Point> ip = points.iterator();
 
 		//build a quadTree
-		while(points.hasNext()) {
-			Point point = points.next();
+		while(ip.hasNext()) {
+			Point point = ip.next();
 			quadtree.insert(point);
 		}		
 		
-		assertEquals(4, quadtree.leaves().size());
-		
 		quadtree.save();
-		
+
+		quadtree = null;
+	}
+	
+	@Test 
+	public void verify() throws FileNotFoundException {
 		
 		//reload a quadtree
-		quadtree = QuadTreeFile.load("Q");
+		quadtree = QuadTreeFile.load(filename);
 		
-		//convert Iterator of values to ArrayList
+				//convert Iterator of values to ArrayList
 		Iterator<Point> iPoints = quadtree.points();
 		List<Point> lQuadPoints = new ArrayList<Point>();
 		while(iPoints.hasNext()) {			
@@ -65,7 +68,7 @@ public class DiskQuadtreeTest {
 		}
 
 		//Verify
-		assertEquals("Q", quadtree.name());
+		assertEquals(filename, quadtree.name());
 		assertTrue(lQuadPoints.contains(new Point(10, 10)));
 		assertTrue(lQuadPoints.contains(new Point(1, 1)));
 		assertTrue(lQuadPoints.contains(new Point(30, 30)));
@@ -74,10 +77,21 @@ public class DiskQuadtreeTest {
 		
 	}
 	
+	@Test
+	public void search() {
+		//reload a quadtree
+		QuadTreeFile quadtree = QuadTreeFile.load(filename);
+
+		Point queryPoint = new Point(10, 10);
+		Point dest = QuadtreeHelper.search(quadtree, queryPoint);
+
+		assertEquals(queryPoint, dest);
+	}
+	
 
 	@After
 	public void delete() {
-		QuadTreeFile.delete("Q");
+		QuadTreeFile.delete(this.filename);
 	}
 }
 	

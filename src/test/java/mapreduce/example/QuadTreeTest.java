@@ -11,8 +11,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 import mapreduce.example.quadtree.InvertedIndexer;
-import mapreduce.example.quadtree.QuadTreeMapper;
 import mapreduce.example.quadtree.QuadTreeReducer;
+import mapreduce.example.quadtree.QuadtreeDriverWithoutSample;
 import mapreduce.io.PointWritable;
 
 import org.apache.hadoop.io.*;
@@ -44,7 +44,7 @@ public class QuadTreeTest {
 	@Test 
 	public void IndexingMap() throws IOException {
 		
-		QuadTreeMapper indexingMapper = new QuadTreeMapper();
+		QuadtreeDriverWithoutSample.QuadTreeMapper indexingMapper = new QuadtreeDriverWithoutSample.QuadTreeMapper();
 		indexingMapper.configure(conf);
 		
 		Text ivalue = new Text("10 10");
@@ -57,10 +57,10 @@ public class QuadTreeTest {
 		verify(output).collect(new Text("Q11"),
 				new PointWritable(new Point(10, 10)));
 		
-		ivalue = new Text("60 60");
+		ivalue = new Text("600 600");
 		indexingMapper.map(null, ivalue, output, null);
 		verify(output).collect(new Text("Q41"),
-				new PointWritable(new Point(60, 60)));
+				new PointWritable(new Point(600, 600)));
 	}
 	
 	@Test
@@ -68,9 +68,7 @@ public class QuadTreeTest {
 
 		QuadTreeReducer reducer= new QuadTreeReducer();
 		
-		
 		reducer.configure(conf);
-		
 				
 		Iterator<PointWritable> values = Arrays.asList(
 				new PointWritable(new Point(100, 100)),

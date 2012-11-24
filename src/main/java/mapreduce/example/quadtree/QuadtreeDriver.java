@@ -12,8 +12,6 @@ import index.quadtree.QuadTree;
 import index.quadtree.QuadTreeFile;
 import index.quadtree.Range;
 import hadoop.Sampler;
-import mapreduce.example.quadtree.QuadTreeDriverWithSample.Sampling;
-
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;

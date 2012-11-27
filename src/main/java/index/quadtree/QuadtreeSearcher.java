@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 
@@ -98,7 +99,39 @@ public class QuadtreeSearcher {
 
 			return leafNode;
 		}
+
+		public ArrayList<QuadTreeFile> searchNodes(Boundary boundary) {
+			ArrayList<QuadTreeFile> nodes = new ArrayList<QuadTreeFile>();
+			
+			QuadTreeFile root = this.quadtree;
+			ArrayList<QuadTreeFile> queue = new ArrayList<QuadTreeFile>();
+			queue.add(root);
+			
+			while(queue.size() > 0) {
+				QuadTreeFile node = queue.get(0);
+				queue.remove(0);
+
+				if(boundary.cover(node.boundary())) {
+					nodes.add(node);
+				}else {
+					if(boundary.overlab(node.boundary())) {
+						
+						if(node.isLeaf()) {
+							nodes.add(node);
+						}else { 
+							Iterator<QuadTreeFile> iq = node.children();
+							while(iq.hasNext()) {
+								QuadTreeFile child = iq.next();
+								queue.add(child);
+							}
+						}
+					}
+				}
+			}
+			return nodes;
+		}
 	}
+	
 	
 	/**
 	 * @param args

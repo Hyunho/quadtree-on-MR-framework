@@ -493,7 +493,6 @@ public class QuadTreeFile implements QuadTree, Serializable {
 					}
 				}
 			}
-			
 			return parents;			
 		}
 	}

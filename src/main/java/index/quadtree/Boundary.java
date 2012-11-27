@@ -105,5 +105,48 @@ public class Boundary implements Serializable{
 		
 		return str;
 	}
-	
+
+	public boolean overlab(Boundary other) {
+
+		
+		if (this.dimension() !=  other.dimension())
+			throw new InvalidParameterException(
+					"dimension of boundraries must be same. " +
+					"But number of dimension of a boundary is " +  this.dimension() +
+					" and number of dimension of other boudnary is " + other.dimension());
+		
+		for(int i=0; i< ranges.length; i++) {
+			if (this.ranges[i].min <= other.ranges[i].min &&
+					this.ranges[i].max < other.ranges[i].min) {
+				return false;
+			}else if(this.ranges[i].min >= other.ranges[i].max &&
+					this.ranges[i].max > other.ranges[i].max) {
+				return false;
+				
+			}
+		}	
+		return true;		
+	}
+
+	public boolean cover(Boundary other) {
+		if (this.dimension() !=  other.dimension())
+			throw new InvalidParameterException(
+					"dimension of boundraries must be same. " +
+							"But number of dimension of a boundary is " +  this.dimension() +
+							" and number of dimension of other boudnary is " + other.dimension());
+
+		for(int i=0; i< ranges.length; i++) {
+			
+			if (this.ranges[i].min <= other.ranges[i].min &&
+					this.ranges[i].max < other.ranges[i].max) {
+				return false;
+			}else if(this.ranges[i].min >= other.ranges[i].min &&
+					this.ranges[i].max < other.ranges[i].max) {
+				return false;
+
+			}
+
+		}
+		return true;
+	}
 }

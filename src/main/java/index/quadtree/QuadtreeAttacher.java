@@ -106,11 +106,5 @@ public class QuadtreeAttacher {
 			e.printStackTrace();
 		}
 		
-
-
-//		FSDataOutputStream os = fs.create(new Path(root), true);				
-//		ObjectOutputStream oos = new ObjectOutputStream(os);
-//		oos.writeObject(quadTree);
-//		oos.close();
 	}
 }

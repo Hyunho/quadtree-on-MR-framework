@@ -70,6 +70,26 @@ public class BoundaryTest {
 				new Boundary(new Range(0, 50), new Range(0, 50)));
 	}
 	 
+	@Test
+	public void checkOverlap() {
+		Boundary a = new Boundary(new Range(0, 10), new Range(0, 10));
+		Boundary b = new Boundary(new Range(5, 15), new Range(5, 15));
+		Boundary c = new Boundary(new Range(11, 11), new Range(21, 21));
+		
+		assertTrue(a.overlab(b));
+		assertFalse(a.overlab(c));
+		
+	}
 	
+	@Test
+	public void cover() {
+		Boundary a = new Boundary(new Range(0, 30), new Range(0, 30));
+		Boundary b = new Boundary(new Range(10, 20), new Range(10, 20));
+		Boundary c = new Boundary(new Range(20, 40), new Range(20, 40));
+		
+		assertTrue(a.cover(b));
+		assertFalse(a.cover(c));
+		
+	}
 
 }

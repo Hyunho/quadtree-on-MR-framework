@@ -11,10 +11,6 @@ import index.quadtree.QuadTreeFile;
 import index.quadtree.QuadTreeMemory;
 import index.quadtree.Range;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -24,9 +20,6 @@ import org.junit.Test;
 
 
 public class MemoryQuadtreeTest {
-	
-	
-
 	
 	/**
 	 * we assume there are no same points.

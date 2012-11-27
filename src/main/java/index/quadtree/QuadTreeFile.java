@@ -50,7 +50,7 @@ public class QuadTreeFile implements QuadTree, Serializable {
 	private int size = 0;
 	public int size() {	return size; }
 
-	private ArrayList<QuadTreeFile> children;
+	ArrayList<QuadTreeFile> children;
 	
 	public QuadTreeFile(int capacity, Boundary boundary, String name) {
 
@@ -356,6 +356,7 @@ public class QuadTreeFile implements QuadTree, Serializable {
 	@Override
 	public String toString() {
 		String str = new String();		
+		str += "name : " + name() + "\n";
 		str += "number of data point : " + size() + "\n";
 		str += "number of leaves of qaudtree : " + leaves().size() + "\n";
 		str += "boundary : " + boundary();
@@ -450,18 +451,50 @@ public class QuadTreeFile implements QuadTree, Serializable {
 		return null;		
 	}
 	
-	public QuadTreeFile findMiddle(QuadTreeFile leaf) {
-		
-		// Initialize 
-		//find a middle node
-		String name = leaf.name();
-		String nameOfMiddleNode = name.substring(0, (name.length()/2) +1);
-		QuadTreeFile middleNode = this.getNode(nameOfMiddleNode);
-		
-		return middleNode;
+	/**
+	 * helper class to travel a quadtree
+	 * @author hyunho
+	 *
+	 */
+	public static class QuadtreeTraveler {
+
+		private QuadTreeFile quadtree;
+
+		public QuadtreeTraveler(QuadTreeFile quadtree) {
+			this.quadtree = quadtree;
+		}
+
+		/** 
+		 * find parents of leaves of a quadtree
+		 */
+		public ArrayList<QuadTreeFile> parentsOfleaves() {
+			
+			ArrayList<QuadTreeFile> parents = new ArrayList<QuadTreeFile>();
+			
+			QuadTreeFile root = this.quadtree;
+			ArrayList<QuadTreeFile> queue = new ArrayList<QuadTreeFile>();
+			queue.add(root);
+			
+			
+			while(queue.size() > 0) {
+				QuadTreeFile node = queue.get(0);
+				queue.remove(0);
+
+				Iterator<QuadTreeFile> iq = node.children();
+				while(iq.hasNext()) {
+					QuadTreeFile child = iq.next();
+
+					if(child.isLeaf())  {
+						parents.add(node);
+						break;
+					}
+					else {
+						queue.add(child);
+					}
+				}
+			}
+			
+			return parents;			
+		}
 	}
-
-
-
-	
 }

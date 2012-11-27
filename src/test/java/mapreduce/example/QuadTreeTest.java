@@ -61,36 +61,8 @@ public class QuadTreeTest {
 		indexingMapper.map(null, ivalue, output, null);
 		verify(output).collect(new Text("Q41"),
 				new PointWritable(new Point(600, 600)));
-	}
+	}	
 	
-	@Test
-	public void quadtreeReduce() throws IOException  {		
-
-		QuadTreeReducer reducer= new QuadTreeReducer();
-		
-		reducer.configure(conf);
-				
-		Iterator<PointWritable> values = Arrays.asList(
-				new PointWritable(new Point(100, 100)),
-				new PointWritable(new Point(1, 1)),
-				new PointWritable(new Point(300, 300)),
-				new PointWritable(new Point(200, 200)),
-				new PointWritable(new Point(300, 150))).iterator();
-
-		OutputCollector<Text, Text> output =
-			mock(OutputCollector.class);
-
-		
-		reducer.reduce(new Text("1"), values, output, null);		
-
-		verify(output).collect(
-				new Text("111"), new Text("100.0 100.0"));
-		verify(output).collect(
-				new Text("114"), new Text("300.0 300.0"));		
-		verify(output).collect(
-				new Text("111"), new Text("200.0 200.0"));		
-	}
-		
 	@Test	
 	public void testIndexing() throws IOException {
 		int value = 20;		

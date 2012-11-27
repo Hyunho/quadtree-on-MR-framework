@@ -69,6 +69,8 @@ public class QuadtreeDriver {
 			i++;
 		}
 		
+		
+		
 		//write quadtree in to HDFS
 		Configuration conf = new Configuration();
 		FileSystem fs = FileSystem.get(URI.create(dst), conf);

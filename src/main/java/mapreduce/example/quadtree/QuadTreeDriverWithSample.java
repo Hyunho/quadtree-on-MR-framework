@@ -31,6 +31,7 @@ import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 
 import org.apache.hadoop.mapred.*;
+import org.apache.hadoop.mapred.lib.MultipleTextOutputFormat;
 
 
 import org.apache.hadoop.util.Tool;
@@ -203,6 +204,15 @@ public class QuadTreeDriverWithSample {
 	 */
 	public static class BuldingQuadtree extends Configured implements Tool{
 
+		static class QuadtreeNameMultipleTextOutputFormat 
+		extends MultipleTextOutputFormat<Text, Text> {
+			
+			@Override
+			protected String generateFileNameForKeyValue(Text key, Text value,
+					String name) {
+				return key.toString();
+			}
+		}
 		
 		public static class PartitionMapper extends MapReduceBase
 		implements Mapper <LongWritable, Text, Text, PointWritable>{
@@ -231,11 +241,13 @@ public class QuadTreeDriverWithSample {
 
 				Point point = new Point(value.toString().split(" "));
 				output.collect(
-						new Text("Q" + this.quadtree.getindex(point)),
+						new Text(this.quadtree.getindex(point)),
 						new PointWritable(point)
 				);
 			}
 		}
+
+		private String outputName;
 		
 		@Override
 		public int run(String[] args) throws Exception {
@@ -252,6 +264,7 @@ public class QuadTreeDriverWithSample {
 			DistributedCache.addCacheFile(
 					new URI("quadtree.dat"), 
                     conf);
+			 
 			DistributedCache.createSymlink(conf);
 			
 			FileInputFormat.addInputPath(conf, new Path(args[0]));
@@ -260,7 +273,8 @@ public class QuadTreeDriverWithSample {
 			conf.setMapOutputKeyClass(Text.class);
 			conf.setMapOutputValueClass(PointWritable.class);		
 			conf.setMapperClass(PartitionMapper.class);
-			conf.setOutputValueClass(Text.class);		
+			conf.setOutputValueClass(Text.class);
+			conf.setOutputFormat(QuadtreeNameMultipleTextOutputFormat.class);
 			conf.setReducerClass(QuadTreeReducer.class);
 			conf.setNumReduceTasks(numReduceTasks);
 			

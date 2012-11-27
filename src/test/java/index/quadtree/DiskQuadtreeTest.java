@@ -81,21 +81,6 @@ public class DiskQuadtreeTest {
 	}
 	
 
-	@Test
-	public void specialSearch() {
-
-		//reload a quadtree
-		QuadTreeFile quadtree = QuadTreeFile.load(filename);
-
-		Point validPoint = new Point(10, 10);
-		Point invalidPoint = new Point(11, 11);
-
-		QuadtreeSearcher.SpecialSearcher ss = new QuadtreeSearcher.SpecialSearcher(quadtree);
-		assertEquals(validPoint, ss.searchPoint(validPoint));		
-		assertThat(invalidPoint, not(ss.searchPoint(invalidPoint)));
-
-	}
-
 	@After
 	public void delete() {
 		QuadTreeFile.delete(this.filename);

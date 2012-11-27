@@ -1,9 +1,12 @@
 package hadoop;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.DataInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.URI;
 import java.util.Random;
 
@@ -45,4 +48,40 @@ public class Sampler {
 		reader.close();
 		return points;
 	}
+	
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		
+		
+		String filename= args[0];
+		int numSample = Integer.parseInt(args[1]);
+		String output = args[2];
+		
+		try {
+			Point[] sample = Sampler.reservoirSampling(filename, numSample);
+			
+			try {				
+				PrintWriter out
+				= new PrintWriter(
+						new BufferedWriter(
+								new FileWriter(output, true)));
+				
+				for(int i=0; i < numSample; i++) {
+					out.write(sample[i].toString());	
+				}
+
+				out.println();
+				out.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
 }

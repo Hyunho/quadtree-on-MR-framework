@@ -18,10 +18,21 @@ import org.apache.hadoop.mapred.MapReduceBase;
 import org.apache.hadoop.mapred.OutputCollector;
 import org.apache.hadoop.mapred.Reducer;
 import org.apache.hadoop.mapred.Reporter;
+import org.apache.hadoop.mapred.lib.MultipleTextOutputFormat;
 
 
 public class QuadTreeReducer extends MapReduceBase
 implements Reducer<Text, PointWritable, Text, Text> {
+	
+	static class StaticNameMultipleTextOutputFormat 
+	extends MultipleTextOutputFormat<Text, Text> {
+		
+		@Override
+		protected String generateFileNameForKeyValue(Text key, Text value,
+				String name) {
+			return key.toString();
+		}
+	}
 
 	private int capacity;	
 
@@ -57,7 +68,11 @@ implements Reducer<Text, PointWritable, Text, Text> {
 						this.capacity, boundary, key.toString());
 			}
 			quadTree.insert(point.point());
-		}		
+		}
+		
+		//output quadtree
+		
+		//output data of quadtree
 		
 		//emit points in quadtree
 		List<QuadTree> leaves = quadTree.leaves();		

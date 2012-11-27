@@ -1,6 +1,9 @@
 package index.quadtree;
 
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
+
+
 import index.quadtree.Boundary;
 import index.quadtree.Point;
 import index.quadtree.QuadTree;
@@ -25,7 +28,7 @@ import org.junit.Test;
 public class DiskQuadtreeTest {
 	
 	
-	private QuadTreeFile quadtree = null	;
+	private QuadTreeFile quadtree = null;
 	private String filename = "Q";
 	
 	List<Point> points = Arrays.asList(
@@ -77,17 +80,21 @@ public class DiskQuadtreeTest {
 		
 	}
 	
+
 	@Test
-	public void search() {
+	public void specialSearch() {
+
 		//reload a quadtree
 		QuadTreeFile quadtree = QuadTreeFile.load(filename);
 
-		Point queryPoint = new Point(10, 10);
-		Point dest = QuadtreeHelper.search(quadtree, queryPoint);
+		Point validPoint = new Point(10, 10);
+		Point invalidPoint = new Point(11, 11);
 
-		assertEquals(queryPoint, dest);
+		QuadtreeSearcher.SpecialSearcher ss = new QuadtreeSearcher.SpecialSearcher(quadtree);
+		assertEquals(validPoint, ss.searchPoint(validPoint));		
+		assertThat(invalidPoint, not(ss.searchPoint(invalidPoint)));
+
 	}
-	
 
 	@After
 	public void delete() {

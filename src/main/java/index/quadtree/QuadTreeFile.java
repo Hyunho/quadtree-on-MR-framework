@@ -62,62 +62,73 @@ public class QuadTreeFile implements QuadTree, Serializable {
 		this.boundary = boundary;
 		this.name = name;
 		
-		// if there are any file related with this quadtree, delete
-//		new File(name).delete();
-//		new File(name + "-points").delete();		
+	}
+
+	public static class Spliter {
 		
-		
-		
+		public static void split(QuadTreeFile quadtree) {
+			List<Boundary> boundaries = quadtree.boundary.split();	
+			Iterator<Point>  iterator  = quadtree.points();
+
+
+			int count = 0;
+
+
+
+			quadtree.children = new ArrayList<QuadTreeFile>();
+
+			for(Boundary bound : boundaries) {
+				quadtree.children.add(new QuadTreeFile(
+						quadtree.capacity,
+						bound,
+						quadtree.name + ( ++count)
+				));
+			}
+
+
+
+			while(iterator.hasNext()) {
+				Point point = iterator.next();
+				quadtree.insertIntoChildren(point);
+			}
+			
+			new File(quadtree.name + "-points").delete();
+		}
 	}
 	
-
-
-
-
-
+	
 	public void split() {
-
-
-		List<Boundary> boundaries = this.boundary.split();	
-		Iterator<Point>  iterator  = this.points();
-
-
-		int count = 0;
-
-
-
-		this.children = new ArrayList<QuadTreeFile>();
-
-		for(Boundary bound : boundaries) {
-			this.children.add(new QuadTreeFile(
-					this.capacity,
-					bound,
-					name + ( ++count)
-			));
-		}
-
-
-
-		while(iterator.hasNext()) {
-			Point point = iterator.next();
-			insertIntoChildren(point);
-		}
-		
-		new File(this.name + "-points").delete();
+		Spliter.split(this);
 	}
 
-	public Iterator<Point> points() {
+	public PointIterator points() {
 		return new PointIterator(this);
 	}
-
+	
+	
 	public class PointIterator implements Iterator<Point> {
 
 		private NextBufferedReader reader;		
 		private Iterator<File> files;
+		
+		@Override
+		protected void finalize() throws Throwable {
+			this.reader.close();
+			super.finalize();
+		}
+		
+		/**
+		 *  after this class is used, should close for the file close issue 
+		 */
+		public void close() {
+			try {
+				this.reader.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 
 		public PointIterator(QuadTreeFile quadtree){
-			
-			
 			
 			//initialize files
 			List<QuadTree> leaves = quadtree.leaves();
@@ -151,6 +162,15 @@ public class QuadTreeFile implements QuadTree, Serializable {
 			if((this.reader != null) &&
 					this.reader.hasNext())
 				return true;
+			
+			if (this.reader != null) {
+				try {
+					this.reader.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
 			return false;
 		}
 
@@ -165,10 +185,15 @@ public class QuadTreeFile implements QuadTree, Serializable {
 					
 					while(!file.exists())
 						file = this.files.next();
+					if (this.reader != null) {
+						this.reader.close();
+					}
 					
 					this.reader = new NextBufferedReader(new FileReader(file));
 					line = this.reader.readLine();
 				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
 					e.printStackTrace();
 				} 
 			}
@@ -177,7 +202,7 @@ public class QuadTreeFile implements QuadTree, Serializable {
 			return point;
 
 		}
-
+		
 		
 
 		@Override
@@ -186,6 +211,13 @@ public class QuadTreeFile implements QuadTree, Serializable {
 		}
 		
 		class NextBufferedReader extends BufferedReader {
+			
+			@Override
+			protected void finalize() throws Throwable {
+				this.close();
+				super.finalize();
+			}
+			
 			private String line;
 
 			public NextBufferedReader(Reader in) {
@@ -203,11 +235,7 @@ public class QuadTreeFile implements QuadTree, Serializable {
 				if(this.line == null) {
 					try {
 						line =  super.readLine();
-						if(line == null) {
-							super.close();
-							
-						}
-						
+												
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -224,19 +252,19 @@ public class QuadTreeFile implements QuadTree, Serializable {
 	}
 
 	private void savePointIntoFile(Point point) {
-		try {				
-			PrintWriter out
-			= new PrintWriter(
-					new BufferedWriter(
-							new FileWriter(this.name() +"-points", true)));
-			
-			
-			out.write(point.toString());
-			out.println();
-			out.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+
+		 try {				
+			 PrintWriter out = new PrintWriter(
+					 new BufferedWriter(
+							 new FileWriter(this.name() +"-points", true)));
+
+
+			 out.write(point.toString());
+			 out.println();
+			 out.close();
+		 } catch (IOException e) {
+			 e.printStackTrace();
+		 } 
 	}
 
 
@@ -363,7 +391,9 @@ public class QuadTreeFile implements QuadTree, Serializable {
 			FileInputStream fileStream = new FileInputStream(file);
 			ObjectInputStream os = new ObjectInputStream(fileStream);
 
-			return (QuadTreeFile)os.readObject();
+			QuadTreeFile quadtree = (QuadTreeFile)os.readObject();
+			os.close();
+			return quadtree;
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -404,6 +434,31 @@ public class QuadTreeFile implements QuadTree, Serializable {
 		
 		System.err.print("check this point " + point);
 		return null;
+	}
+	
+	/**
+	 * find a node whose has given name
+	 * @param nameOfMiddleNode
+	 */
+	public QuadTreeFile getNode(String nodeName) {
+		Iterator<QuadTreeFile> iq =  this.descendant().iterator();
+		while(iq.hasNext()) {
+			QuadTreeFile node = iq.next();
+			if (nodeName.equals(node.name()))
+				return node;
+		}
+		return null;		
+	}
+	
+	public QuadTreeFile findMiddle(QuadTreeFile leaf) {
+		
+		// Initialize 
+		//find a middle node
+		String name = leaf.name();
+		String nameOfMiddleNode = name.substring(0, (name.length()/2) +1);
+		QuadTreeFile middleNode = this.getNode(nameOfMiddleNode);
+		
+		return middleNode;
 	}
 
 

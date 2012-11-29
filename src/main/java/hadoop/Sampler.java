@@ -1,18 +1,19 @@
 package hadoop;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.DataInputStream;
-import java.io.FileWriter;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.URI;
 import java.util.Random;
+
+import mapreduce.io.PointWritable;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.IOUtils;
+import org.apache.hadoop.io.NullWritable;
+import org.apache.hadoop.io.SequenceFile;
+import org.apache.hadoop.util.ReflectionUtils;
 
 import index.quadtree.Point;
 
@@ -25,63 +26,37 @@ public class Sampler {
 		Configuration conf = new Configuration();
 		
 		FileSystem fs = FileSystem.get(URI.create(filename), conf);
+		Path path = new Path(filename);
 		
-		DataInputStream dfs = new DataInputStream(fs.open(new Path(filename)));
-		BufferedReader reader = new BufferedReader(new InputStreamReader(dfs));
-		
-		String line;
-		int index = 0;
-		
-		Random rand = new Random();
+		SequenceFile.Reader reader = null;
+		try {
+			reader = new SequenceFile.Reader(fs, path, conf);
+			NullWritable key = (NullWritable)
+					ReflectionUtils.newInstance(reader.getKeyClass(), conf);
+			PointWritable value = (PointWritable)
+					ReflectionUtils.newInstance(reader.getValueClass(), conf);
 
-		while ((line = reader.readLine()) != null){
-
-			if ( index < numSample ) {
-				points[index] = Point.stringToPoint(line);
-			}else {
-				int r = rand.nextInt(index);
-				if(r < numSample)
-					points[r] = Point.stringToPoint(line);
+			int index = 0;
+			Random rand = new Random();
+			
+			while(reader.next(key)) {
+				
+				if(index< numSample) {
+					reader.getCurrentValue(value);
+					points[index] = value.point();
+				}else {
+					int r = rand.nextInt(index);
+					if(r<numSample) {						
+						reader.getCurrentValue(value);
+						points[r] = value.point();
+					}
+				}
+				index++;				
 			}
-			index++; 
+		}finally {
+			IOUtils.closeStream(reader);
 		}
-		reader.close();
+		
 		return points;
 	}
-	
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		
-		
-		String filename= args[0];
-		int numSample = Integer.parseInt(args[1]);
-		String output = args[2];
-		
-		try {
-			Point[] sample = Sampler.reservoirSampling(filename, numSample);
-			
-			try {				
-				PrintWriter out
-				= new PrintWriter(
-						new BufferedWriter(
-								new FileWriter(output, true)));
-				
-				for(int i=0; i < numSample; i++) {
-					out.write(sample[i].toString());	
-				}
-
-				out.println();
-				out.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-	}
-
 }

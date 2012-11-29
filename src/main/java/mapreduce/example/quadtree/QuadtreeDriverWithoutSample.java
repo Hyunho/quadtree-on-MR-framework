@@ -4,17 +4,17 @@ package mapreduce.example.quadtree;
 
 import index.quadtree.Boundary;
 import index.quadtree.Point;
-import index.quadtree.QuadTreeFile;
 import index.quadtree.QuadTreeMemory;
 import index.quadtree.Range;
 
 import java.io.IOException;
 
+import mapreduce.example.quadtree.QuadTreeDriverWithSample.BuldingQuadtree.QuadtreeNameMultipleSequenceOutputFormat;
 import mapreduce.io.PointWritable;
 
 import org.apache.hadoop.conf.*;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapred.*;
 import org.apache.hadoop.util.*;
@@ -32,7 +32,7 @@ public class QuadtreeDriverWithoutSample extends Configured implements Tool{
 	 *
 	 */
 	public static class QuadTreeMapper extends MapReduceBase 
-	implements Mapper<LongWritable, Text, Text, PointWritable> {
+	implements Mapper<NullWritable, PointWritable, Text, PointWritable> {
 
 		private QuadTreeMemory quadTree;
 
@@ -43,12 +43,11 @@ public class QuadtreeDriverWithoutSample extends Configured implements Tool{
 		}	
 		
 		@Override
-		public void map(LongWritable key, Text iValue,
+		public void map(NullWritable key, PointWritable iValue,
 				OutputCollector<Text, PointWritable> output, Reporter reporter)
 						throws IOException {
 
-
-			Point point = Point.stringToPoint(iValue.toString());
+			Point point = iValue.point();
 
 			if(this.quadTree == null) {
 					int dimension = point.dimension();
@@ -97,16 +96,21 @@ public class QuadtreeDriverWithoutSample extends Configured implements Tool{
 
 		FileInputFormat.addInputPath(conf, new Path(args[0]));
 		FileOutputFormat.setOutputPath(conf, new Path(args[1]));
+		
+		conf.setInputFormat(SequenceFileInputFormat.class);
 
 		conf.setMapOutputKeyClass(Text.class);
-		conf.setMapOutputValueClass(PointWritable.class);		
+		conf.setMapOutputValueClass(PointWritable.class);
+		
+		conf.setOutputKeyClass(Text.class);
+		conf.setOutputValueClass(PointWritable.class);
+		conf.setOutputFormat(QuadtreeNameMultipleSequenceOutputFormat.class);
+
+		
 		conf.setMapperClass(QuadTreeMapper.class);
-
-		conf.setOutputValueClass(Text.class);
-		conf.setNumReduceTasks(mumReduceTask);
-
 		conf.setReducerClass(QuadTreeReducer.class);
-
+		
+		conf.setNumReduceTasks(mumReduceTask);
 
 		JobClient.runJob(conf);
 		return 0;

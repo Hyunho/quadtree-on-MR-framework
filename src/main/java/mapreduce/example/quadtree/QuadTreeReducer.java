@@ -1,10 +1,8 @@
 package mapreduce.example.quadtree;
 
-import index.quadtree.Boundary;
 import index.quadtree.Point;
 import index.quadtree.QuadTree;
 import index.quadtree.QuadTreeFile;
-import index.quadtree.Range;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -26,11 +24,9 @@ import org.apache.hadoop.mapred.MapReduceBase;
 import org.apache.hadoop.mapred.OutputCollector;
 import org.apache.hadoop.mapred.Reducer;
 import org.apache.hadoop.mapred.Reporter;
-import org.apache.hadoop.mapred.lib.MultipleTextOutputFormat;
-
 
 public class QuadTreeReducer extends MapReduceBase
-implements Reducer<Text, PointWritable, Text, Text> {
+implements Reducer<Text, PointWritable, Text, PointWritable> {
 	
 	
 
@@ -57,7 +53,7 @@ implements Reducer<Text, PointWritable, Text, Text> {
 
 	@Override
 	public void reduce(Text key, Iterator<PointWritable> values,
-			OutputCollector<Text, Text> output, Reporter reporter)
+			OutputCollector<Text, PointWritable> output, Reporter reporter)
 	throws IOException {
 
 		//build a local quadtree
@@ -93,7 +89,7 @@ implements Reducer<Text, PointWritable, Text, Text> {
 			while(points.hasNext()) {
 				Point point = points.next();
 				output.collect(
-						oKey, new Text(point.toString()));
+						oKey, new PointWritable(point));
 			}
 		}
 		

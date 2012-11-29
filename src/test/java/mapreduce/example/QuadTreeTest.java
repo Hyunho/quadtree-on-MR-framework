@@ -47,8 +47,7 @@ public class QuadTreeTest {
 		QuadtreeDriverWithoutSample.QuadTreeMapper indexingMapper = new QuadtreeDriverWithoutSample.QuadTreeMapper();
 		indexingMapper.configure(conf);
 		
-		Text ivalue = new Text("10 10");
-		
+		PointWritable ivalue = new PointWritable(new Point(10, 10));
 		
 		OutputCollector<Text, PointWritable> output =
 			mock(OutputCollector.class);
@@ -57,7 +56,7 @@ public class QuadTreeTest {
 		verify(output).collect(new Text("Q11"),
 				new PointWritable(new Point(10, 10)));
 		
-		ivalue = new Text("600 600");
+		ivalue = new PointWritable(new Point(600,600));
 		indexingMapper.map(null, ivalue, output, null);
 		verify(output).collect(new Text("Q41"),
 				new PointWritable(new Point(600, 600)));

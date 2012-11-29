@@ -70,10 +70,8 @@ public class Point implements Serializable {
 		
 		double[] douArray =  new double[strings.length];
 
-		for(int i=0; i< strings.length; i++)
-		for(String str : strings) {
+		for(int i=0; i< strings.length; i++) {
 			douArray[i] = Double.parseDouble(strings[i]);
-			
 		}		
 
 		Point point = new Point(douArray);

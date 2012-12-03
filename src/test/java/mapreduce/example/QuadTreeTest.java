@@ -7,11 +7,7 @@ import index.quadtree.Point;
 import index.quadtree.QuadTreeFile;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Iterator;
-
 import mapreduce.example.quadtree.InvertedIndexer;
-import mapreduce.example.quadtree.QuadTreeReducer;
 import mapreduce.example.quadtree.QuadtreeDriverWithoutSample;
 import mapreduce.io.PointWritable;
 
@@ -32,13 +28,14 @@ public class QuadTreeTest {
 	private JobConf conf;
 
 	@Before
-	public void before () {
-		
+	public void before () {		
 		this.conf = new JobConf();
-		conf.setInt("capacity", 4);
-	
+		this.conf.setInt("capacity", 4);	
 		this.conf.setInt("depth", 2);
+		this.conf.setInt("dimension", 2);
 	}
+	
+
 
 
 	@Test 

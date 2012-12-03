@@ -2,7 +2,6 @@ package index.quadtree;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 import index.quadtree.QuadtreeSearcher.NormalSearcher;

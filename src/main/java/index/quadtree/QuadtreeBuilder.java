@@ -1,16 +1,12 @@
 package index.quadtree;
 
+import hadoop.io.PointInputStream;
+
 import java.io.IOException;
 import java.net.URI;
-import mapreduce.io.PointWritable;
-
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.IOUtils;
-import org.apache.hadoop.io.NullWritable;
-import org.apache.hadoop.io.SequenceFile;
-import org.apache.hadoop.util.ReflectionUtils;
 
 
 public class QuadtreeBuilder {
@@ -26,7 +22,6 @@ public class QuadtreeBuilder {
 			System.exit(-1);
 		}
 
-
 		String fileName = args[0];
 		buildingWithSingleMachine(fileName);
 
@@ -36,26 +31,19 @@ public class QuadtreeBuilder {
 
 		QuadTreeFile quadTree = new QuadTreeFile(10000,
 				new Boundary(new Range(0, 1000), new Range(0, 1000)), "Q");
+		
+		Configuration conf = new Configuration();		
+		FileSystem fs = FileSystem.get(URI.create(filename), conf);		
+		PointInputStream dis = new PointInputStream(fs.open(new Path(filename)), 2);		
 
-		
-		Configuration conf = new Configuration();
-		
-		FileSystem fs = FileSystem.get(URI.create(filename), conf);
-		Path path = new Path(filename);
-		
-		SequenceFile.Reader reader = null;
 		try {
-			reader = new SequenceFile.Reader(fs, path, conf);
-			NullWritable key = (NullWritable)
-					ReflectionUtils.newInstance(reader.getKeyClass(), conf);
-			PointWritable value = (PointWritable)
-					ReflectionUtils.newInstance(reader.getValueClass(), conf);
-
-			while(reader.next(key, value)) {
-				quadTree.insert(value.point());
+			Point point;
+			while((point = dis.readPoint()) != null) {
+				quadTree.insert(point);
 			}
+			quadTree.save();
 		}finally {
-			IOUtils.closeStream(reader);
+			dis.read();
 		}
 		
 	}

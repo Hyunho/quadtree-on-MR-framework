@@ -1,8 +1,10 @@
 package mapreduce.example.quadtree;
 
+import index.quadtree.Boundary;
 import index.quadtree.Point;
 import index.quadtree.QuadTree;
 import index.quadtree.QuadTreeFile;
+import index.quadtree.Range;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -31,13 +33,15 @@ implements Reducer<Text, PointWritable, Text, PointWritable> {
 	
 
 	private int capacity;
-	private QuadTreeFile baseQuadtree;	
+	private QuadTreeFile baseQuadtree;
+	private int dimension;	
 
 	@Override   
 	public void configure(JobConf conf) {		
 		//set capacity
 		this.capacity = (conf.getInt("capacity", 10));
-		
+		this.dimension = (conf.getInt("dimension", 2));
+
 		try {
 			FileSystem fs = FileSystem.get(conf);
 			FSDataInputStream fis=  fs.open(new Path("quadtree.dat"));
@@ -57,16 +61,22 @@ implements Reducer<Text, PointWritable, Text, PointWritable> {
 	throws IOException {
 
 		//build a local quadtree
-		QuadTree quadTree = null;
+		
+		Range[] ranges = new Range[dimension];
+		for(int i=0; i< this.dimension ; i++ ) {
+			ranges[i] = new Range(0, 1000);
+		}
+		Boundary boundary = new Boundary(ranges);
+		
+		QuadTree quadTree =  new QuadTreeFile(
+				this.capacity, boundary, key.toString());;
+		
+				
+		//insert points
 		while(values.hasNext()) {
 			
-			PointWritable point = values.next();
-			
-			if (quadTree == null) {
-				QuadTreeFile node = baseQuadtree.getNode(key.toString());				
-				quadTree = new QuadTreeFile(
-						this.capacity, node.boundary(), key.toString());
-			}
+			PointWritable point = values.next();	
+		
 			quadTree.insert(point.point());
 		}
 		

@@ -10,6 +10,7 @@ import index.quadtree.Range;
 import java.io.IOException;
 
 import mapreduce.example.quadtree.QuadTreeDriverWithSample.BuldingQuadtree.QuadtreeNameMultipleSequenceOutputFormat;
+import mapreduce.io.BinaryFileInputFormat;
 import mapreduce.io.PointWritable;
 
 import org.apache.hadoop.conf.*;
@@ -23,9 +24,6 @@ import org.apache.hadoop.util.*;
 
 public class QuadtreeDriverWithoutSample extends Configured implements Tool{
 
-
-
-
 	/**
 	 * get index of tuple using virtual quad-tree
 	 * @author hyunho
@@ -35,11 +33,12 @@ public class QuadtreeDriverWithoutSample extends Configured implements Tool{
 	implements Mapper<NullWritable, PointWritable, Text, PointWritable> {
 
 		private QuadTreeMemory quadTree;
+		private int dimension;
 
 
 		@Override   
 		public void configure(JobConf conf) {		
-
+			this.dimension = (conf.getInt("dimension", 2));
 		}	
 		
 		@Override
@@ -50,10 +49,9 @@ public class QuadtreeDriverWithoutSample extends Configured implements Tool{
 			Point point = iValue.point();
 
 			if(this.quadTree == null) {
-					int dimension = point.dimension();
-					
+										
 					Range[] ranges = new Range[dimension];
-					for(int i=0; i< dimension ; i++ ) {
+					for(int i=0; i< this.dimension ; i++ ) {
 						ranges[i] = new Range(0, 1000);
 					}
 					
@@ -82,22 +80,27 @@ public class QuadtreeDriverWithoutSample extends Configured implements Tool{
 	private static int mumReduceTask = 2 * 9;
 	@Override
 	public int run(String[] args) throws Exception {
-		if(args.length != 2) {
-			System.err.printf("Usage: %s [generic option] <input> <output>\n", 
+		if(args.length != 3) {
+			System.err.printf("Usage: %s [generic option] <input> <output> <dimensio>\n", 
 					getClass().getSimpleName());
 			ToolRunner.printGenericCommandUsage(System.err);
 			return -1;
 		}
+		
+		String input = args[0];
+		String output = args[1];
+		int dimension = Integer.parseInt(args[2]);
 
 		JobConf conf = new JobConf(getConf(), getClass());
 		conf.setJobName("QuadTreeWithoutSample");
 
-		conf.setInt("capacity", 10000);
+		conf.setInt("capacity", 1700000);
+		conf.setInt("dimension", dimension);		
 
-		FileInputFormat.addInputPath(conf, new Path(args[0]));
-		FileOutputFormat.setOutputPath(conf, new Path(args[1]));
+		FileInputFormat.addInputPath(conf, new Path(input));
+		FileOutputFormat.setOutputPath(conf, new Path(output));
 		
-		conf.setInputFormat(SequenceFileInputFormat.class);
+		conf.setInputFormat(BinaryFileInputFormat.class);
 
 		conf.setMapOutputKeyClass(Text.class);
 		conf.setMapOutputValueClass(PointWritable.class);

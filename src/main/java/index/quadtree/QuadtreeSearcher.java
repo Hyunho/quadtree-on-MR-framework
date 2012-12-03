@@ -3,8 +3,6 @@ package index.quadtree;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 
-import index.quadtree.QuadTreeFile.PointIterator;
-
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -168,7 +166,7 @@ public class QuadtreeSearcher {
 
 				Point question = Point.stringToPoint(line);
 				
-//				System.out.println(ns.searchLeafNode(question));
+				System.out.println(ns.searchLeafNode(question));
 				Point answer = ns.searchPoint(question);
 				
 				try {

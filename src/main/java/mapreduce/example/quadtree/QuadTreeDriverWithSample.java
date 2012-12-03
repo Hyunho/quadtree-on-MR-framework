@@ -12,10 +12,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import java.net.URI;
+import java.security.InvalidParameterException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import mapreduce.io.BinaryFileInputFormat;
 import mapreduce.io.PointWritable;
 
 import org.apache.hadoop.conf.Configuration;
@@ -25,12 +27,10 @@ import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 
 import org.apache.hadoop.mapred.*;
-import org.apache.hadoop.mapred.lib.MultipleSequenceFileOutputFormat;
 import org.apache.hadoop.mapred.lib.MultipleTextOutputFormat;
 
 import org.apache.hadoop.util.Tool;
@@ -88,14 +88,14 @@ public class QuadTreeDriverWithSample {
 				} catch (ClassNotFoundException e) {
 					e.printStackTrace();
 				}
-	
 			}
 	
 			@Override
 			public void map(NullWritable key, PointWritable value,
 					OutputCollector<Text, PointWritable> output, Reporter arg3)
 			throws IOException {
-
+				
+				System.out.println(value.toString());
 				output.collect(
 						new Text(this.quadtree.getindex(value.point())),
 						value);
@@ -108,11 +108,19 @@ public class QuadTreeDriverWithSample {
 			JobConf conf = new JobConf(getConf(), getClass());
 			conf.setJobName("Build local quadtrees");
 			
-			conf.setInt("capacity", 1710000);
+			
+			String input = args[0];
+			String output = args[1];
+			int dimension = Integer.parseInt(args[2]);			
+			
+			
+			//configuration
+			conf.setInt("capacity", 1700000);
 			conf.setStrings("boundary",
 					"0-1000",
 					"0-1000"				
-			);
+			);			
+			conf.setInt("dimension", dimension);		
 			
 			DistributedCache.addCacheFile(
 					new URI("quadtree.dat"), 
@@ -120,10 +128,10 @@ public class QuadTreeDriverWithSample {
 			 
 			DistributedCache.createSymlink(conf);
 			
-			FileInputFormat.addInputPath(conf, new Path(args[0]));
-			FileOutputFormat.setOutputPath(conf, new Path(args[1]));
+			FileInputFormat.addInputPath(conf, new Path(input));
+			FileOutputFormat.setOutputPath(conf, new Path(output));
 			
-			conf.setInputFormat(SequenceFileInputFormat.class);
+			conf.setInputFormat(BinaryFileInputFormat.class);
 			conf.setOutputFormat(QuadtreeNameMultipleSequenceOutputFormat.class);
 			
 			conf.setOutputValueClass(PointWritable.class);
@@ -143,34 +151,45 @@ public class QuadTreeDriverWithSample {
 	}
 
 
-	private static void samplingAndBuilding(String filename) throws IOException {
+	private static void samplingAndBuilding(String[] args) throws IOException {
 
+		String input = args[0];
+		int dimension = Integer.parseInt(args[2]);
+		
 		String dst = "quadtree.dat";
 		int numSample = 10000;
 		
 		int capacityOfBaseQuadtree = numSample / 16; 
 
-		Point[] points = Sampler.reservoirSampling(filename, numSample);
-
-		int dimension = points[0].dimension();
+		Point[] points = Sampler.reservoirSampling(input, numSample, dimension);
 		
+		System.out.println(points[0].dimension());
+
 		Range[] ranges = new Range[dimension];
 		for(int i=0; i< dimension ; i++ ) {
 			ranges[i] = new Range(0, 1000);
 		}
 		
+		Boundary boundary = new Boundary(ranges);
 		// initialize a base quadtree
 		QuadTree quadTree = new QuadTreeFile(
 				capacityOfBaseQuadtree, 
-				new Boundary(ranges),
+				boundary,
 				"Q");				
-		
 	
 		int i=0;
-		while(i<numSample) {
-			quadTree.insert(points[i]);
-			i++;
+		try  {			
+			while(i<numSample) {
+				quadTree.insert(points[i]);
+				i++;
+				
+			}			
+		}catch(InvalidParameterException ie) {
+			System.out.println("error in " + i +"th point"+ points[i].dimension()+ "---- " + points[i].toString());
+			ie.printStackTrace();
+				
 		}
+		
 		
 		//write quadtree in to HDFS
 		Configuration conf = new Configuration();
@@ -184,8 +203,8 @@ public class QuadTreeDriverWithSample {
 	
 	public static void main(String[] args) throws Exception{
 
-		if(args.length != 2) {
-			System.err.printf("Usage: %s [generic option] <input> <output>\n", 
+		if(args.length != 3) {
+			System.err.printf("Usage: %s [generic option] <input> <output> <dimension>\n", 
 					QuadTreeDriverWithSample.class.getSimpleName());
 			ToolRunner.printGenericCommandUsage(System.err);
 			System.exit(-1);
@@ -198,7 +217,7 @@ public class QuadTreeDriverWithSample {
 		System.out.println("start sampling and building a quadtree");
 		System.out.println(dateFormat.format(cal.getTime()));
 		
-		samplingAndBuilding(args[0]);
+		samplingAndBuilding(args);
 		
 		// end
 		System.out.println("end building a quadtree");

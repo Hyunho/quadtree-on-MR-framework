@@ -1,19 +1,13 @@
 package index.quadtree;
 
-import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
-
 
 import index.quadtree.Boundary;
 import index.quadtree.Point;
-import index.quadtree.QuadTree;
 import index.quadtree.QuadTreeFile;
 import index.quadtree.Range;
 
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;

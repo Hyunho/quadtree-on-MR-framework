@@ -2,7 +2,7 @@ package index.quadtree;
 
 import java.io.Serializable;
 
-public class Point implements Serializable {
+public class Point implements Serializable{
 		
 	/**
 	 * 
@@ -16,6 +16,11 @@ public class Point implements Serializable {
 	public Point() {
 		this.values = new double[0];
 	}
+	
+	public double get(int i) {
+		return values[i];
+	}
+	
 	public Point(double... values) {
 		this.values = values;
 	}	

@@ -8,7 +8,6 @@ import index.quadtree.Boundary;
 import index.quadtree.Point;
 import index.quadtree.QuadTree;
 import index.quadtree.QuadTreeFile;
-import index.quadtree.QuadTreeMemory;
 import index.quadtree.Range;
 
 import java.util.Arrays;
@@ -16,10 +15,11 @@ import java.util.Iterator;
 import java.util.List;
 
 
+import org.junit.After;
 import org.junit.Test;
 
 
-public class MemoryQuadtreeTest {
+public class QuadtreeTest {
 	
 	/**
 	 * we assume there are no same points.
@@ -44,9 +44,8 @@ public class MemoryQuadtreeTest {
 	public void splitQuadTree() {		
 		
 		Boundary boundary = new Boundary(new Range(0, 100), new Range(0, 100));		
-		QuadTreeMemory quadTree =  new QuadTreeMemory(2, boundary, "Q");
+		QuadTreeFile quadTree =  new QuadTreeFile(3, boundary, "Q");
 		
-		assertFalse(quadTree.hasChildren());
 		
 		quadTree.insert(new Point(1, 2));
 		quadTree.insert(new Point(10, 10));		
@@ -65,8 +64,8 @@ public class MemoryQuadtreeTest {
 	public void build() {
 		Boundary boundary = new Boundary(new Range(0, 100), new Range(0, 100));	
 		
-		QuadTree quadTreeMemory =  new QuadTreeMemory(3, boundary, "Q");		
-		bulidQuadTreeTest(quadTreeMemory);
+		QuadTree quadTreeFile =  new QuadTreeFile(3, boundary, "Q");		
+		bulidQuadTreeTest(quadTreeFile);
 	}
 	
 	
@@ -109,13 +108,13 @@ public class MemoryQuadtreeTest {
 		Boundary boundary = 
 			new Boundary(new Range(0, 100), new Range(0, 100));
 		
-		QuadTreeMemory quadTree = new QuadTreeMemory(10, boundary, "Q");
+		QuadTreeFile quadTree = new QuadTreeFile(10, boundary, "Q");
 		
-		assertEquals("", quadTree.getindex(point));
+		assertEquals("Q", quadTree.getindex(point));
 		
-		quadTree = QuadTreeMemory.getQuadtree(2, boundary, 1);
+		quadTree = QuadTreeFile.makeQuadtree(2, boundary, 1);
 				
-		assertEquals("4", quadTree.getindex(point));
+		assertEquals("Q4", quadTree.getindex(point));
 		
 	}
 	
@@ -125,17 +124,17 @@ public class MemoryQuadtreeTest {
 		Boundary boundary = 
 			new Boundary(new Range(0, 100), new Range(0, 100));
 		
-		QuadTreeMemory quadTree = new QuadTreeMemory(2, boundary, "Q");		
+		QuadTreeFile quadTree = new QuadTreeFile(2, boundary, "Q");		
 		assertEquals(1, quadTree.leaves().size());
 		
-		quadTree = QuadTreeMemory.getQuadtree(2, boundary, 1);
+		quadTree = QuadTreeFile.makeQuadtree(2, boundary, 1);
 		assertEquals(4, quadTree.leaves().size());
 		
-		quadTree = QuadTreeMemory.getQuadtree(2, boundary, 2);
+		quadTree = QuadTreeFile.makeQuadtree(2, boundary, 2);
 		assertEquals(16, quadTree.leaves().size());
 	}
 	
-	@Test
+	@After
 	public void deleteFiles() {
 		QuadTreeFile.delete("Q");
 

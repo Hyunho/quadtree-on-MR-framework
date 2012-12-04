@@ -13,7 +13,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-public class HelpQuadtreeTest {
+public class QuadtreeHelperTest {
 
 	public static QuadTreeFile build() {
 		
@@ -49,7 +49,7 @@ public class HelpQuadtreeTest {
 		
 		Boundary boundary = new Boundary(new Range(0, 11), new Range(0, 11));
 
-		QuadTreeFile quadtree = HelpQuadtreeTest.build();
+		QuadTreeFile quadtree = QuadtreeHelperTest.build();
 		
 		NormalSearcher searcher = new QuadtreeSearcher.NormalSearcher(quadtree);
 		

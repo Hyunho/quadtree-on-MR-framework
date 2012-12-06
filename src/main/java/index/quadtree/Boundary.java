@@ -32,7 +32,8 @@ public class Boundary implements Serializable{
 			throw new InvalidParameterException(
 					"dimension of boundrary and that of point must be same. " +
 					"But number of dimension of boundary is " +  this.dimension() +
-					" and number of dimension of point is " + point.dimension());
+					" and number of dimension of point is " + point.dimension()+ "\n" +
+					"Point is" + point.toString()) ;
 		
 		for(int i=0; i< ranges.length; i++) {
 			if ((ranges[i].min > point.values()[i]) ||
@@ -106,6 +107,11 @@ public class Boundary implements Serializable{
 		return str;
 	}
 
+	/**
+	 * Does this boundary overlap given other boundary partially?
+	 * @param other
+	 * @return
+	 */
 	public boolean overlab(Boundary other) {
 
 		
@@ -128,6 +134,11 @@ public class Boundary implements Serializable{
 		return true;		
 	}
 
+	/**
+	 * Does this boundary cover given other boundary completely?
+	 * @param other
+	 * @return
+	 */
 	public boolean cover(Boundary other) {
 		if (this.dimension() !=  other.dimension())
 			throw new InvalidParameterException(

@@ -98,6 +98,11 @@ public class QuadtreeSearcher {
 			return leafNode;
 		}
 
+		/**
+		 * filter nodes which not matched  
+		 * @param boundary : region boundary to search 
+		 * @return
+		 */
 		public ArrayList<QuadTreeFile> searchNodes(Boundary boundary) {
 			ArrayList<QuadTreeFile> nodes = new ArrayList<QuadTreeFile>();
 			
@@ -105,6 +110,7 @@ public class QuadtreeSearcher {
 			ArrayList<QuadTreeFile> queue = new ArrayList<QuadTreeFile>();
 			queue.add(root);
 			
+			//breath first traversal 
 			while(queue.size() > 0) {
 				QuadTreeFile node = queue.get(0);
 				queue.remove(0);

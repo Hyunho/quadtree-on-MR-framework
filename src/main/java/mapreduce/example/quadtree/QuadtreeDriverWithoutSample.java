@@ -4,11 +4,10 @@ package mapreduce.example.quadtree;
 
 import index.quadtree.Boundary;
 import index.quadtree.Point;
-import index.quadtree.QuadTreeMemory;
+import index.quadtree.QuadTreeFile;
 import index.quadtree.Range;
 
 import java.io.IOException;
-
 import mapreduce.example.quadtree.QuadTreeDriverWithSample.BuldingQuadtree.QuadtreeNameMultipleSequenceOutputFormat;
 import mapreduce.io.BinaryFileInputFormat;
 import mapreduce.io.PointWritable;
@@ -32,50 +31,60 @@ public class QuadtreeDriverWithoutSample extends Configured implements Tool{
 	public static class QuadTreeMapper extends MapReduceBase 
 	implements Mapper<NullWritable, PointWritable, Text, PointWritable> {
 
-		private QuadTreeMemory quadTree;
+		private QuadTreeFile quadTree;
 		private int dimension;
 
 
 		@Override   
 		public void configure(JobConf conf) {		
 			this.dimension = (conf.getInt("dimension", 2));
+			if(dimension > 5) {
+				dimension = 4;
+			}
+			
+			if(this.quadTree == null) {
+				Range[] ranges = new Range[dimension];
+				for(int i=0; i< this.dimension ; i++ ) {
+					ranges[i] = new Range(0, 1000);
+				}
+
+				Boundary boundary = new Boundary(ranges);
+
+				int depth;
+				if(dimension > 2) {
+					depth = 1; 
+				}
+				else {
+					depth = 2;
+				}
+
+				this.quadTree = QuadTreeFile.makeQuadtree(3, boundary, depth);
+			}
 		}	
-		
+
 		@Override
 		public void map(NullWritable key, PointWritable iValue,
 				OutputCollector<Text, PointWritable> output, Reporter reporter)
 						throws IOException {
 
-			Point point = iValue.point();
-
-			if(this.quadTree == null) {
-										
-					Range[] ranges = new Range[dimension];
-					for(int i=0; i< this.dimension ; i++ ) {
-						ranges[i] = new Range(0, 1000);
-					}
-					
-					Boundary boundary = new Boundary(ranges);
-					
-					int depth;
-					if(dimension >= 4) {
-						depth = 1; 
-					}
-					else {
-						depth = 2;
-					}
-							 
-					
-					this.quadTree = QuadTreeMemory.getQuadtree(3, boundary, depth);
+			Point point = iValue.point();	
+			Point tempPoint;
+			
+			if(point.dimension() > 5) {				
+				tempPoint = new Point(point.get(0), point.get(1), point.get(2), point.get(3));
 			}
+			else {
+				tempPoint = point;
+			}		
 			
 			output.collect(
-					new Text("Q" + this.quadTree.getindex(point)),
+					new Text(this.quadTree.getindex(tempPoint)),
 					new PointWritable(point)
 					);
 		}
 	}
 
+	
 
 	private static int mumReduceTask = 2 * 9;
 	@Override

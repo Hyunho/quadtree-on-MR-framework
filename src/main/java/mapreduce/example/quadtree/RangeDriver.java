@@ -44,7 +44,7 @@ public class RangeDriver {
 		public static class RangeMapperWithQuad extends MapReduceBase
 		implements Mapper<LongWritable, Text, NullWritable, PointWritable> {
 				
-			public Boundary boundary =new Boundary(new Range(250, 300), new Range(250, 300)); 
+			public Boundary boundary =new Boundary(new Range(290, 300), new Range(290, 300)); 
 
 			@Override
 			public void map(LongWritable key, Text value,
@@ -67,7 +67,7 @@ public class RangeDriver {
 			
 			Configuration conf = new Configuration();
 			
-			Boundary boundary =  new Boundary(new Range(250, 300), new Range(250, 300));
+			Boundary boundary =  new Boundary(new Range(290, 300), new Range(290, 300));
 			
 			JobConf job = new JobConf(conf, RangeSearchWithQuad.class);
 			job.setJobName("range search with quadtree");
@@ -121,7 +121,7 @@ public class RangeDriver {
 		public static class RangeMapper extends MapReduceBase
 		implements Mapper<NullWritable, PointWritable, NullWritable, PointWritable> {
 				
-			public Boundary boundary =new Boundary(new Range(250, 300), new Range(250, 300)); 
+			public Boundary boundary =new Boundary(new Range(290, 300), new Range(290, 300)); 
 
 			@Override
 			public void map(NullWritable key, PointWritable value,
@@ -175,7 +175,6 @@ public class RangeDriver {
 		}
 		
 		int method = Integer.parseInt(args[2]);
-		
 		
 		if (method == 1) {
 			ToolRunner.run(new RangeSearchWithQuad(), args);

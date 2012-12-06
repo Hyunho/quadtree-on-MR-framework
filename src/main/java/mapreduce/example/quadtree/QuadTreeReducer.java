@@ -7,7 +7,6 @@ import index.quadtree.QuadTreeFile;
 import index.quadtree.Range;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.URI;
 import java.util.Iterator;
@@ -16,7 +15,6 @@ import java.util.List;
 import mapreduce.io.PointWritable;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -33,7 +31,6 @@ implements Reducer<Text, PointWritable, Text, PointWritable> {
 	
 
 	private int capacity;
-	private QuadTreeFile baseQuadtree;
 	private int dimension;	
 
 	@Override   
@@ -41,18 +38,6 @@ implements Reducer<Text, PointWritable, Text, PointWritable> {
 		//set capacity
 		this.capacity = (conf.getInt("capacity", 10));
 		this.dimension = (conf.getInt("dimension", 2));
-
-		try {
-			FileSystem fs = FileSystem.get(conf);
-			FSDataInputStream fis=  fs.open(new Path("quadtree.dat"));
-			ObjectInputStream os = new ObjectInputStream(fis);
-			this.baseQuadtree = (QuadTreeFile)os.readObject();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		
 	}
 
 	@Override
@@ -69,14 +54,11 @@ implements Reducer<Text, PointWritable, Text, PointWritable> {
 		Boundary boundary = new Boundary(ranges);
 		
 		QuadTree quadTree =  new QuadTreeFile(
-				this.capacity, boundary, key.toString());;
-		
+				this.capacity, boundary, key.toString());;		
 				
 		//insert points
 		while(values.hasNext()) {
-			
 			PointWritable point = values.next();	
-		
 			quadTree.insert(point.point());
 		}
 		
@@ -102,6 +84,5 @@ implements Reducer<Text, PointWritable, Text, PointWritable> {
 						oKey, new PointWritable(point));
 			}
 		}
-		
 	}
 }

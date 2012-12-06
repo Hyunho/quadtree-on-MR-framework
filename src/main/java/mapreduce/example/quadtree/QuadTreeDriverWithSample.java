@@ -12,7 +12,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import java.net.URI;
-import java.security.InvalidParameterException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -35,6 +34,9 @@ import org.apache.hadoop.mapred.lib.MultipleTextOutputFormat;
 
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 
 /**
@@ -67,7 +69,7 @@ public class QuadTreeDriverWithSample {
 			@Override
 			protected String generateFileNameForKeyValue(Text key, PointWritable value,
 					String name) {
-				return key.toString();
+				return key.toString() + "-points";
 			}
 		}
 		
@@ -159,12 +161,16 @@ public class QuadTreeDriverWithSample {
 		String dst = "quadtree.dat";
 		int numSample = 10000;
 		
-		int capacityOfBaseQuadtree = numSample / 16; 
+		int capacityOfBaseQuadtree = numSample / numReduceTasks; 
 
 		Point[] points = Sampler.reservoirSampling(input, numSample, dimension);
 		
 		System.out.println(points[0].dimension());
 
+		for(int i=0; i< dimension ; i++ ) {
+			assertThat(points[i].dimension(), is(dimension));
+			
+		}
 		Range[] ranges = new Range[dimension];
 		for(int i=0; i< dimension ; i++ ) {
 			ranges[i] = new Range(0, 1000);
@@ -176,21 +182,14 @@ public class QuadTreeDriverWithSample {
 				capacityOfBaseQuadtree, 
 				boundary,
 				"Q");				
-	
+
 		int i=0;
-		try  {			
-			while(i<numSample) {
-				quadTree.insert(points[i]);
-				i++;
-				
-			}			
-		}catch(InvalidParameterException ie) {
-			System.out.println("error in " + i +"th point"+ points[i].dimension()+ "---- " + points[i].toString());
-			ie.printStackTrace();
-				
+
+		while(i<numSample) {
+			quadTree.insert(points[i]);
+			i++;
 		}
-		
-		
+
 		//write quadtree in to HDFS
 		Configuration conf = new Configuration();
 		FileSystem fs = FileSystem.get(URI.create(dst), conf);

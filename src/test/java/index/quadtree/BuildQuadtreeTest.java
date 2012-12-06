@@ -23,7 +23,6 @@ public class BuildQuadtreeTest {
 			Boundary boundaray = new Boundary(new Range(0, 1000), new Range(0, 1000));
 
 			diskQuadtreeTest(fileName, boundaray);
-			memoryQuadtreeTest(fileName, boundaray);
 			
 		} catch (Exception e) {
 			fail(e.getLocalizedMessage());
@@ -52,7 +51,6 @@ public class BuildQuadtreeTest {
 			Boundary boundaray = new Boundary(ranges);
 
 			diskQuadtreeTest(fileName, boundaray);
-			memoryQuadtreeTest(fileName, boundaray);
 
 		} catch (Exception e) {
 			fail(e.getLocalizedMessage());			
@@ -96,21 +94,13 @@ public class BuildQuadtreeTest {
 			e.printStackTrace();
 		}
 		
-		quadTree.save();
-
-		
+		quadTree.save();		
 		quadTree = QuadTreeFile.load("Q");
 		
 		int pointSizes = 0;
-		int numLeaf = 0;
-		
-		
 		List<QuadTree> leaves = quadTree.leaves();
 		
-		
 		for(QuadTree leaf : leaves) {
-			
-			numLeaf++;
 			Iterator<Point> points = leaf.points();
 			
 			while (points.hasNext()) {
@@ -121,42 +111,5 @@ public class BuildQuadtreeTest {
 		}
 		
 		assertEquals(100, pointSizes);		
-	}
-	
-
-	
-	private void memoryQuadtreeTest(String fileName, Boundary boundaray) {
-		
-		QuadTree quadTree = 
-				new QuadTreeMemory(10,	boundaray,	"Q");
-		
-		int count = 0;
-		try {
-			
-			BufferedReader in = new BufferedReader(new FileReader(fileName));
-			
-			String line;
-			try {
-				while((line = in.readLine()) != null) {
-					Point point = Point.stringToPoint(line);
-					quadTree.insert(point);					
-					count++;					
-					assertEquals(count, quadTree.size());					
-				}
-				
-				assertEquals(count,quadTree.size());
-				
-			} catch (IOException e) {				
-				e.printStackTrace();
-			}
-			
-		} catch (FileNotFoundException e) {
-			System.err.println(fileName + "is not existed in " +
-					System.getProperty("user.dir"));
-			e.printStackTrace();
-		} 
-	}
-	
-	
-
+	}	
 }

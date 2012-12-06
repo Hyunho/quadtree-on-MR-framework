@@ -70,10 +70,7 @@ public class QuadTreeFile implements QuadTree, Serializable {
 			List<Boundary> boundaries = quadtree.boundary.split();	
 			Iterator<Point>  iterator  = quadtree.points();
 
-
 			int count = 0;
-
-
 
 			quadtree.children = new ArrayList<QuadTreeFile>();
 
@@ -85,14 +82,35 @@ public class QuadTreeFile implements QuadTree, Serializable {
 				));
 			}
 
-
-
 			while(iterator.hasNext()) {
 				Point point = iterator.next();
 				quadtree.insertIntoChildren(point);
 			}
 			
 			new File(quadtree.name + "-points").delete();
+		}
+	}
+	
+	public static class Traveler {
+		
+		public static List<QuadTree> getLeaves(QuadTreeFile quadtree) {
+			
+			List<QuadTree> leaves = new ArrayList<QuadTree>();			
+			ArrayList<QuadTreeFile> queue = new ArrayList<QuadTreeFile>();
+			queue.add(quadtree);
+			
+			while(!queue.isEmpty()) {
+				QuadTreeFile node = queue.get(0);
+				queue.remove(0);
+				
+				if(!node.isLeaf()) {
+					queue.addAll(node.children);
+					
+				}else {
+					leaves.add(node);
+				}					
+			}
+			return leaves;
 		}
 	}
 	
@@ -243,8 +261,6 @@ public class QuadTreeFile implements QuadTree, Serializable {
 				
 				String result = this.line;
 				this.line = null;
-
-				
 				
 				return result;
 			}
@@ -309,22 +325,8 @@ public class QuadTreeFile implements QuadTree, Serializable {
 
 
 	public List<QuadTree> leaves() {
-
-		List<QuadTree> sub = new ArrayList<QuadTree>();
-
-		if (this.isLeaf()) {
-			sub.add(this);
-
-		} else {
-
-			Iterator<QuadTreeFile> iterator = this.children();
-
-			while(iterator.hasNext()) {
-				QuadTree quadTree = iterator.next();
-				sub.addAll(quadTree.leaves());
-			}
-		}		
-		return sub;		
+		List<QuadTree> leaves = Traveler.getLeaves(this);
+		return leaves;
 	}
 
 	/**
@@ -450,6 +452,31 @@ public class QuadTreeFile implements QuadTree, Serializable {
 		}
 		return null;		
 	}
+	
+	
+
+	/**
+	 * generate quadtree with given depth
+	 * @param capacity
+	 * @param boundary
+	 * @param depth
+	 * @return
+	 */
+	public static QuadTreeFile makeQuadtree(
+			int capacity, Boundary boundary, int depth){
+		
+		QuadTreeFile quadTree = 
+			new QuadTreeFile(capacity, boundary, "Q");
+		
+		for(int i=0; i < depth; i++ ) {
+			List<QuadTree> leaves = quadTree.leaves();
+			for(QuadTree q : leaves) 
+				q.split();
+		}
+				
+		return quadTree;
+	}
+
 	
 	/**
 	 * helper class to travel a quadtree

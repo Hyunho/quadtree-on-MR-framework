@@ -11,11 +11,12 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Test;
 
 public class QuadtreeHelperTest {
 
-	public static QuadTreeFile build() {
+	public QuadTreeFile build() {
 		
 		String filename = "Q";
 		
@@ -45,11 +46,17 @@ public class QuadtreeHelperTest {
 	}
 	
 	@Test
+	public void leaves() {
+		QuadTreeFile quadtree = build();
+		assertThat(quadtree.leaves().size(), is(31));
+	}
+	
+	@Test
 	public void rangeQuery() {
 		
 		Boundary boundary = new Boundary(new Range(0, 11), new Range(0, 11));
 
-		QuadTreeFile quadtree = QuadtreeHelperTest.build();
+		QuadTreeFile quadtree = build();
 		
 		NormalSearcher searcher = new QuadtreeSearcher.NormalSearcher(quadtree);
 		
@@ -70,6 +77,12 @@ public class QuadtreeHelperTest {
 		}
 
 		assertThat(answers.size(), is(2));
+	}
+	
+	@After
+	public void deleteFiles() {
+		QuadTreeFile.delete("Q");
+
 	}
 }
 

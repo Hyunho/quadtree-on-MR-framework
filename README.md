@@ -3,10 +3,11 @@
 Download source files from github.
 
     $ sudo apt-get install git    
-    $ git clone git@github.com:Hyunho/paper2.git
+    $ git clone git://github.com/Hyunho/paper2.git
 
 ### install utilities for java
 
+    $ sudo apt-get install openjdk-6-jdk
     $ sudo apt-get install maven2
     $ sudo apt-get insatll eclipse  
 
@@ -54,7 +55,7 @@ Now, there is a copiled jar file in sub 'target' directory. And, copy a compiled
 In server in cluster, we generate a dataset, and upload to HDFS.
 Copy script folder from source to server. 
 
-    $ scp script admin01@192.168.59.34:/home/admin01
+    $ scp -r script admin01@192.168.59.34:/home/admin01
 
 ### In server machine on cluster 
 ####install R language
@@ -72,12 +73,14 @@ Using gen_uniform.R command, we generate an uniform dataset. All arguments are s
 
 Upload dataset to HDFS                                                                                          
 
+    $ sudo -u hdfs hadoop fs -mkdir /user/hdfs/
+    $ sudo -u hdfs hadoop fs -mkdir /user/hdfs/input/
     $ sudo -u hdfs hadoop fs -copyFromLocal *.txt /user/hdfs/input/
 
 After uploading, convert text files on HDFS to a binary files
 
     $ sudo -u hdfs hadoop jar skyline-practice-0.0.1-SNAPSHOT.jar hadoop.StringToBinaryConverter /user/hdfs/input/2D-100-n.txt /user/hdfs/input/2D-100-n.bin
-    $ sudo -u hdfs hadoop jar skyline-practice-0.0.1-SNAPSHOT.jar hadoop.StringToBinaryConverter /user/hdfs/input/2D-100-n.txt /user/hdfs/input/2D-100-u.bin
+    $ sudo -u hdfs hadoop jar skyline-practice-0.0.1-SNAPSHOT.jar hadoop.StringToBinaryConverter /user/hdfs/input/2D-100-u.txt /user/hdfs/input/2D-100-u.bin
 
 ##Running
 

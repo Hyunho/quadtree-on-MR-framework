@@ -1,6 +1,7 @@
 #developement
 
-Download source files from github.        
+Download source files from github.
+
     $ sudo apt-get install git    
     $ git clone git@github.com:Hyunho/paper2.git
 

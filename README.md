@@ -1,22 +1,22 @@
-#developement
+##developement
 
 Download source files from github.
 
     $ sudo apt-get install git    
     $ git clone git@github.com:Hyunho/paper2.git
 
-## install utilities for java
+### install utilities for java
 
     $ sudo apt-get install maven2
     $ sudo apt-get insatll eclipse  
 
-## install R language
+### install R language
 
 Type following code, 
 
     $ sudo apt-get install r-base
 
-## Eclipse Project File Generation
+### Eclipse Project File Generation
 
 We are using Maven so you can easily generate project files for our modules.
 
@@ -44,7 +44,7 @@ You can now import the projects into your eclipse workspace via:
     File -> Import -> Existing Projects into Workspace -> 
             Choose your workspace as the root directory and import a project.
 
-## Complie
+### Complie
 Type the following code
 
     $ mvn package 

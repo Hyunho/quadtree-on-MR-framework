@@ -71,6 +71,12 @@ Using gen_uniform.R command, we generate an uniform dataset. All arguments are s
 Upload dataset to HDFS                                                                                          
         sudo -u hdfs hadoop fs -copyFromLocal *.txt /user/hdfs/input/
 
+After uploading, convert text files on HDFS to a binary files
+        sudo -u hdfs hadoop jar skyline-practice-0.0.1-SNAPSHOT.jar hadoop.StringToBinaryConverter /user/hdfs/input\
+/2D-100-n.txt /user/hdfs/input/2D-100-n.bin
+        sudo -u hdfs hadoop jar skyline-practice-0.0.1-SNAPSHOT.jar hadoop.StringToBinaryConverter /user/hdfs/input\
+/2D-100-n.txt /user/hdfs/input/2D-100-u.bin
+
 ##Running
 
 Run a jar file. first argument.

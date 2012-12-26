@@ -80,7 +80,7 @@ Upload dataset to HDFS
 After uploading, convert text files on HDFS to a binary files
 
     $ sudo -u hdfs hadoop jar skyline-practice-0.0.1-SNAPSHOT.jar hadoop.StringToBinaryConverter /user/hdfs/input/2D-100-n.txt /user/hdfs/input/2D-100-n.bin
-    $ sudo -u hdfs hadoop jar skyline-practice-0.0.1-SNAPSHOT.jar hadoop.StringToBinaryConverter /user/hdfs/input/2D-100-n.txt /user/hdfs/input/2D-100-u.bin
+    $ sudo -u hdfs hadoop jar skyline-practice-0.0.1-SNAPSHOT.jar hadoop.StringToBinaryConverter /user/hdfs/input/2D-100-u.txt /user/hdfs/input/2D-100-u.bin
 
 ##Running
 

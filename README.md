@@ -46,6 +46,7 @@ You can now import the projects into your eclipse workspace via:
 
 ## Complie
 Type the following code
+
     $ mvn package 
 Now, there is a copiled jar file in sub 'target' directory. And, copy a compiled jar file from local file system to server.
 

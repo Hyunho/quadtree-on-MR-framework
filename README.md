@@ -55,7 +55,7 @@ Now, there is a copiled jar file in sub 'target' directory. And, copy a compiled
 In server in cluster, we generate a dataset, and upload to HDFS.
 Copy script folder from source to server. 
 
-    $ scp script admin01@192.168.59.34:/home/admin01
+    $ scp -r script admin01@192.168.59.34:/home/admin01
 
 ### In server machine on cluster 
 ####install R language

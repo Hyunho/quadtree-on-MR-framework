@@ -53,6 +53,7 @@ Now, there is a copiled jar file in sub 'target' directory. And, copy a compiled
 
 In server in cluster, we generate a dataset, and upload to HDFS.
 Copy script folder from source to server. 
+
     $ scp script admin01@192.168.59.34:/home/admin01
 
 ### In server machine on cluster 
@@ -63,38 +64,39 @@ Copy script folder from source to server.
 Using gen_non-uiform.R command , we generate a non-uniform dataset.                                          
 In commands, 1st arugment is file name to write, 2nd argument is number of dimension and 3rd argument is number of recodes.                                                                                                           
 
-    script/R/gen_non-uniform.R 2D-100-n.txt 2 10000000
+    $ script/R/gen_non-uniform.R 2D-100-n.txt 2 10000000
     
 Using gen_uniform.R command, we generate an uniform dataset. All arguments are same as above.              
-        script/R/gen_unoform.R 2D-100-u.txt 10000000
+
+    $ script/R/gen_unoform.R 2D-100-u.txt 10000000
 
 Upload dataset to HDFS                                                                                          
-        sudo -u hdfs hadoop fs -copyFromLocal *.txt /user/hdfs/input/
+
+    $ sudo -u hdfs hadoop fs -copyFromLocal *.txt /user/hdfs/input/
 
 After uploading, convert text files on HDFS to a binary files
-        sudo -u hdfs hadoop jar skyline-practice-0.0.1-SNAPSHOT.jar hadoop.StringToBinaryConverter /user/hdfs/input\
-/2D-100-n.txt /user/hdfs/input/2D-100-n.bin
-        sudo -u hdfs hadoop jar skyline-practice-0.0.1-SNAPSHOT.jar hadoop.StringToBinaryConverter /user/hdfs/input\
-/2D-100-n.txt /user/hdfs/input/2D-100-u.bin
+
+    $ sudo -u hdfs hadoop jar skyline-practice-0.0.1-SNAPSHOT.jar hadoop.StringToBinaryConverter /user/hdfs/input/2D-100-n.txt /user/hdfs/input/2D-100-n.bin
+    $ sudo -u hdfs hadoop jar skyline-practice-0.0.1-SNAPSHOT.jar hadoop.StringToBinaryConverter /user/hdfs/input/2D-100-n.txt /user/hdfs/input/2D-100-u.bin
 
 ##Running
 
 Run a jar file. first argument.
 
-    sudo -u hdfs hadoop jar skyline-practice-0.0.1-SNAPSHOT.jar mapreduce.example.quadtree.QuadtreeDriverWithoutSample /user/hdfs/input/2D-100-n.bin /user/hdfs/output/temp 2
+    $ sudo -u hdfs hadoop jar skyline-practice-0.0.1-SNAPSHOT.jar mapreduce.example.quadtree.QuadtreeDriverWithoutSample /user/hdfs/input/2D-100-n.bin /user/hdfs/output/temp 2
 
 If you want to re-run a jar file. claer temporary files munaually.
 To clear files, type following commands.
 
 clear files on local file system                                                                                  
 
-        rm Q*
-        rm quadtree.data
+    $ rm Q*
+    $ rm quadtree.data
 
 clear files on Hadoop distributed file system   
 
-        sudo -u hdfs hadoop fs -rm /user/hdfs/Q*
-        sudo -u hdfs hadoop fs -rm /user/hdfs/quadtree.dat
-        sudo -u hdfs hadoop fs -rm -r /user/hdfs/output/*
+    $ sudo -u hdfs hadoop fs -rm /user/hdfs/Q*
+    $ sudo -u hdfs hadoop fs -rm /user/hdfs/quadtree.dat
+    $ sudo -u hdfs hadoop fs -rm -r /user/hdfs/output/*
 
 

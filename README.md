@@ -81,7 +81,7 @@ After uploading, convert text files on HDFS to a binary files
 
 ##Running
 
-Run a jar file. first argument.
+Run a jar file. first argument is input file, second argument is output folder and third argument is number of dimenion of input file.
 
     $ sudo -u hdfs hadoop jar skyline-practice-0.0.1-SNAPSHOT.jar mapreduce.example.quadtree.QuadtreeDriverWithoutSample /user/hdfs/input/2D-100-n.bin /user/hdfs/output/temp 2
 

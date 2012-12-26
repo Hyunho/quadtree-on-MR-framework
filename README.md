@@ -73,6 +73,8 @@ Using gen_uniform.R command, we generate an uniform dataset. All arguments are s
 
 Upload dataset to HDFS                                                                                          
 
+    $ sudo -u hdfs hadoop fs -mkdir /user/hdfs/
+    $ sudo -u hdfs hadoop fs -mkdir /user/hdfs/input/
     $ sudo -u hdfs hadoop fs -copyFromLocal *.txt /user/hdfs/input/
 
 After uploading, convert text files on HDFS to a binary files

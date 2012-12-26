@@ -7,7 +7,7 @@ Download source files from github.
 
 ### install utilities for java
 
-    $ sudo apt-get install openjdk-6-jre-headless
+    $ sudo apt-get install openjdk-6-jdk
     $ sudo apt-get install maven2
     $ sudo apt-get insatll eclipse  
 

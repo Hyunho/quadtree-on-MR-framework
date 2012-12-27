@@ -29,7 +29,7 @@ You can check if it was successful in Eclipse via:
 If you see the M2_REPO variable, it worked correctly.
 
 
-Now run the following commands:
+Now run the following commands (move to paper2):
   
     $ mvn install
     $ mvn eclipse:eclipse

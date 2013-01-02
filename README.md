@@ -1,3 +1,12 @@
+# what is it 
+
+It is a application for buiding a quadtre on MapReduce framework. 
+In order to reduce a bulindg time,  
+
+1. we use a samplining paradiam and buid a tiny quadtree. 
+2. Using tiny quadtree, we partition a dataset. And a local quadtree on each partition is built on MapReduce framework. 
+3. Merge local quadtrees and finaly Quadtree on entire is built. 
+
 ##developement
 
 Download source files from github.
